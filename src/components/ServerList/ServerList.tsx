@@ -9,7 +9,38 @@ export const ServerList = () => (
           {element}
         </ServerIcon>
       ))}
+      <ServerIcon title={"Add a server"}>
+        <svg
+          enable-background="new 0 0 50 50"
+          height="25px"
+          id="Layer_1"
+          version="1.1"
+          viewBox="0 0 50 50"
+          width="25px"
+        >
+          <rect fill="none" height="50" width="50" />
+          <line
+            fill="none"
+            stroke="#259855"
+            stroke-miterlimit="10"
+            stroke-width="4"
+            x1="9"
+            x2="41"
+            y1="25"
+            y2="25"
+          />
+          <line
+            fill="none"
+            stroke="#259855"
+            stroke-miterlimit="10"
+            stroke-width="4"
+            x1="25"
+            x2="25"
+            y1="9"
+            y2="41"
+          />
+        </svg>
+      </ServerIcon>
     </div>
   </div>
 );
-/*https://cdn.discordapp.com/icons/522815365282136076/39da61f48ba994387c660a90143bdc4f.webp?size=96*/
