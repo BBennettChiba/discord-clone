@@ -11,10 +11,9 @@ import { servers } from "./Severs";
 
 export const ServerList = () => {
   const [selected, setSelected] = useState<number | null>(null);
-  console.log(selected);
   return (
-    <div className="fixed h-full">
-      <div className="flex-grow h-screen pt-3 relative bg-neutral-800">
+    <div className="h-full w-[72px]">
+      <div className="relative h-screen flex-grow bg-neutral-800 pt-3">
         <div onClick={() => setSelected(0)}>
           <ServerIcon title="Direct Messages" selected={selected === 0}>
             <svg
@@ -33,8 +32,8 @@ export const ServerList = () => {
             </svg>
           </ServerIcon>
         </div>
-        <div className="h-3 w-full relative flex items-start justify-center">
-          <div className="w-8 h-[2px] bg-gray-700" />
+        <div className="relative flex h-3 w-full items-start justify-center">
+          <div className="h-[2px] w-8 bg-gray-700" />
         </div>
 
         {servers.map(({ element, title }, i) => (

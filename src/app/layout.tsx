@@ -17,8 +17,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <body className={inter.className}>
       <TrpcProvider>
         <NextAuthProvider>
-          <ServerList />
-          {children}
+          <div className="flex">
+            <ServerList />
+            {children}
+          </div>
         </NextAuthProvider>
       </TrpcProvider>
     </body>
