@@ -9,7 +9,7 @@ type Props = {
 
 const Server = ({ children, params: { server } }: Props) => {
   console.log(server);
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="flex flex-1">
       <div className="h-full w-60 bg-zinc-800">
@@ -17,22 +17,24 @@ const Server = ({ children, params: { server } }: Props) => {
           <div>{server}</div>
           <div className="ml-auto pr-4">
             <div
-              className="group relative h-8 w-8"
+              className="group relative flex h-8 w-8 items-center justify-center outline outline-white"
               onClick={() => setIsMenuOpen((v) => !v)}
             >
               <div
                 className={clsx(
-                  "absolute left-1/2 top-1/2 h-[1px] w-4 origin-left rotate-[225deg] bg-white transition-all",
+                  "absolute w-[1px] -translate-x-1/2 -rotate-45 bg-white transition-all",
                   {
-                    "left-1 w-6 origin-center": isMenuOpen,
+                    // "h-7 origin-center": isMenuOpen,
+                    // "h-4 origin-bottom -translate-y-1/2": !isMenuOpen,
                   },
                 )}
               />
               <div
                 className={clsx(
-                  "absolute left-1/2 top-1/2 h-[1px] w-4 origin-left -rotate-45 bg-white transition-all",
+                  "absolute w-[1px] translate-x-1/2 rotate-45 bg-white transition-all",
                   {
-                    "left-1 w-6 origin-center": isMenuOpen,
+                    // "h-7 origin-center": isMenuOpen,
+                    // "h-4 origin-bottom -translate-y-1/2": !isMenuOpen,
                   },
                 )}
               />
