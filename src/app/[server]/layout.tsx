@@ -1,6 +1,7 @@
 "use client";
 import { useState, type ReactNode } from "react";
 import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
+import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -34,6 +35,7 @@ const Server = ({ children, params: { server } }: Props) => {
           </div>
         </div>
         {isMenuOpen ? <DropdownMenu /> : null}
+        <GroupList />
       </div>
       {children}
     </div>

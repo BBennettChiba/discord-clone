@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 
 const ICON_SIZE = "h[18px] w-[18px]";
 const options = [
-  // [{ text: "Server Boost" }],
   [
     {
       text: "Invite People",
@@ -25,19 +24,53 @@ const options = [
       ),
     },
     {
-      text: "App Directory",
+      adminOption: true,
+      text: "Server Settings",
       icon: (
         <svg
           className={ICON_SIZE}
           aria-hidden="true"
           role="img"
-          width="16"
-          height="16"
+          width="24"
+          height="24"
           viewBox="0 0 24 24"
         >
           <path
             fill="currentColor"
-            d="M12 2C14.761 2 17 4.238 17 7V9H7V7C7 4.238 9.238 2 12 2ZM10.5 5.5C10.5 6.329 11.172 7 12 7C12.828 7 13.5 6.329 13.5 5.5C13.5 4.671 12.828 4 12 4C11.172 4 10.5 4.671 10.5 5.5ZM23 22H17L19 19V12H17V18C17 18.553 16.552 19 16 19H14L15 22H9L10 19H8C7.448 19 7 18.553 7 18V12H5V19L7 22H1L3 19V12C3 10.896 3.897 10 5 10H19C20.103 10 21 10.896 21 12V19L23 22ZM13 14C13 14.553 13.448 15 14 15C14.552 15 15 14.553 15 14C15 13.447 14.552 13 14 13C13.448 13 13 13.447 13 14Z"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M19.738 10H22V14H19.739C19.498 14.931 19.1 15.798 18.565 16.564L20 18L18 20L16.565 18.564C15.797 19.099 14.932 19.498 14 19.738V22H10V19.738C9.069 19.498 8.203 19.099 7.436 18.564L6 20L4 18L5.436 16.564C4.901 15.799 4.502 14.932 4.262 14H2V10H4.262C4.502 9.068 4.9 8.202 5.436 7.436L4 6L6 4L7.436 5.436C8.202 4.9 9.068 4.502 10 4.262V2H14V4.261C14.932 4.502 15.797 4.9 16.565 5.435L18 3.999L20 5.999L18.564 7.436C19.099 8.202 19.498 9.069 19.738 10ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"
+          />
+        </svg>
+      ),
+    },
+    {
+      adminOption: true,
+      text: "Create Channel",
+      icon: (
+        <svg className={ICON_SIZE} width="16" height="16" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
+          />
+        </svg>
+      ),
+    },
+    {
+      adminOption: true,
+      text: "Create Category",
+      icon: (
+        <svg
+          className={ICON_SIZE}
+          aria-hidden="true"
+          role="img"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M20 7H12L10.553 5.106C10.214 4.428 9.521 4 8.764 4H3C2.447 4 2 4.447 2 5V19C2 20.104 2.895 21 4 21H20C21.104 21 22 20.104 22 19V9C22 7.896 21.104 7 20 7ZM16 15H13V18H11V15H8V13H11V10H13V13H16V15Z"
           />
         </svg>
       ),
@@ -173,36 +206,42 @@ const options = [
     },
   ],
 ];
+
+const IS_ADMIN = true;
+
 export const DropdownMenu = () => (
-  <div className="absolute top-12 flex w-full flex-col">
+  <div className="absolute top-12 z-10 flex w-full flex-col">
     <div className="p-3 text-xs">
       <div className="rounded-md bg-black px-2 py-2">
         {options.map((group, i) => (
           <>
             <div className="" key={i}>
-              {group.map((option, j) => (
-                <div className="flex h-8 items-center" key={j}>
-                  <div
-                    className={cn(
-                      "group flex h-full w-full items-center justify-between rounded-sm p-1 hover:bg-indigo-500",
-                      {
-                        "hover:bg-red-500 hover:text-white":
-                          i === options.length - 1,
-                      },
-                    )}
-                  >
-                    <div>{option.text}</div>
+              {group.map((option, j) => {
+                if (!IS_ADMIN && option.adminOption) return null;
+                return (
+                  <div className="flex h-8 items-center" key={j}>
                     <div
-                      className={cn({
-                        "text-red-500 group-hover:text-white":
-                          i === options.length - 1,
-                      })}
+                      className={cn(
+                        "group flex h-full w-full items-center justify-between rounded-sm p-1 hover:bg-indigo-500",
+                        {
+                          "hover:bg-red-500 hover:text-white":
+                            i === options.length - 1,
+                        },
+                      )}
                     >
-                      {option.icon}
+                      <div>{option.text}</div>
+                      <div
+                        className={cn({
+                          "text-red-500 group-hover:text-white":
+                            i === options.length - 1,
+                        })}
+                      >
+                        {option.icon}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             {i !== options.length - 1 ? (
               <div className="m-1 border-b border-gray-700" />
