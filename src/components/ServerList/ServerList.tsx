@@ -13,7 +13,7 @@ export const ServerList = () => {
   const [selected, setSelected] = useState<number | null>(null);
   return (
     <div className="h-full w-[72px]">
-      <div className="relative h-screen flex-grow bg-neutral-800 pt-3">
+      <div className="relative h-screen flex-grow bg-neutral-900 pt-3">
         <div onClick={() => setSelected(0)}>
           <ServerIcon title="Direct Messages" selected={selected === 0}>
             <svg

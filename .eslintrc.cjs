@@ -5,7 +5,11 @@ const path = require("path");
 module.exports = {
   overrides: [
     {
-      files: ["src/app/**/layout.tsx", "src/app/**/page.tsx"],
+      files: [
+        "src/app/**/layout.tsx",
+        "src/app/**/page.tsx",
+        "tailwind.config.ts",
+      ],
       rules: {
         "import/no-default-export": "off",
       },

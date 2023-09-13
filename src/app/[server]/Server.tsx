@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
-import { type Props } from "./layout";
+
+type Props = { children: ReactNode; params: { server: string } };
 
 export const Server = ({ children, params: { server } }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,7 +29,6 @@ export const Server = ({ children, params: { server } }: Props) => {
             </div>
           </div>
         </div>
-        <Thing />
       </div>
       {children}
     </div>

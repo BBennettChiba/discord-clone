@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import { ChannelBrowser } from "@/components/ChannelSelection/ChannelBrowser";
 import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
+import { UserStatus } from "@/components/ChannelSelection/UserStatus";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -38,7 +39,7 @@ const Server = ({ children, params: { server } }: Props) => {
         <ChannelBrowser />
         {isMenuOpen ? <DropdownMenu /> : null}
         <GroupList />
-        <div className="">here</div>
+        <UserStatus />
       </div>
       {children}
     </div>
