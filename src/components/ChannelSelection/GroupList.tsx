@@ -19,7 +19,7 @@ const groups = [
   },
 ];
 export const GroupList = () => (
-  <div>
+  <div className="flex-1">
     <ul>
       {groups.map((group) => (
         <Group key={group.id} group={group} />

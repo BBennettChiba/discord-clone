@@ -1,5 +1,6 @@
 "use client";
 import { useState, type ReactNode } from "react";
+import { ChannelBrowser } from "@/components/ChannelSelection/ChannelBrowser";
 import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,7 @@ const Server = ({ children, params: { server } }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="flex flex-1">
-      <div className="relative h-full w-60 bg-zinc-800">
+      <div className="relative flex h-full w-60 flex-col bg-zinc-800">
         <div className="mb-[-1px] flex h-12 w-full items-center border-b border-black pl-4">
           <div>{server}</div>
           <div className="ml-auto pr-2">
@@ -34,8 +35,10 @@ const Server = ({ children, params: { server } }: Props) => {
             </div>
           </div>
         </div>
+        <ChannelBrowser />
         {isMenuOpen ? <DropdownMenu /> : null}
         <GroupList />
+        <div className="">here</div>
       </div>
       {children}
     </div>
