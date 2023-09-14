@@ -27,6 +27,7 @@ export const ServerIcon = ({ children, title, green, selected }: Props) => {
             {
               "text-xs": isLong,
               "hover:bg-green-500": green,
+              "rounded-xl": selected,
             },
           )}
         >
