@@ -4,6 +4,7 @@ import { ChannelBrowser } from "@/components/ChannelSelection/ChannelBrowser";
 import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { UserStatus } from "@/components/ChannelSelection/UserStatus";
+import { servers } from "@/components/ServerList/Servers";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -13,11 +14,14 @@ type Props = {
 
 const Server = ({ children, params: { server } }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { title } = servers.find((s) => s.id === server)!;
   return (
     <div className="flex flex-1">
-      <div className="relative flex h-full w-60 flex-col bg-zinc-800">
+      <div className="relative flex  h-screen w-60 flex-col bg-zinc-800">
         <div className="mb-[-1px] flex h-12 w-full items-center border-b border-black pl-4">
-          <div>{server}</div>
+          <div className="w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+            {title}
+          </div>
           <div className="ml-auto pr-2">
             <div
               className="group relative flex h-8 w-8 cursor-pointer items-center justify-center"
