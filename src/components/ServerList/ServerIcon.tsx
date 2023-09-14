@@ -34,7 +34,7 @@ export const ServerIcon = ({ children, title, green, selected }: Props) => {
           {children}
         </div>
       </div>
-      <div className="left-20 hidden min-w-[10rem] rounded-lg bg-black p-2 group-hover:absolute group-hover:block">
+      <div className="absolute left-20 top-1/2 z-10 hidden min-w-[10rem] origin-center -translate-y-1/2 rounded-lg bg-black p-2 group-hover:block">
         {title}
       </div>
       <div className="absolute -left-2 flex h-full w-3 items-center overflow-hidden">
