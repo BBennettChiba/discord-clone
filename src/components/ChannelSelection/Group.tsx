@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChannelList } from "./ChannelList";
 
 type Channel = {
-  id: number;
+  id: string;
   name: string;
 };
 type Props = {

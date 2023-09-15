@@ -18,7 +18,7 @@ const Server = ({ children, params: { server } }: Props) => {
   return (
     <div className="flex flex-1">
       <div className="relative flex  h-screen w-60 flex-col bg-zinc-800">
-        <div className="mb-[-1px] flex h-12 w-full items-center border-b border-black pl-4">
+        <div className="mb-[-1px] flex flex-none h-12 w-full items-center border-b border-black pl-4">
           <div className="w-52 overflow-hidden text-ellipsis whitespace-nowrap">
             {title}
           </div>

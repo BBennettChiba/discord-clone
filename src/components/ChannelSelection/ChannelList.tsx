@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 type Props = {
-  channels: { id: number; name: string }[];
+  channels: { id: string; name: string }[];
 };
 
 export const ChannelList = ({ channels }: Props) =>

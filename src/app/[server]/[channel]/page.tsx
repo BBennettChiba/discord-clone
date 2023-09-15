@@ -5,7 +5,7 @@ type Props = {
 };
 
 const Channel = ({ params: { channel } }: Props) => (
-  <div className="flex-1">{channel}</div>
+  <div className="flex-1 bg-zinc-700">{channel}</div>
 );
 
 export default Channel;
