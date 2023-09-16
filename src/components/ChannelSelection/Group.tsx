@@ -11,14 +11,14 @@ type Props = {
   group: { id: number; name: string; channels: Channel[] };
 };
 
-export const Group = ({ group }: Props) => {
+export const Group = ({ group }: Props): JSX.Element => {
   const [checked, setChecked] = useState(false);
   return (
     <>
-      <div className="pt-4 group">
+      <div className="group pt-4">
         <li className="h-6">
           <div
-            onClick={() => setChecked((c) => !c)}
+            onClick={(): void => setChecked((c) => !c)}
             className="flex cursor-pointer"
           >
             <div className="relative left-1 p-2">

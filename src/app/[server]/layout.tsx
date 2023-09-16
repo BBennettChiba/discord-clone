@@ -12,20 +12,20 @@ type Props = {
   params: { server: string };
 };
 
-const Server = ({ children, params: { server } }: Props) => {
+const Server = ({ children, params: { server } }: Props): JSX.Element => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { title } = servers.find((s) => s.id === server)!;
   return (
     <div className="flex flex-1">
       <div className="relative flex  h-screen w-60 flex-col bg-zinc-800">
-        <div className="mb-[-1px] flex flex-none h-12 w-full items-center border-b border-black pl-4">
+        <div className="mb-[-1px] flex h-12 w-full flex-none items-center border-b border-black pl-4">
           <div className="w-52 overflow-hidden text-ellipsis whitespace-nowrap">
             {title}
           </div>
           <div className="ml-auto pr-2">
             <div
               className="group relative flex h-8 w-8 cursor-pointer items-center justify-center"
-              onClick={() => setIsMenuOpen((v) => !v)}
+              onClick={(): void => setIsMenuOpen((v) => !v)}
             >
               <div className="absolute h-4 w-[1px] origin-center -translate-x-1/2 -rotate-45 bg-white transition-all" />
               <div className="absolute h-4 w-[1px] origin-center translate-x-1/2 rotate-45 bg-white transition-all" />

@@ -138,7 +138,7 @@ export const groups = [
     ],
   },
 ];
-export const GroupList = () => (
+export const GroupList = (): JSX.Element => (
   <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-900">
     <ul>
       {groups.map((group) => (

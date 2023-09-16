@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 
 type Props = { children: ReactNode; params: { server: string } };
 
-export const Server = ({ children, params: { server } }: Props) => {
+export const Server = ({
+  children,
+  params: { server },
+}: Props): JSX.Element => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="flex flex-1">
@@ -14,7 +17,7 @@ export const Server = ({ children, params: { server } }: Props) => {
           <div className="ml-auto pr-2">
             <div
               className="group relative flex h-8 w-8 items-center justify-center"
-              onClick={() => setIsMenuOpen((v) => !v)}
+              onClick={(): void => setIsMenuOpen((v) => !v)}
             >
               <div className="absolute h-4 w-[1px] origin-center -translate-x-1/2 -rotate-45 bg-white transition-all" />
               <div className="absolute h-4 w-[1px] origin-center translate-x-1/2 rotate-45 bg-white transition-all" />

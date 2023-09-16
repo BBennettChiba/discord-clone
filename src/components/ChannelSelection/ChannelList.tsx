@@ -5,7 +5,7 @@ type Props = {
   channels: { id: string; name: string }[];
 };
 
-export const ChannelList = ({ channels }: Props) =>
+export const ChannelList = ({ channels }: Props): JSX.Element[] =>
   channels.map((ch) => (
     <Link href={`${ch.id}`} key={ch.id}>
       <div className="px-2">

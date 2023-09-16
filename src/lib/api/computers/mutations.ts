@@ -6,9 +6,23 @@ import {
   computers,
   computerIdSchema,
   type ComputerId,
+  type Computer,
 } from "@/lib/db/schema/computers";
 
-export const createComputer = async (computer: NewComputer) => {
+type MutationReturnType = Promise<
+  | {
+      computer: Computer;
+      error?: undefined;
+    }
+  | {
+      error: string;
+      computer?: undefined;
+    }
+>;
+
+export const createComputer = async (
+  computer: NewComputer,
+): MutationReturnType => {
   const newComputer = insertComputerSchema.parse(computer);
   try {
     const [c] = await db.insert(computers).values(newComputer).returning();
@@ -21,7 +35,10 @@ export const createComputer = async (computer: NewComputer) => {
   }
 };
 
-export const updateComputer = async (id: ComputerId, computer: NewComputer) => {
+export const updateComputer = async (
+  id: ComputerId,
+  computer: NewComputer,
+): MutationReturnType => {
   const { id: computerId } = computerIdSchema.parse({ id });
   const newComputer = insertComputerSchema.parse(computer);
   try {
@@ -39,7 +56,7 @@ export const updateComputer = async (id: ComputerId, computer: NewComputer) => {
   }
 };
 
-export const deleteComputer = async (id: ComputerId) => {
+export const deleteComputer = async (id: ComputerId): MutationReturnType => {
   const { id: computerId } = computerIdSchema.parse({ id });
   try {
     const [c] = await db

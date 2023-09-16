@@ -5,18 +5,17 @@ import { useState } from "react";
 import { ServerIcon } from "./ServerIcon";
 import { servers } from "./Servers";
 
-export const ServerList = () => {
+export const ServerList = (): JSX.Element => {
   const { server } = useParams();
-  const currentServerIndex = servers.findIndex(
-    (s) => s.id === (server as string),
-  ) + 1;
+  const currentServerIndex =
+    servers.findIndex((s) => s.id === (server as string)) + 1;
 
   const [selected, setSelected] = useState<number>(currentServerIndex);
 
   return (
     <div className="h-full w-[72px]">
       <div className="relative h-screen flex-grow bg-neutral-900 pt-3">
-        <div onClick={() => setSelected(0)}>
+        <div onClick={(): void => setSelected(0)}>
           <Link href="/me">
             <ServerIcon title="Direct Messages" selected={selected === 0}>
               <svg
@@ -41,7 +40,7 @@ export const ServerList = () => {
         </div>
 
         {servers.map(({ element, title, id, defaultChannel }, i) => (
-          <div onClick={() => setSelected(i + 1)} key={id}>
+          <div onClick={(): void => setSelected(i + 1)} key={id}>
             <Link href={`/${id}/${defaultChannel}`}>
               <ServerIcon title={title} selected={i + 1 === selected}>
                 {element}
@@ -49,7 +48,7 @@ export const ServerList = () => {
             </Link>
           </div>
         ))}
-        <div onClick={() => setSelected(servers.length + 1)}>
+        <div onClick={(): void => setSelected(servers.length + 1)}>
           <ServerIcon
             title={"Add a server"}
             green

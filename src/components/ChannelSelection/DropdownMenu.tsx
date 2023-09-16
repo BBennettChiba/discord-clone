@@ -210,7 +210,7 @@ const options = [
 
 const IS_ADMIN = true;
 
-export const DropdownMenu = () => (
+export const DropdownMenu = (): JSX.Element => (
   <div className="absolute top-12 z-10 flex w-full flex-col">
     <div className="p-3 text-xs">
       <div className="rounded-md bg-black px-2 py-2">

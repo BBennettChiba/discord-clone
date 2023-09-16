@@ -1,4 +1,4 @@
-export const ChannelBrowser = () => (
+export const ChannelBrowser = (): JSX.Element => (
   <>
     <div className="px-2 pt-3">
       <div className="flex h-[34px] w-full cursor-pointer items-center rounded-md text-gray-400 hover:bg-zinc-700 hover:text-gray-300">

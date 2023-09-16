@@ -1,7 +1,7 @@
 "use client";
 import { useSession, signIn, signOut } from "next-auth/react";
 
-export const SignIn = () => {
+export const SignIn = (): JSX.Element => {
   const { data: session, status } = useSession();
 
   if (status === "loading") return <div>Loading...</div>;
@@ -10,14 +10,14 @@ export const SignIn = () => {
     return (
       <>
         Signed in as {session.user.email} <br />
-        <button onClick={() => void signOut()}>Sign out</button>
+        <button onClick={(): void => void signOut()}>Sign out</button>
       </>
     );
   }
   return (
     <>
       Not signed in <br />
-      <button onClick={() => void signIn()}>Sign in</button>
+      <button onClick={(): void => void signIn()}>Sign in</button>
     </>
   );
 };

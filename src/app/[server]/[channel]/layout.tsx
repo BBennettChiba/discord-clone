@@ -5,7 +5,7 @@ import { groups } from "@/components/ChannelSelection/GroupList";
 
 type Props = { children: ReactNode };
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children }: Props): JSX.Element => {
   const { channel } = useParams();
   const [search, setSearch] = useState("");
 
@@ -118,7 +118,7 @@ const Layout = ({ children }: Props) => {
               <input
                 className="w-36 appearance-none bg-neutral-800 transition-all focus:w-56 focus:outline-none"
                 type="text"
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e): void => setSearch(e.target.value)}
                 value={search}
                 placeholder="search"
               />

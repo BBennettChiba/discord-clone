@@ -31,6 +31,9 @@ module.exports = {
   plugins: ["@typescript-eslint", "import"],
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
+    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/prefer-ts-expect-error": "error",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {

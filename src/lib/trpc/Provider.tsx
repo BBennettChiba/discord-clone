@@ -7,7 +7,11 @@ import SuperJSON from "superjson";
 import { trpc } from "./client";
 import { getUrl } from "./utils";
 
-export const TrpcProvider = ({ children }: { children: React.ReactNode }) => {
+export const TrpcProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element => {
   const [queryClient] = useState(() => new QueryClient({}));
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -17,7 +21,7 @@ export const TrpcProvider = ({ children }: { children: React.ReactNode }) => {
           url: getUrl(),
         }),
       ],
-    })
+    }),
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

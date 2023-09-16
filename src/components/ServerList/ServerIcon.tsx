@@ -11,7 +11,12 @@ type Props = {
 
 const isText = (child: ReactNode): child is string => typeof child === "string";
 
-export const ServerIcon = ({ children, title, green, selected }: Props) => {
+export const ServerIcon = ({
+  children,
+  title,
+  green,
+  selected,
+}: Props): JSX.Element => {
   const isLong = isText(children)
     ? children.length > 5
       ? true

@@ -1,5 +1,3 @@
-export default function Me() {
-  return (
-    <div>me</div>
-  )
-}
+const Me = (): JSX.Element => <div>me</div>;
+
+export default Me;
