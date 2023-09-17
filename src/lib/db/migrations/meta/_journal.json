@@ -15,6 +15,13 @@
       "when": 1694947418284,
       "tag": "0001_typical_wendell_vaughn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1694950835759,
+      "tag": "0002_motionless_toad_men",
+      "breakpoints": true
     }
   ]
 }

@@ -25,7 +25,7 @@ export const channels = pgTable(
   (channel) => ({
     nameIndex: index("name_idx").on(channel.name),
     nameIndexUnique: uniqueIndex("name_idx").on(channel.name),
-    serverIdIndex: uniqueIndex("server_id_idx").on(channel.serverId),
+    serverIdIndex: index("server_id_idx").on(channel.serverId),
   }),
 );
 

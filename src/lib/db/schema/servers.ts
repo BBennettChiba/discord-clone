@@ -5,6 +5,7 @@ import {
   serial,
   pgTable,
   uniqueIndex,
+  index,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type z } from "zod";
@@ -23,7 +24,7 @@ export const servers = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
   },
   (server) => ({
-    ownerIdIndex: uniqueIndex("owner_id_idx").on(server.ownerId),
+    ownerIdIndex: index("owner_id_idx").on(server.ownerId),
     nameIndex: uniqueIndex("name_idx").on(server.name),
   }),
 );

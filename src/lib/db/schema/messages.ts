@@ -23,7 +23,7 @@ export const messages = pgTable(
       .references(() => channels.id, { onDelete: "cascade" })
       .notNull(),
     createdAt: timestamp("created_at").notNull(),
-    updatedAt: timestamp("updated_at").notNull(),
+    updatedAt: timestamp("updated_at"),
     authorId: varchar("author", { length: 256 })
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
