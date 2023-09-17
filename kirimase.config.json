@@ -2,6 +2,13 @@
   "driver": "pg",
   "hasSrc": true,
   "provider": "supabase",
-  "packages": ["drizzle", "trpc", "next-auth"],
-  "preferredPackageManager": "bun"
+  "packages": [
+    "drizzle",
+    "trpc",
+    "next-auth"
+  ],
+  "preferredPackageManager": "bun",
+  "rootPath": "src/",
+  "orm": "drizzle",
+  "auth": "next-auth"
 }
