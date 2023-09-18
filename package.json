@@ -13,7 +13,8 @@
     "db:pull": "drizzle-kit introspect:pg",
     "db:studio": "drizzle-kit studio",
     "db:check": "drizzle-kit check:pg",
-    "db:seed": "bun src/lib/db/seed.ts"
+    "db:seed": "bun src/lib/db/seed.ts",
+    "db:clear": "bun src/lib/db/clearDb.ts"
   },
   "dependencies": {
     "@auth/core": "^0.14.0",

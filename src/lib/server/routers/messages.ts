@@ -1,32 +1,28 @@
-import { getMessageById, getMessages } from "@/lib/api/messages/queries";
-import { publicProcedure, router } from "../trpc";
+// import {
+// createMessage,
+// deleteMessage,
+// updateMessage,
+// } from "@/lib/api/messages/mutations";
+import { getMessagesByChannelId, getMessages } from "@/lib/api/messages/queries";
 import {
-  messageIdSchema,
-  insertMessageParams,
-  updateMessageParams,
+  MessageByChannelIdSchema,
+  // insertMessageParams,
+  // updateMessageParams,
 } from "@/lib/db/schema/messages";
-import { createMessage, deleteMessage, updateMessage } from "@/lib/api/messages/mutations";
+import { publicProcedure, router } from "../trpc";
 
 export const messagesRouter = router({
-  getMessages: publicProcedure.query(async () => {
-    return getMessages();
-  }),
-  getMessageById: publicProcedure.input(messageIdSchema).query(async ({ input }) => {
-    return getMessageById(input.id);
-  }),
-  createMessage: publicProcedure
-    .input(insertMessageParams)
-    .mutation(async ({ input }) => {
-      return createMessage(input);
-    }),
-  updateMessage: publicProcedure
-    .input(updateMessageParams)
-    .mutation(async ({ input }) => {
-      return updateMessage(input.id, input);
-    }),
-  deleteMessage: publicProcedure
-    .input(messageIdSchema)
-    .mutation(async ({ input }) => {
-      return deleteMessage(input.id);
-    }),
+  getMessages: publicProcedure.query(async () => getMessages()),
+  getMessagesByChannelId: publicProcedure
+    .input(MessageByChannelIdSchema)
+    .query(async ({ input }) => getMessagesByChannelId(input)),
+  // createMessage: publicProcedure
+  //   .input(insertMessageParams)
+  //   .mutation(async ({ input }) => createMessage(input)),
+  // updateMessage: publicProcedure
+  //   .input(updateMessageParams)
+  //   .mutation(async ({ input }) => updateMessage(input.id, input)),
+  // deleteMessage: publicProcedure
+  //   .input(messageIdSchema)
+  //   .mutation(async ({ input }) => deleteMessage(input.id)),
 });

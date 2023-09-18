@@ -1,7 +1,8 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useState, type ReactNode } from "react";
-import { groups } from "@/components/ChannelSelection/GroupList";
+import { trpc } from "@/lib/trpc/client";
+// import { groups } from "@/components/ChannelSelection/GroupList";
 
 type Props = { children: ReactNode };
 
@@ -9,10 +10,13 @@ const Layout = ({ children }: Props): JSX.Element => {
   const { channel } = useParams();
   const [search, setSearch] = useState("");
 
-  const thisChannel = groups
-    .find((g) => g.channels.find((c) => c.id === channel))
-    ?.channels.find((c) => c.id === channel);
-  if (!thisChannel) throw new Error("Channel not found");
+  const { data: channelData, isLoading } =
+    trpc.channels.getChannelById.useQuery({
+      id: +channel,
+    });
+
+  if (isLoading) return <>loading</>;
+  if (!channelData) throw new Error(" no channel found");
 
   return (
     <div className="flex w-[calc(100dvw-312px)] flex-col bg-zinc-700">
@@ -36,12 +40,12 @@ const Layout = ({ children }: Props): JSX.Element => {
             />
           </svg>
         </div>
-        <div className="p-2">{thisChannel.name}</div>
+        <div className="p-2">{channelData.name}</div>
         <div className="h-full p-2">
           <div className="h-full w-[1px] bg-gray-500" />
         </div>
         <div className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap p-2 text-xs">
-          {thisChannel.description}
+          {channelData.description}
         </div>
         <div className="px-2">
           <svg
@@ -92,14 +96,14 @@ const Layout = ({ children }: Props): JSX.Element => {
           >
             <path
               fill="currentColor"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M14 8.00598C14 10.211 12.206 12.006 10 12.006C7.795 12.006 6 10.211 6 8.00598C6 5.80098 7.794 4.00598 10 4.00598C12.206 4.00598 14 5.80098 14 8.00598ZM2 19.006C2 15.473 5.29 13.006 10 13.006C14.711 13.006 18 15.473 18 19.006V20.006H2V19.006Z"
             />
             <path
               fill="currentColor"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M14 8.00598C14 10.211 12.206 12.006 10 12.006C7.795 12.006 6 10.211 6 8.00598C6 5.80098 7.794 4.00598 10 4.00598C12.206 4.00598 14 5.80098 14 8.00598ZM2 19.006C2 15.473 5.29 13.006 10 13.006C14.711 13.006 18 15.473 18 19.006V20.006H2V19.006Z"
             />
             <path
@@ -145,7 +149,7 @@ const Layout = ({ children }: Props): JSX.Element => {
         <input
           type="text"
           className="h-11 w-full appearance-none bg-neutral-600 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
-          placeholder={`Send a message in ${thisChannel.name}`}
+          placeholder={`Send a message in ${channelData.name}`}
         />
       </div>
     </div>

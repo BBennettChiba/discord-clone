@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "c9b6b244-612d-465c-9706-8754460b5031",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "1bf8e5d9-8efb-4177-a727-30b5c07b25ae",
+  "prevId": "2234235d-94e5-45d4-a1ff-f3a82305a85d",
   "tables": {
     "account": {
       "name": "account",
@@ -236,8 +236,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "server_id": {
-          "name": "server_id",
+        "description": {
+          "name": "description",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_id": {
+          "name": "group_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -249,31 +255,38 @@
           "columns": [
             "name"
           ],
-          "isUnique": true
-        },
-        "server_id_idx": {
-          "name": "server_id_idx",
-          "columns": [
-            "server_id"
-          ],
           "isUnique": false
         }
       },
-      "foreignKeys": {
-        "channels_server_id_servers_id_fk": {
-          "name": "channels_server_id_servers_id_fk",
-          "tableFrom": "channels",
-          "tableTo": "servers",
-          "columnsFrom": [
-            "server_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "groups": {
+      "name": "groups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "server_id": {
+          "name": "server_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -380,6 +393,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "default_channel": {
+          "name": "default_channel",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "owner_id": {
           "name": "owner_id",
           "type": "text",
@@ -419,6 +438,63 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users_to_servers": {
+      "name": "users_to_servers",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "server_id": {
+          "name": "server_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_to_servers_user_id_user_id_fk": {
+          "name": "users_to_servers_user_id_user_id_fk",
+          "tableFrom": "users_to_servers",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "users_to_servers_server_id_servers_id_fk": {
+          "name": "users_to_servers_server_id_servers_id_fk",
+          "tableFrom": "users_to_servers",
+          "tableTo": "servers",
+          "columnsFrom": [
+            "server_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "users_to_servers_user_id_server_id": {
+          "name": "users_to_servers_user_id_server_id",
+          "columns": [
+            "user_id",
+            "server_id"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     }
   },

@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { type Server } from "@/lib/db/schema/servers";
 import { ServerIcon } from "./ServerIcon";
-import { servers } from "./Servers";
 
-export const ServerList = (): JSX.Element => {
+export const ServerList = ({ servers }: { servers: Server[] }): JSX.Element => {
   const { server } = useParams();
+
   const currentServerIndex =
-    servers.findIndex((s) => s.id === (server as string)) + 1;
+    servers.findIndex((s) => s.id === +server) + 1 || 0;
 
   const [selected, setSelected] = useState<number>(currentServerIndex);
 
@@ -39,11 +40,12 @@ export const ServerList = (): JSX.Element => {
           <div className="h-[2px] w-8 bg-gray-700" />
         </div>
 
-        {servers.map(({ element, title, id, defaultChannel }, i) => (
+        {servers.map(({ name, id, defaultChannel }, i) => (
           <div onClick={(): void => setSelected(i + 1)} key={id}>
             <Link href={`/${id}/${defaultChannel}`}>
-              <ServerIcon title={title} selected={i + 1 === selected}>
-                {element}
+              <ServerIcon title={name} selected={i + 1 === selected}>
+                {/* {element} */}
+                {name}
               </ServerIcon>
             </Link>
           </div>

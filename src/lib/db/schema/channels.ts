@@ -1,39 +1,29 @@
 import { relations } from "drizzle-orm";
-import {
-  varchar,
-  integer,
-  serial,
-  pgTable,
-  uniqueIndex,
-  index,
-} from "drizzle-orm/pg-core";
+import { varchar, integer, serial, pgTable, index } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { type getChannels } from "@/lib/api/channels/queries";
+// import { type getChannels } from "@/lib/api/channels/queries";
+import { groups } from "./groups";
 import { messages } from "./messages";
-import { servers } from "./servers";
 
 export const channels = pgTable(
   "channels",
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 40 }).notNull(),
-    serverId: integer("server_id")
-      .references(() => servers.id, { onDelete: "cascade" })
-      .notNull(),
+    description: varchar("description", { length: 256 }).notNull(),
+    groupId: integer("group_id").notNull(),
   },
   (channel) => ({
     nameIndex: index("name_idx").on(channel.name),
-    nameIndexUnique: uniqueIndex("name_idx").on(channel.name),
-    serverIdIndex: index("server_id_idx").on(channel.serverId),
   }),
 );
 
 export const channelsRelations = relations(channels, ({ many, one }) => ({
   messages: many(messages),
-  server: one(servers, {
-    fields: [channels.serverId],
-    references: [servers.id],
+  group: one(groups, {
+    fields: [channels.groupId],
+    references: [groups.id],
   }),
 }));
 
@@ -41,7 +31,7 @@ export const channelsRelations = relations(channels, ({ many, one }) => ({
 export const insertChannelSchema = createInsertSchema(channels);
 
 export const insertChannelParams = createSelectSchema(channels, {
-  serverId: z.coerce.number(),
+  id: z.coerce.number(),
 }).omit({
   id: true,
 });
@@ -49,7 +39,7 @@ export const insertChannelParams = createSelectSchema(channels, {
 export const updateChannelSchema = createSelectSchema(channels);
 
 export const updateChannelParams = createSelectSchema(channels, {
-  serverId: z.coerce.number(),
+  id: z.coerce.number(),
 });
 
 export const channelIdSchema = updateChannelSchema.pick({ id: true });
@@ -62,6 +52,6 @@ export type UpdateChannelParams = z.infer<typeof updateChannelParams>;
 export type ChannelId = z.infer<typeof channelIdSchema>["id"];
 
 // this type infers the return from getChannels() - meaning it will include any joins
-export type CompleteChannel = Awaited<
-  ReturnType<typeof getChannels>
->["channels"][number];
+// export type CompleteChannel = Awaited<
+//   ReturnType<typeof getChannels>
+// >["channels"][number];

@@ -1,0 +1,1 @@
+ALTER TABLE "servers" ADD COLUMN "default_channel" integer NOT NULL;

@@ -1,14 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { type CompleteGroup } from "@/lib/db/schema/groups";
 import { ChannelList } from "./ChannelList";
 
-type Channel = {
-  id: string;
-  name: string;
-};
 type Props = {
-  group: { id: number; name: string; channels: Channel[] };
+  group: CompleteGroup;
 };
 
 export const Group = ({ group }: Props): JSX.Element => {

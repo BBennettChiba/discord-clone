@@ -1,14 +1,14 @@
 import { router } from "../trpc";
-import { computersRouter } from "./computers";
+import { channelsRouter } from "./channels";
 import { messagesRouter } from "./messages";
 import { serversRouter } from "./servers";
-import { channelsRouter } from "./channels";
+import { groupsRouter } from "./groups";
 
 export const appRouter = router({
-  computers: computersRouter,
   messages: messagesRouter,
   servers: serversRouter,
   channels: channelsRouter,
+  groups: groupsRouter,
 });
 
 export type AppRouter = typeof appRouter;

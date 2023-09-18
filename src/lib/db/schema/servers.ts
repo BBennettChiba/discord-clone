@@ -6,6 +6,7 @@ import {
   pgTable,
   uniqueIndex,
   index,
+  integer,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type z } from "zod";
@@ -13,12 +14,15 @@ import { type z } from "zod";
 import { type getServers } from "@/lib/api/servers/queries";
 import { users } from "./auth";
 import { channels } from "./channels";
+import { groups } from "./groups";
+import { usersToServers } from "./usersToServers";
 
 export const servers = pgTable(
   "servers",
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 40 }).notNull(),
+    defaultChannel: integer("default_channel").notNull(),
     ownerId: text("owner_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -34,7 +38,12 @@ export const serversRealtions = relations(servers, ({ one, many }) => ({
     fields: [servers.ownerId],
     references: [users.id],
   }),
-  channels: many(channels),
+  groups: many(groups),
+  members: many(usersToServers),
+  defaultChannel: one(channels, {
+    fields: [servers.defaultChannel],
+    references: [channels.id],
+  }),
 }));
 
 // Schema for servers - used to validate API requests
@@ -48,6 +57,7 @@ export const insertServerParams = createSelectSchema(servers, {}).omit({
 export const updateServerSchema = createSelectSchema(servers);
 
 export const updateServerParams = createSelectSchema(servers, {}).omit({
+  name: true,
   ownerId: true,
 });
 
@@ -58,9 +68,7 @@ export type Server = z.infer<typeof updateServerSchema>;
 export type NewServer = z.infer<typeof insertServerSchema>;
 export type NewServerParams = z.infer<typeof insertServerParams>;
 export type UpdateServerParams = z.infer<typeof updateServerParams>;
-export type ServerId = z.infer<typeof serverIdSchema>[];
+export type ServerId = z.infer<typeof serverIdSchema>;
 
 // this type infers the return from getServers() - meaning it will include any joins
-export type CompleteServer = Awaited<
-  ReturnType<typeof getServers>
->["servers"][number];
+export type CompleteServer = Awaited<ReturnType<typeof getServers>>[number];

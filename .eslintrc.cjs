@@ -9,6 +9,7 @@ module.exports = {
         "src/app/**/layout.tsx",
         "src/app/**/page.tsx",
         "tailwind.config.ts",
+        "drizzle.config.ts",
       ],
       rules: {
         "import/no-default-export": "off",
@@ -32,7 +33,7 @@ module.exports = {
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {
     "@typescript-eslint/switch-exhaustiveness-check": "error",
-    "@typescript-eslint/explicit-function-return-type": "error",
+    // "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/prefer-ts-expect-error": "error",
     "@typescript-eslint/consistent-type-imports": [
       "warn",

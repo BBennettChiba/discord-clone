@@ -8,6 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { messages } from "./messages";
 import { servers } from "./servers";
+import { usersToServers } from "./usersToServers";
 import type { AdapterAccount } from "@auth/core/adapters";
 
 export const users = pgTable("user", {
@@ -18,9 +19,10 @@ export const users = pgTable("user", {
   image: text("image"),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   messages: many(messages),
-  servers: many(servers),
+  servers: many(usersToServers),
+  ownedServer: one(servers),
 }));
 
 export const accounts = pgTable(

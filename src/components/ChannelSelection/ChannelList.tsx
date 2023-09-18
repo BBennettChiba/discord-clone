@@ -1,8 +1,9 @@
 import Link from "next/link";
 import React from "react";
+import { type CompleteGroup } from "@/lib/db/schema/groups";
 
 type Props = {
-  channels: { id: string; name: string }[];
+  channels: CompleteGroup["channels"];
 };
 
 export const ChannelList = ({ channels }: Props): JSX.Element[] =>

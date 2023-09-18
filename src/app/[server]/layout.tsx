@@ -4,7 +4,8 @@ import { ChannelBrowser } from "@/components/ChannelSelection/ChannelBrowser";
 import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { UserStatus } from "@/components/ChannelSelection/UserStatus";
-import { servers } from "@/components/ServerList/Servers";
+// import { servers } from "@/components/ServerList/Servers";
+import { trpc } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -14,13 +15,14 @@ type Props = {
 
 const Server = ({ children, params: { server } }: Props): JSX.Element => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { title } = servers.find((s) => s.id === server)!;
+  const { data: serverData } = trpc.servers.getServerById.useQuery({ id: +server });
+
   return (
     <div className="flex flex-1">
       <div className="relative flex  h-screen w-60 flex-col bg-zinc-800">
         <div className="mb-[-1px] flex h-12 w-full flex-none items-center border-b border-black pl-4">
           <div className="w-52 overflow-hidden text-ellipsis whitespace-nowrap">
-            {title}
+            {serverData?.name}
           </div>
           <div className="ml-auto pr-2">
             <div
@@ -42,7 +44,7 @@ const Server = ({ children, params: { server } }: Props): JSX.Element => {
         </div>
         <ChannelBrowser />
         {isMenuOpen ? <DropdownMenu /> : null}
-        <GroupList />
+        <GroupList serverId={+server}/>
         <UserStatus />
       </div>
       {children}

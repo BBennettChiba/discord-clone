@@ -71,7 +71,13 @@ export const updateMessageParams = createSelectSchema(messages, {
   authorId: true,
 });
 
-export const messageIdSchema = updateMessageSchema.pick({ id: true });
+export const messageIdSchema = updateMessageSchema.pick({
+  id: true,
+});
+
+export const MessageByChannelIdSchema = updateMessageSchema.pick({
+  channelId: true,
+});
 
 // Types for messages - used to type API request params and within Components
 export type Message = z.infer<typeof updateMessageSchema>;
@@ -79,8 +85,7 @@ export type NewMessage = z.infer<typeof insertMessageSchema>;
 export type NewMessageParams = z.infer<typeof insertMessageParams>;
 export type UpdateMessageParams = z.infer<typeof updateMessageParams>;
 export type MessageId = z.infer<typeof messageIdSchema>["id"];
+export type MessageByChannelId = z.infer<typeof MessageByChannelIdSchema>;
 
 // this type infers the return from getMessages() - meaning it will include any joins
-export type CompleteMessage = Awaited<
-  ReturnType<typeof getMessages>
->["messages"][number];
+export type CompleteMessage = Awaited<ReturnType<typeof getMessages>>[number];

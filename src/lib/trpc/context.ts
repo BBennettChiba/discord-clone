@@ -4,10 +4,12 @@ import { getUserAuth } from "../auth/utils";
 
 type CreateContextReturn = Promise<{
   session: Session | null;
-  headers: {
-      [k: string]: string;
-  } | undefined;
-}>
+  headers:
+    | {
+        [k: string]: string;
+      }
+    | undefined;
+}>;
 
 export const createContext = async (
   opts?: FetchCreateContextFnOptions,
