@@ -1,16 +1,9 @@
-"use client";
-
-import { trpc } from "@/lib/trpc/client";
+import { serverTrpc } from "@/lib/trpc/caller";
 import { Group } from "./Group";
 
-export const GroupList = ({ serverId }: { serverId: number }) => {
-  const { data: groups, isLoading } = trpc.groups.getGroupByServerId.useQuery({
-    serverId,
-  });
+export const GroupList = async ({ serverId }: { serverId: number }) => {
 
-  if (isLoading) return <>loading</>;
-
-  if (!groups) throw new Error("No groups");
+  const groups = await serverTrpc.groups.getGroupByServerId({ serverId });
 
   return (
     <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-900">
