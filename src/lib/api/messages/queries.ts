@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   type MessageByChannelId,
@@ -18,6 +18,7 @@ export const getMessagesByChannelId = async (input: MessageByChannelId) => {
   const m = await db.query.messages.findMany({
     where: eq(messages.channelId, channelId),
     with: { author: true },
+    orderBy: asc(messages.createdAt),
   });
   return m;
 };
