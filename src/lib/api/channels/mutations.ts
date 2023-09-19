@@ -16,7 +16,8 @@ export const createChannel = async (channel: NewChannelParams) => {
     const [c] = await db.insert(channels).values(newChannel).returning();
     return { channel: c };
   } catch (err) {
-    const message = (err as Error).message ?? "Error, please try again";
+    const message =
+      err instanceof Error ? err.message : "Error, please try again";
     console.error(message);
     return { error: message };
   }
@@ -36,7 +37,8 @@ export const updateChannel = async (
       .returning();
     return { channel: c };
   } catch (err) {
-    const message = (err as Error).message ?? "Error, please try again";
+    const message =
+      err instanceof Error ? err.message : "Error, please try again";
     console.error(message);
     return { error: message };
   }
@@ -51,7 +53,8 @@ export const deleteChannel = async (id: ChannelId) => {
       .returning();
     return { channel: c };
   } catch (err) {
-    const message = (err as Error).message ?? "Error, please try again";
+    const message =
+      err instanceof Error ? err.message : "Error, please try again";
     console.error(message);
     return { error: message };
   }

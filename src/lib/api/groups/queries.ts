@@ -7,7 +7,6 @@ export const getGroupsByServerId = async ({
 }: {
   serverId: number;
 }) => {
-  console.log(serverId);
   const g = await db.query.groups.findMany({
     with: { channels: true },
     where: eq(groups.serverId, serverId),

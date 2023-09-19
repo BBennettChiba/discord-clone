@@ -16,7 +16,9 @@ export const createGroup = async (group: NewGroupParams) => {
     const [g] = await db.insert(groups).values(newGroup).returning();
     return { group: g };
   } catch (err) {
-    const message = (err as Error).message ?? "Error, please try again";
+    const message =
+      err instanceof Error ? err.message : "Error, please try again";
+
     console.error(message);
     return { error: message };
   }
@@ -33,7 +35,8 @@ export const updateGroup = async (id: GroupId, group: UpdateGroupParams) => {
       .returning();
     return { group: g };
   } catch (err) {
-    const message = (err as Error).message ?? "Error, please try again";
+    const message =
+      err instanceof Error ? err.message : "Error, please try again";
     console.error(message);
     return { error: message };
   }
@@ -48,7 +51,8 @@ export const deleteGroup = async (id: GroupId) => {
       .returning();
     return { group: g };
   } catch (err) {
-    const message = (err as Error).message ?? "Error, please try again";
+    const message =
+      err instanceof Error ? err.message : "Error, please try again";
     console.error(message);
     return { error: message };
   }

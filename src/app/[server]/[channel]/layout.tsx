@@ -2,7 +2,6 @@
 import { useParams } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { trpc } from "@/lib/trpc/client";
-// import { groups } from "@/components/ChannelSelection/GroupList";
 
 type Props = { children: ReactNode };
 
@@ -17,6 +16,8 @@ const Layout = ({ children }: Props): JSX.Element => {
 
   if (isLoading) return <>loading</>;
   if (!channelData) throw new Error(" no channel found");
+
+  /**@TODO see if I can convert to server component */
 
   return (
     <div className="flex w-[calc(100dvw-312px)] flex-col bg-zinc-700">
