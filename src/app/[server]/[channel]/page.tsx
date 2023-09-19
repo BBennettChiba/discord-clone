@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { serverTrpc } from "@/lib/trpc/caller";
 
 type Props = {
@@ -15,6 +16,12 @@ const Channel = async ({ params: { channel } }: Props) => {
           <div>id: {msg.id}</div>
           <div>{msg.body}</div>
           <div>author: {msg.author.name}</div>
+          <Image
+            src={msg.author.image || ""}
+            alt={msg.author.name!}
+            height={34}
+            width={34}
+          />
         </div>
       ))}
     </div>

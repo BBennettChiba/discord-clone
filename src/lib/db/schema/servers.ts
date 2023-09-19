@@ -26,6 +26,7 @@ export const servers = pgTable(
     ownerId: text("owner_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    icon: text("icon_url").notNull()
   },
   (server) => ({
     ownerIdIndex: index("owner_id_idx").on(server.ownerId),

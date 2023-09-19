@@ -8,6 +8,9 @@ import { db } from "./";
 
 console.log("BEGINNING SEEDING");
 
+const randomInt = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
 type User = {
   id: string;
   name: string;
@@ -42,6 +45,7 @@ const createServerData = (numOfServers: number) => {
       name: faker.lorem.slug(),
       ownerId: getRandomUser(fakeUsers).id,
       defaultChannel: -1,
+      icon: faker.image.urlPicsumPhotos({ height: 48, width: 48 }),
     };
     fakeServers.push(server);
   }
@@ -50,13 +54,10 @@ const createServerData = (numOfServers: number) => {
 
 const fakeServers = createServerData(5);
 
-// const getRandomServer = (listofServers: Server[]): Server =>
-// listofServers[Math.floor(Math.random() * listofServers.length)];
-
-const createGroupData = (numOfGroups: number) => {
+const createGroupData = () => {
   const fakeGroups = [];
   for (const server of fakeServers) {
-    for (let i = 0; i < numOfGroups; i++) {
+    for (let i = 0; i < randomInt(2, 10); i++) {
       const grp = {
         id: faker.number.int(100_000_000),
         name: faker.lorem.word(),
@@ -68,23 +69,21 @@ const createGroupData = (numOfGroups: number) => {
   return fakeGroups;
 };
 
-const fakeGroups = createGroupData(10);
+const fakeGroups = createGroupData();
 
-const getRandomGroup = (listOfGroups: Group[]) =>
-  listOfGroups[Math.floor(Math.random() * listOfGroups.length)];
-
-const createChannelData = (numOfChannels: number): Channel[] => {
+const createChannelData = (): Channel[] => {
   const fakeChannels: Channel[] = [];
-  for (let i = 0; i < numOfChannels; i++) {
-    const group = getRandomGroup(fakeGroups);
-    const channel: Channel = {
-      id: faker.number.int(100_000_000),
-      name: faker.lorem.word(),
-      description: faker.lorem.sentence(),
-      groupId: group.id,
-    };
-    fakeChannels.push(channel);
-    addDefaultChannels(group, channel.id);
+  for (const group of fakeGroups) {
+    for (let i = 0; i < randomInt(2, 10); i++) {
+      const channel: Channel = {
+        id: faker.number.int(100_000_000),
+        name: faker.lorem.word(),
+        description: faker.lorem.sentence(),
+        groupId: group.id,
+      };
+      fakeChannels.push(channel);
+      addDefaultChannels(group, channel.id);
+    }
   }
   return fakeChannels;
 };
@@ -97,36 +96,33 @@ const addDefaultChannels = (group: Group, channelId: number) => {
   server.defaultChannel = channelId;
 };
 
-const fakeChannels = createChannelData(20);
+const fakeChannels = createChannelData();
 
-const getRandomChannel = (listOfChannels: Channel[]): Channel =>
-  listOfChannels[Math.floor(Math.random() * listOfChannels.length)];
-
-const createMessageData = (numOfMessages: number): Message[] => {
+const createMessageData = (): Message[] => {
   const fakeMessages: Message[] = [];
-  for (let i = 0; i < numOfMessages; i++) {
-    const message: Message = {
-      id: faker.number.int(100_000_000),
-      body: faker.lorem.lines(),
-      createdAt: faker.date.recent(),
-      authorId: getRandomUser(fakeUsers).id,
-      channelId: getRandomChannel(fakeChannels).id,
-      parentId: null,
-      updatedAt: null,
-    };
-    fakeMessages.push(message);
+  for (const channel of fakeChannels) {
+    for (let i = 0; i < randomInt(10, 300); i++) {
+      const message: Message = {
+        id: faker.number.int(100_000_000),
+        body: faker.lorem.lines(),
+        createdAt: faker.date.recent(),
+        authorId: getRandomUser(fakeUsers).id,
+        channelId: channel.id,
+        parentId: null,
+        updatedAt: null,
+      };
+      fakeMessages.push(message);
+    }
   }
   return fakeMessages;
 };
 
-const fakeMessages = createMessageData(5000);
-const fakeMessages2 = createMessageData(5000);
+const fakeMessages = createMessageData();
 
 await db.insert(users).values(fakeUsers);
 await db.insert(servers).values(fakeServers);
 await db.insert(channels).values(fakeChannels);
 await db.insert(messages).values(fakeMessages);
-await db.insert(messages).values(fakeMessages2);
 await db.insert(groups).values(fakeGroups);
 
 console.log("SEEDING FINISHED");

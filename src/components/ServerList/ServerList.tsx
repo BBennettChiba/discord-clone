@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -40,12 +41,11 @@ export const ServerList = ({ servers }: { servers: Server[] }): JSX.Element => {
           <div className="h-[2px] w-8 bg-gray-700" />
         </div>
 
-        {servers.map(({ name, id, defaultChannel }, i) => (
+        {servers.map(({ name, id, defaultChannel, icon }, i) => (
           <div onClick={(): void => setSelected(i + 1)} key={id}>
             <Link href={`/${id}/${defaultChannel}`}>
               <ServerIcon title={name} selected={i + 1 === selected}>
-                {/* {element} */}
-                {name}
+                <Image height={48} width={48} src={icon} alt={icon} />
               </ServerIcon>
             </Link>
           </div>
