@@ -75,9 +75,11 @@ export const messageIdSchema = updateMessageSchema.pick({
   id: true,
 });
 
-export const MessageByChannelIdSchema = updateMessageSchema.pick({
-  channelId: true,
-});
+export const MessageByChannelIdSchema = updateMessageSchema
+  .pick({
+    channelId: true,
+  })
+  .extend({ cursor: z.date().optional() });
 
 // Types for messages - used to type API request params and within Components
 export type Message = z.infer<typeof updateMessageSchema>;

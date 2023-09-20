@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   type MessageByChannelId,
@@ -12,13 +12,34 @@ export const getMessages = async () => {
   return m;
 };
 
+const limit = 10;
+
 export const getMessagesByChannelId = async (input: MessageByChannelId) => {
   // const { session } = await getUserAuth();
+
+  let { cursor } = MessageByChannelIdSchema.parse(input);
   const { channelId } = MessageByChannelIdSchema.parse(input);
+
+  if (!cursor) cursor = new Date();
+
   const m = await db.query.messages.findMany({
-    where: eq(messages.channelId, channelId),
+    where: and(
+      eq(messages.channelId, channelId),
+      lt(messages.createdAt, cursor),
+    ),
     with: { author: true },
-    orderBy: asc(messages.createdAt),
+    orderBy: desc(messages.createdAt),
+    limit: limit + 1,
   });
-  return m;
+
+  let nextCursor: typeof cursor | undefined = undefined;
+  if (m.length > limit) {
+    const nextItem = m.pop();
+    nextCursor = nextItem?.createdAt;
+  }
+
+  return {
+    messages: m,
+    nextCursor,
+  };
 };

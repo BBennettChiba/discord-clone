@@ -14,9 +14,9 @@ export const ScrollContainer = ({ children }: Props) => {
   }, [ref]);
 
   return (
-    <div className="h-[calc(100vh-116px)] flex-col-reverse overflow-y-auto bg-zinc-700 text-gray-400 scrollbar-thin scrollbar-thumb-zinc-900">
+    <div className="flex h-[calc(100vh-116px)] flex-col-reverse overflow-y-auto bg-zinc-700 text-gray-400 scrollbar-thin scrollbar-thumb-zinc-900">
+      <div className="pb-4" ref={ref} />
       {children}
-      <div className="pt-4" ref={ref} />
     </div>
   );
 };

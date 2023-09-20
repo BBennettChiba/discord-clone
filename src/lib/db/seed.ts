@@ -101,7 +101,7 @@ const fakeChannels = createChannelData();
 const createMessageData = (): Message[] => {
   const fakeMessages: Message[] = [];
   for (const channel of fakeChannels) {
-    for (let i = 0; i < randomInt(10, 300); i++) {
+    for (let i = 0; i < randomInt(5, 400); i++) {
       const message: Message = {
         id: faker.number.int(100_000_000),
         body: faker.lorem.lines(),
