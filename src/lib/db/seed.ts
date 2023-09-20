@@ -105,7 +105,7 @@ const createMessageData = (): Message[] => {
       const message: Message = {
         id: faker.number.int(100_000_000),
         body: faker.lorem.lines(),
-        createdAt: faker.date.recent(),
+        createdAt: faker.date.recent({ days: 32 }),
         authorId: getRandomUser(fakeUsers).id,
         channelId: channel.id,
         parentId: null,
