@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import { Fragment, useRef } from "react";
+import { Message } from "@/components/Channel/Message";
 import { ScrollContainer } from "@/components/Channel/ScrollContainer";
 import { useIntersectionObserver } from "@/lib/hooks";
 import { trpc } from "@/lib/trpc/client";
@@ -25,7 +25,6 @@ const MONTHS = [
 ] as const;
 
 const Channel = ({ params: { channel } }: Props) => {
-
   const highestPost = useRef<HTMLDivElement | null>(null);
 
   const { isVisible } = useIntersectionObserver(highestPost);
@@ -42,16 +41,11 @@ const Channel = ({ params: { channel } }: Props) => {
 
   let lastDate: Date | undefined;
 
-  const today = new Date().getDay();
-
   if (isLoading) return <>loading</>;
 
   if (!data) return <div>error</div>;
 
   if (isVisible && hasNextPage) void fetchNextPage();
-
-  console.log("is visible? ", isVisible);
-  console.log(data, hasNextPage);
 
   return (
     <ScrollContainer>
@@ -79,29 +73,7 @@ const Channel = ({ params: { channel } }: Props) => {
                 className="pt-[17px]"
                 ref={i === arr.length - 1 ? highestPost : undefined}
               >
-                <div className="min-h-12 relative flex">
-                  <div className="absolute left-[16px] top-1 overflow-hidden rounded-3xl">
-                    <Image
-                      src={msg.author.image || ""}
-                      alt={msg.author.name!}
-                      height={40}
-                      width={40}
-                    />
-                  </div>
-                  <div className="pl-[72px]">
-                    <div className="flex">
-                      <div className="text-purple-600">{msg.author.name}</div>
-                      <div className="flex items-center pl-2 text-xs">
-                        <div>
-                          {msg.createdAt.getDay() === today
-                            ? `today at ${msg.createdAt.toLocaleTimeString()}`
-                            : msg.createdAt.toLocaleString()}
-                        </div>
-                      </div>
-                    </div>
-                    <div>{msg.body}</div>
-                  </div>
-                </div>
+                <Message msg={msg} />
               </div>
             </Fragment>
           );
