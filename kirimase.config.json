@@ -7,7 +7,7 @@
     "trpc",
     "next-auth"
   ],
-  "preferredPackageManager": "bun",
+  "preferredPackageManager": "pnpm",
   "rootPath": "src/",
   "orm": "drizzle",
   "auth": "next-auth"

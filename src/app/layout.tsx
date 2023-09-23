@@ -1,9 +1,13 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { type ReactNode } from "react";
 import { ServerList } from "@/components/ServerList/ServerList";
 import { NextAuthProvider } from "@/lib/auth/Provider";
 import { TrpcProvider } from "@/lib/trpc/Provider";
 import { serverTrpc } from "@/lib/trpc/caller";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 import type { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,10 +24,10 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       <body className={inter.className}>
         <TrpcProvider>
           <NextAuthProvider>
-            <div className="flex">
+            <CheckSession>
               <ServerList servers={servers} />
               {children}
-            </div>
+            </CheckSession>
           </NextAuthProvider>
         </TrpcProvider>
       </body>
@@ -32,3 +36,9 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 };
 
 export default RootLayout;
+
+export const CheckSession = async ({ children }: { children: ReactNode }) => {
+  const session = await getServerSession(authOptions);
+  if (!session) return redirect("/api/auth/signin");
+  return <div className="flex">{children}</div>;
+};

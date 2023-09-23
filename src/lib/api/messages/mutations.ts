@@ -10,21 +10,26 @@ import {
   messages,
   messageIdSchema,
 } from "@/lib/db/schema/messages";
+import { getMesasgeById as getMessageById } from "./queries";
 
-export const createMessage = async (message: NewMessageParams) => {
+export const createMessage = async (msgInput: NewMessageParams) => {
   const { session } = await getUserAuth();
   if (!session) throw new Error("Session not found in createMessage");
   const newMessage = insertMessageSchema.parse({
-    ...message,
-    userId: session.user.id,
+    ...msgInput,
+    authorId: session.user.id,
   });
   try {
-    const [m] = await db.insert(messages).values(newMessage).returning();
-    return { message: m };
+    const [m] = await db
+      .insert(messages)
+      .values(newMessage)
+      .returning();
+    const message = await getMessageById(m.id) 
+    return { message  };
   } catch (err) {
     const errMessage =
       err instanceof Error ? err.message : "Error, please try again";
-    console.error(message);
+    console.error(errMessage);
     return { error: errMessage };
   }
 };

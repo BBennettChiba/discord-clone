@@ -3,13 +3,15 @@ import { type MutableRefObject, useEffect, useState } from "react";
 type Options = {
   rootMargin: `${number}px`;
   threshold: number;
+  root: HTMLElement | null
 };
 
 export const useIntersectionObserver = (
   ref: MutableRefObject<HTMLElement | null>,
   options: Options = {
-    rootMargin: "0px",
+    rootMargin: "10px",
     threshold: 1.0,
+    root: null 
   },
 ) => {
   const [isVisible, setIsVisible] = useState(false);

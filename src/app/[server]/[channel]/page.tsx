@@ -25,9 +25,14 @@ const MONTHS = [
 ] as const;
 
 const Channel = ({ params: { channel } }: Props) => {
-  const highestPost = useRef<HTMLDivElement | null>(null);
+  const inner = useRef<HTMLDivElement | null>(null);
+  const outer = useRef<HTMLDivElement | null>(null);
 
-  const { isVisible } = useIntersectionObserver(highestPost);
+  const { isVisible } = useIntersectionObserver(inner, {
+    root: outer.current,
+    rootMargin: "0px",
+    threshold: 1,
+  });
 
   const { data, isLoading, fetchNextPage, hasNextPage } =
     trpc.messages.getMessagesByChannelId.useInfiniteQuery(
@@ -48,37 +53,41 @@ const Channel = ({ params: { channel } }: Props) => {
   if (isVisible && hasNextPage) void fetchNextPage();
 
   return (
-    <ScrollContainer>
-      {data.pages
-        .flatMap((d) => d.messages)
-        .map((msg, i, arr) => {
-          const newDay =
-            lastDate?.getDay() !== msg.createdAt.getDay() && i !== 0;
-          lastDate = msg.createdAt;
+    <div ref={outer}>
+      <ScrollContainer>
+        {data.pages
+          .flatMap((d) => d.messages)
+          .map((msg, i, arr) => {
+            const newDay =
+              lastDate?.getDay() !== msg.createdAt.getDay() && i !== 0;
+            lastDate = msg.createdAt;
 
-          return (
-            <Fragment key={msg.id}>
-              {newDay ? (
-                <div className="px-4 pb-2 pt-6">
-                  <div className="relative h-[1px] w-full bg-gray-500">
-                    <div className="absolute left-1/2 -translate-y-1/2 bg-zinc-700 text-xs">
-                      {`${
-                        MONTHS[msg.createdAt.getMonth()]
-                      } ${msg.createdAt.getDate()}, ${msg.createdAt.getFullYear()}`}
+            return (
+              <Fragment key={msg.id}>
+                {newDay ? (
+                  <div className="px-4 pb-2 pt-6">
+                    <div className="relative h-[1px] w-full bg-gray-500">
+                      <div className="absolute left-1/2 -translate-y-1/2 bg-zinc-700 text-xs">
+                        {`${
+                          MONTHS[msg.createdAt.getMonth()]
+                        } ${msg.createdAt.getDate()}, ${msg.createdAt.getFullYear()}`}
+                      </div>
                     </div>
                   </div>
+                ) : null}
+                <div
+                  className={`pt-[17px] ${
+                    i === arr.length - 1 ? "bg-black " : ""
+                  }`}
+                  ref={i === arr.length - 1 ? inner : undefined}
+                >
+                  <Message msg={msg} />
                 </div>
-              ) : null}
-              <div
-                className="pt-[17px]"
-                ref={i === arr.length - 1 ? highestPost : undefined}
-              >
-                <Message msg={msg} />
-              </div>
-            </Fragment>
-          );
-        })}
-    </ScrollContainer>
+              </Fragment>
+            );
+          })}
+      </ScrollContainer>
+    </div>
   );
 };
 

@@ -12,15 +12,24 @@ export const getMessages = async () => {
   return m;
 };
 
+export const getMesasgeById = async (id: number) => {
+  const message = await db.query.messages.findFirst({
+    where: eq(messages.id, id),
+    with: { author: true },
+  });
+  return message;
+};
+
 const limit = 10;
 
 export const getMessagesByChannelId = async (input: MessageByChannelId) => {
-  // const { session } = await getUserAuth();
-
   let { cursor } = MessageByChannelIdSchema.parse(input);
   const { channelId } = MessageByChannelIdSchema.parse(input);
 
-  if (!cursor) cursor = new Date();
+  if (!cursor) {
+    cursor = new Date();
+    cursor.setDate(cursor.getDate() + 1);
+  }
 
   const m = await db.query.messages.findMany({
     where: and(
@@ -33,6 +42,7 @@ export const getMessagesByChannelId = async (input: MessageByChannelId) => {
   });
 
   let nextCursor: typeof cursor | undefined = undefined;
+
   if (m.length > limit) {
     const nextItem = m.pop();
     nextCursor = nextItem?.createdAt;

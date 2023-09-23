@@ -22,8 +22,8 @@ export const messages = pgTable(
     channelId: integer("channel_id")
       .references(() => channels.id, { onDelete: "cascade" })
       .notNull(),
-    createdAt: timestamp("created_at").notNull(),
-    updatedAt: timestamp("updated_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow(),
     authorId: varchar("author", { length: 256 })
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
@@ -54,11 +54,11 @@ export const insertMessageSchema = createInsertSchema(messages);
 
 export const insertMessageParams = createSelectSchema(messages, {
   channelId: z.coerce.number(),
-  createdAt: z.coerce.string(),
-  updatedAt: z.coerce.string(),
 }).omit({
   id: true,
-  userId: true,
+  authorId: true,
+  createdAt: true,
+  updatedAt: true
 });
 
 export const updateMessageSchema = createSelectSchema(messages);
@@ -86,7 +86,7 @@ export type Message = z.infer<typeof updateMessageSchema>;
 export type NewMessage = z.infer<typeof insertMessageSchema>;
 export type NewMessageParams = z.infer<typeof insertMessageParams>;
 export type UpdateMessageParams = z.infer<typeof updateMessageParams>;
-export type MessageId = z.infer<typeof messageIdSchema>["id"];
+export type MessageId = z.infer<typeof messageIdSchema>['id']
 export type MessageByChannelId = z.infer<typeof MessageByChannelIdSchema>;
 
 // this type infers the return from getMessages() - meaning it will include any joins

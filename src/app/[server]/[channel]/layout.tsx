@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { MessageInput } from "@/components/Channel/MessageInput";
 import { SearchBar } from "@/components/Channel/SearchBar";
 import { serverTrpc } from "@/lib/trpc/caller";
 
@@ -112,13 +113,7 @@ const Layout = async ({ children, params: { channel } }: Props) => {
         </div>
       </div>
       {children}
-      <div className="px-4 pb-6">
-        <input
-          type="text"
-          className="h-11 w-full appearance-none bg-neutral-600 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
-          placeholder={`Send a message in ${channelData.name}`}
-        />
-      </div>
+      <MessageInput channelName={channelData.name} channelId={+channel} />
     </div>
   );
 };
