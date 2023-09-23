@@ -1,5 +1,7 @@
 import Image from "next/image";
+import { useEmojiPicker } from "@/contexts/EmojiContext";
 import { type trpc } from "@/lib/trpc/client";
+import { cn } from "@/lib/utils";
 import { MessageHoverToolbar } from "./MessageHoverToolbar";
 
 type MessageT = Awaited<
@@ -15,6 +17,7 @@ type Props = {
 };
 
 export const Message = ({ msg }: Props) => {
+  const { isOpenWhere } = useEmojiPicker();
   const today = new Date().getDay();
   return (
     <div className="min-h-12 group relative flex hover:bg-zinc-800 hover:bg-opacity-30">
@@ -39,8 +42,15 @@ export const Message = ({ msg }: Props) => {
         </div>
         <div>{msg.body}</div>
       </div>
-      <div className="absolute -translate-y-1/2 right-0 group-hover:block hidden">
-        <MessageHoverToolbar />
+      <div
+        className={cn(
+          `absolute right-0 hidden -translate-y-1/2 group-hover:block`,
+          {
+            block: msg.id === isOpenWhere,
+          },
+        )}
+      >
+        <MessageHoverToolbar messageId={msg.id} />
       </div>
     </div>
   );
