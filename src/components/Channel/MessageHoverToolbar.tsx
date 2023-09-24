@@ -1,15 +1,19 @@
 "use client";
+import { useRef } from "react";
 import { useEmojiPicker } from "@/contexts/EmojiContext";
 
 export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
-  const { openPicker, Picker } = useEmojiPicker();
+  const ref = useRef<HTMLDivElement>(null);
+  const { openPicker } = useEmojiPicker();
   const openEmojiPicker = () => {
-    openPicker(messageId);
+    if (!ref.current) throw new Error("No current");
+    const { top, left } = ref.current.getBoundingClientRect();
+    // These magic numbers come from the side bar and top bar width and height values
+    openPicker(messageId, top - 48, left - 312);
   };
 
   return (
-    <div className="h-8 pr-3 z-10">
-      <Picker id={messageId} />
+    <div className="z-10 h-8 pr-3" ref={ref}>
       <div className="flex h-full items-center rounded-md border border-zinc-800 bg-zinc-700 hover:shadow-lg">
         <div
           className="rounded-l-md p-[6px] hover:bg-white/10"

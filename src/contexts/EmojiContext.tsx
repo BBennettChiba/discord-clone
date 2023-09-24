@@ -5,6 +5,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useRef,
 } from "react";
 import { usePreventOverlapping } from "@/hooks";
 
@@ -13,8 +14,8 @@ type Props = {
 };
 
 type Context = {
-  Picker: ({ id }: { id: number }) => JSX.Element | null;
-  openPicker: (id: number) => void;
+  Picker: () => JSX.Element | null;
+  openPicker: (id: number, top: number, left: number) => void;
   closePicker: () => void;
   isOpenWhere: number | null;
 };
@@ -25,21 +26,32 @@ export const useEmojiPicker = () => useContext(context);
 
 export const EmojiContextProvider = ({ children }: Props) => {
   const [isOpenWhere, setIsOpenWhere] = useState<null | number>(0);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
   const closePicker = () => {
     setIsOpenWhere(null);
   };
-  const openPicker = (messageId: number) => {
+  const openPicker = (messageId: number, top: number, left: number) => {
     setIsOpenWhere(messageId);
+    setPosition({ top, left });
   };
 
-  const Picker = ({ id }: { id: number }) => {
-    const onEmojiSelect = (v) => console.log(v);
+  const Picker = () => {
+    const emoji = useRef("");
+    const onEmojiSelect = (v: Emoji) => (emoji.current = v.native);
     const onClickOutside = () => closePicker();
     const { ref } = usePreventOverlapping();
 
-    if (id !== isOpenWhere) return null;
+    if (!isOpenWhere) return null;
+
+    console.log(emoji.current);
+
     return (
-      <div ref={ref} className="absolute -translate-x-full">
+      <div
+        ref={ref}
+        className="right absolute -translate-x-full"
+        style={{ top: `${position.top}px`, left: `${position.left}px` }}
+      >
         <EmojiPicker
           data={data}
           onEmojiSelect={onEmojiSelect}
@@ -54,4 +66,16 @@ export const EmojiContextProvider = ({ children }: Props) => {
       {children}
     </context.Provider>
   );
+};
+
+/**@TODO solve the overlapping issue when needing to transform Y  */
+
+type Emoji = {
+  id: string;
+  name: string;
+  native: string;
+  unified: string;
+  keywords: string[];
+  shortcodes: string;
+  emoticons: string[];
 };

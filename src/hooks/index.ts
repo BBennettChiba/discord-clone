@@ -1,7 +1,7 @@
 import { type MutableRefObject, useEffect, useState, useRef } from "react";
 
 type Options = {
-  rootMargin: `${number}px`;
+  rootMargin: string;
   threshold: number;
   root: HTMLElement | null;
 };
@@ -10,7 +10,7 @@ export const useIntersectionObserver = (
   ref: MutableRefObject<HTMLElement | null>,
   options: Options = {
     rootMargin: "10px",
-    threshold: 1.0,
+    threshold: 0,
     root: null,
   },
 ) => {
@@ -40,14 +40,12 @@ export const usePreventOverlapping = () => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (!ref.current) return;
-    const { height, y, bottom, top } = ref.current.getBoundingClientRect();
-    console.log("h: ", height, "y: ", y, "bottom: ");
-    if (height + y > window.innerHeight - 68) {
+    const { height, y } = ref.current.getBoundingClientRect();
+    if (height + y > window.innerHeight) {
       const difference = y + height - window.innerHeight;
       ref.current.style.transform = `translateY(-${
-        difference + 68
+        difference + 1
       }px) translateX(-100%)`;
-      console.log("working?");
     }
   });
 
