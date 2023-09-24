@@ -15,7 +15,6 @@ type Props = { channelName: string; channelId: number };
 type Data = InfiniteData<Awaited<ReturnType<typeof getMessagesByChannelId>>>;
 
 /**
- * @TODO also find out why infinite scrolling no longer works
  * @TODO find out why new comments don't work, they're created but I can't fetch them. They update in the dom but the invalidate query erases it */
 
 export const MessageInput = ({ channelName, channelId }: Props) => {

@@ -4,7 +4,7 @@ import { channels, type Channel } from "./schema/channels";
 import { groups, type Group } from "./schema/groups";
 import { messages, type Message } from "./schema/messages";
 import { servers, type Server } from "./schema/servers";
-import { db } from "./";
+import { client, db } from "./";
 
 console.log("BEGINNING SEEDING");
 
@@ -126,3 +126,5 @@ await db.insert(messages).values(fakeMessages);
 await db.insert(groups).values(fakeGroups);
 
 console.log("SEEDING FINISHED");
+
+await client.end();

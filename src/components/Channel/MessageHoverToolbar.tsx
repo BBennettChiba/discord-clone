@@ -8,8 +8,9 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
   const openEmojiPicker = () => {
     if (!ref.current) throw new Error("No current");
     const { top, left } = ref.current.getBoundingClientRect();
-    // These magic numbers come from the side bar and top bar width and height values
-    openPicker(messageId, top - 48, left - 312);
+    const TOP_HEIGHT = 48;
+    const LEFT__WIDTH = 312;
+    openPicker(messageId, top - TOP_HEIGHT, left - LEFT__WIDTH);
   };
 
   return (
