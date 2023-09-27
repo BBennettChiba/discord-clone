@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { MembersList } from "@/components/Channel/MembersList";
 import { MessageInput } from "@/components/Channel/MessageInput";
 import { TopBar } from "@/components/Channel/TopBar/TopBar";
 import { serverTrpc } from "@/lib/trpc/caller";
@@ -13,7 +14,10 @@ const Layout = async ({ children, params: { channel } }: Props) => {
   return (
     <div className="flex w-[calc(100dvw-312px)] flex-col bg-zinc-700">
       <TopBar channel={channelData} />
-      {children}
+      <div className="flex">
+        {children}
+        <MembersList channelId={+channel} />
+      </div>
       <MessageInput channelName={channelData.name} channelId={+channel} />
     </div>
   );
