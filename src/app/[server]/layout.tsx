@@ -17,7 +17,7 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
     <div className="flex flex-1">
       <div className="relative flex  h-screen w-60 flex-col bg-zinc-800">
         <MenuOpener name={server.name} />
-        <ChannelBrowserButton />
+        <ChannelBrowserButton defaultChannel={server.defaultChannel}/>
         <GroupList serverId={+serverId} />
         <UserStatus />
       </div>
