@@ -23,7 +23,6 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
   const [body, setBody] = useState("");
   const { mutate } = trpc.messages.createMessage.useMutation({
     onSuccess: (data) => {
-      console.log(data);
       setBody("");
       queryClient.setQueryData<Data>(
         [
