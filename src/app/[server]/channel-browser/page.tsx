@@ -1,5 +1,5 @@
 import { BackButton } from "@/components/ChannelBrowser/BackButton";
-import { ChannelSearchBar } from "@/components/ChannelBrowser/ChannelSearchBar";
+import { Browser } from "@/components/ChannelBrowser/Browser";
 import { HashWithLookingGlass } from "@/components/Icons";
 import { serverTrpc } from "@/lib/trpc/caller";
 
@@ -36,9 +36,7 @@ const ChannelBrowser = async ({
         <BackButton lastChannel={lastChannel} />
       </div>
 
-      <div className="pl-4 pt-4 flex-1">
-        <ChannelSearchBar />
-      </div>
+     <Browser groups={groups}/> 
     </div>
   );
 };
