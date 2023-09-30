@@ -1,4 +1,5 @@
 import { BackButton } from "@/components/ChannelBrowser/BackButton";
+import { ChannelSearchBar } from "@/components/ChannelBrowser/ChannelSearchBar";
 import { HashWithLookingGlass } from "@/components/Icons";
 import { serverTrpc } from "@/lib/trpc/caller";
 
@@ -26,20 +27,17 @@ const ChannelBrowser = async ({
   if (!lastChannel) throw new Error("No last channel found");
 
   return (
-    <div className="h-full w-full">
-      <div className="flex h-12 w-full items-center bg-zinc-800 border-bottom">
+    <div className="h-full w-full bg-zinc-800 flex flex-col">
+      <div className="flex h-12 w-full items-center border-b border-black">
         <div className="p-2">
           {<HashWithLookingGlass className="h-6 w-6" />}
         </div>
         <div>&nbsp;Browse Channels</div>
         <BackButton lastChannel={lastChannel} />
       </div>
-      <div className="flex flex-col pl-4 pt-4">
-        <input
-          className="h-8 w-[60.69rem] flex-grow cursor-text bg-neutral-800 px-2 text-zinc-200"
-          defaultValue=""
-          placeholder="Search Channels"
-        />
+
+      <div className="pl-4 pt-4 flex-1">
+        <ChannelSearchBar />
       </div>
     </div>
   );
