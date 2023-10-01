@@ -8,13 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:pg",
-    "db:migrate": "tsx src/lib/db/migrate.ts",
+    "db:migrate": "bun src/lib/db/migrate.ts",
     "db:drop": "drizzle-kit drop",
     "db:pull": "drizzle-kit introspect:pg",
     "db:studio": "drizzle-kit studio",
     "db:check": "drizzle-kit check:pg",
-    "db:seed": "tsx src/lib/db/seed.ts",
-    "db:clear": "tsx src/lib/db/clearDb.ts"
+    "db:seed": "bun src/lib/db/seed.ts",
+    "db:clear": "bun src/lib/db/clearDb.ts"
   },
   "dependencies": {
     "@auth/core": "^0.14.0",

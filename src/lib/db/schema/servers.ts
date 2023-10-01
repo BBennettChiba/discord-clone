@@ -72,4 +72,4 @@ export type UpdateServerParams = z.infer<typeof updateServerParams>;
 export type ServerId = z.infer<typeof serverIdSchema>;
 
 // this type infers the return from getServers() - meaning it will include any joins
-export type CompleteServer = Awaited<ReturnType<typeof getServers>>[number];
+export type CompleteServer = NonNullable<Awaited<ReturnType<typeof getServers>>>[number];

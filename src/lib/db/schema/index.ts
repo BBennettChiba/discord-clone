@@ -3,6 +3,7 @@ import * as channelsSchema from "./channels";
 import * as groupsSchema from "./groups";
 import * as messagesSchema from "./messages";
 import * as serversSchema from "./servers";
+import * as usersToChannelsSchema from "./usersToChannels";
 import * as usersToServerSchema from "./usersToServers";
 
 export const schema = {
@@ -12,4 +13,5 @@ export const schema = {
   ...serversSchema,
   ...usersToServerSchema,
   ...groupsSchema,
+  ...usersToChannelsSchema,
 };

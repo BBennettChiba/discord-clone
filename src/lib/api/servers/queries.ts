@@ -1,20 +1,28 @@
 import { eq, and } from "drizzle-orm";
-// import { getUserAuth } from "@/lib/auth/utils";
+import { getUserAuth } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema/auth";
 import {
   type ServerId,
   serverIdSchema,
   servers,
   // type Server,
 } from "@/lib/db/schema/servers";
-// import { usersToServers } from "@/lib/db/schema/usersToServers";
+import { usersToServers } from "@/lib/db/schema/usersToServers";
 
 /* get servers where the user is a member of */
 
 export const getServers = async () => {
-  // const { session } = await getUserAuth();
-  const s = await db.query.servers.findMany();
-  return s;
+  const { session } = await getUserAuth();
+  if (!session?.user) return null;
+  const s = await db
+    .select({ servers })
+    .from(servers)
+    .leftJoin(usersToServers, eq(usersToServers.serverId, servers.id))
+    .leftJoin(users, eq(usersToServers.userId, users.id))
+    .where(eq(users.id, session.user.id));
+
+  return s.map((ser) => ser.servers);
 };
 
 export const getServerById = async ({ id }: ServerId) => {

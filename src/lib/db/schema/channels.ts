@@ -2,9 +2,9 @@ import { relations } from "drizzle-orm";
 import { varchar, integer, serial, pgTable, index } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-// import { type getChannels } from "@/lib/api/channels/queries";
 import { groups } from "./groups";
 import { messages } from "./messages";
+import { usersToChannels } from "./usersToChannels";
 
 export const channels = pgTable(
   "channels",
@@ -21,6 +21,7 @@ export const channels = pgTable(
 
 export const channelsRelations = relations(channels, ({ many, one }) => ({
   messages: many(messages),
+  users: many(usersToChannels),
   group: one(groups, {
     fields: [channels.groupId],
     references: [groups.id],

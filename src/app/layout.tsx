@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const servers = await serverTrpc.servers.getServers();
+  if (!servers) throw new Error("No servers");
   return (
     <html lang="en">
       <body className={inter.className}>
