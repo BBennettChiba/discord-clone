@@ -1,9 +1,13 @@
 "use client";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
-import { DropdownMenu } from "./DropdownMenu";
 
-export const MenuOpener = ({ name }: { name: string }) => {
+type Props = {
+  children: ReactNode;
+  name: string;
+};
+
+export const MenuOpener = ({ name, children }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <>
@@ -29,7 +33,43 @@ export const MenuOpener = ({ name }: { name: string }) => {
           </div>
         </div>
       </div>
-      {isMenuOpen ? <DropdownMenu /> : null}
+      {isMenuOpen ? children : null}
     </>
   );
 };
+
+export const PlusButton = () => (
+  <svg
+    className="group"
+    enableBackground="new 0 0 50 50"
+    height="25px"
+    id="Layer_1"
+    version="1.1"
+    viewBox="0 0 50 50"
+    width="25px"
+  >
+    <rect fill="none" height="50" width="50" />
+    <line
+      fill="none"
+      stroke="#259855"
+      strokeMiterlimit="10"
+      strokeWidth="4"
+      x1="9"
+      x2="41"
+      y1="25"
+      y2="25"
+      className="group-hover:stroke-white"
+    />
+    <line
+      fill="none"
+      stroke="#259855"
+      strokeMiterlimit="10"
+      strokeWidth="4"
+      x1="25"
+      x2="25"
+      y1="9"
+      y2="41"
+      className="group-hover:stroke-white"
+    />
+  </svg>
+);

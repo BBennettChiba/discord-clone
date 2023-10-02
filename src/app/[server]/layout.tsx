@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { ChannelBrowserButton } from "@/components/ChannelSelection/ChannelBrowser";
+import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { MenuOpener } from "@/components/ChannelSelection/MenuOpener";
 import { UserStatus } from "@/components/ChannelSelection/UserStatus";
@@ -16,7 +17,9 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
   return (
     <div className="flex flex-1">
       <div className="relative flex h-screen w-60 flex-col bg-zinc-800">
-        <MenuOpener name={server.name} />
+        <MenuOpener name={server.name}>
+          <DropdownMenu />
+        </MenuOpener>
         <ChannelBrowserButton defaultChannel={server.defaultChannel} />
         <GroupList serverId={+serverId} />
         <UserStatus />
