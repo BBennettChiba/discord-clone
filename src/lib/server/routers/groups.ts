@@ -13,7 +13,7 @@ import { publicProcedure, router } from "../trpc";
 
 export const groupsRouter = router({
   // getGroups: publicProcedure.query(() => getGroups()),
-  getGroupByServerId: publicProcedure
+  getGroupsByServerId: publicProcedure
     .input(getGroupsByServerIdSchema)
     .query(async ({ input }) => getGroupsByServerId(input)),
   // createGroup: publicProcedure

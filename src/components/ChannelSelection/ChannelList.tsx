@@ -1,21 +1,25 @@
 import Link from "next/link";
-import React from "react";
+import React, { Fragment } from "react";
 import { type CompleteGroup } from "@/lib/db/schema/groups";
 
 type Props = {
   channels: CompleteGroup["channels"];
 };
 
-export const ChannelList = ({ channels }: Props): JSX.Element[] =>
+export const ChannelList = ({ channels }: Props) =>
   channels.map((ch) => (
-    <Link href={`${ch.id}`} key={ch.id}>
-      <div className="px-2">
-        <li className="flex h-[34px] w-full cursor-pointer rounded-md pl-2 text-gray-400 hover:bg-zinc-700 hover:text-gray-300">
-          <div className="flex items-center">{SFG}</div>
-          <div className="flex items-center pl-2">{ch.name}</div>
-        </li>
-      </div>
-    </Link>
+    <Fragment key={ch.id}>
+      {ch.isUserSubscribed ? (
+        <Link href={`${ch.id}`}>
+          <div className="px-2">
+            <li className="flex h-[34px] w-full cursor-pointer rounded-md pl-2 text-gray-400 hover:bg-zinc-700 hover:text-gray-300">
+              <div className="flex items-center">{SFG}</div>
+              <div className="flex items-center pl-2">{ch.name}</div>
+            </li>
+          </div>
+        </Link>
+      ) : null}
+    </Fragment>
   ));
 const SFG = (
   <svg

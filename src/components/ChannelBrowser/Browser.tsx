@@ -2,11 +2,12 @@
 import { type inferRouterOutputs } from "@trpc/server";
 import React, { Fragment, useState } from "react";
 import { type AppRouter } from "@/lib/server/routers/_app";
-import { Checkbox, Hash } from "../Icons";
+import { Checkbox } from "../Icons";
+import { ChannelListItem } from "./ChannelListItem";
 import { ChannelSearchBar } from "./ChannelSearchBar";
 
 type Props = {
-  groups: inferRouterOutputs<AppRouter>["groups"]["getGroupByServerId"];
+  groups: inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"];
 };
 
 export const Browser = ({ groups }: Props) => {
@@ -46,27 +47,7 @@ export const Browser = ({ groups }: Props) => {
                       <div className="h-[1px] w-full bg-gray-700" />
                     </div>
                   ) : null}
-                  <div className="group px-4 py-3">
-                    <li className="flex h-10 items-center justify-between">
-                      <div>
-                        <div className="flex items-center">
-                          <Hash className="h-5 w-5" />
-                          <div>&nbsp;{c.name}</div>
-                        </div>
-                        <div className="text-xs">{c.description}</div>
-                      </div>
-                      <div className="flex">
-                        <div className="pr-8">
-                          <button className="invisible border border-gray-500 rounded-sm text-sm px-4 py-1 group-hover:visible hover:bg-gray-500">
-                            View
-                          </button>
-                        </div>
-                        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-indigo-500">
-                          <Checkbox className="h-[18px] w-[18px]" />
-                        </div>
-                      </div>
-                    </li>
-                  </div>
+                  <ChannelListItem channel={c} />
                 </Fragment>
               ))}
             </ul>

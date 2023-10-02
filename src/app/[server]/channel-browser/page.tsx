@@ -16,7 +16,7 @@ const ChannelBrowser = async ({
   params: { server },
   searchParams: { last },
 }: Props) => {
-  const groups = await serverTrpc.groups.getGroupByServerId({
+  const groups = await serverTrpc.groups.getGroupsByServerId({
     serverId: +server,
   });
 
@@ -27,7 +27,7 @@ const ChannelBrowser = async ({
   if (!lastChannel) throw new Error("No last channel found");
 
   return (
-    <div className="h-full w-full bg-zinc-800 flex flex-col">
+    <div className="flex h-full w-full flex-col bg-zinc-800">
       <div className="flex h-12 w-full items-center border-b border-black">
         <div className="p-2">
           {<HashWithLookingGlass className="h-6 w-6" />}
@@ -36,7 +36,7 @@ const ChannelBrowser = async ({
         <BackButton lastChannel={lastChannel} />
       </div>
 
-     <Browser groups={groups}/> 
+      <Browser groups={groups} />
     </div>
   );
 };
