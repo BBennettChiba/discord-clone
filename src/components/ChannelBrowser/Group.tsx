@@ -14,7 +14,7 @@ export const Group = ({ group }: Props) => (
       <div>{group.name.toUpperCase()}</div>
       <div className="mr-2 flex">
         <div
-          role="checkbox"
+          // role="checkbox"
           className="mr-[6px] h-[14px] w-[14px] rounded-sm bg-indigo-500"
         >
           <Checkbox className="h-[14px] w-[14px]" />

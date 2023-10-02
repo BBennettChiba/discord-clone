@@ -19,7 +19,6 @@ export const getGroupsByServerId = async ({
     where: eq(users.id, session.user.id),
     with: { channels: { with: { channel: true } } },
   });
-  console.log(user);
   return gs.map((g) => ({
     ...g,
     channels: g.channels.map((c) => ({

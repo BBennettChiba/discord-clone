@@ -1,18 +1,52 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { type inferRouterOutputs } from "@trpc/server";
+import { useParams } from "next/navigation";
 import React from "react";
 import { type AppRouter } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { Checkbox, Hash } from "../Icons";
 
+type Groups = inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"];
+
+type Channel = Groups[number]["channels"][number];
+
 type Props = {
-  channel: inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"][number]["channels"][number];
+  channel: Channel;
 };
 
 export const ChannelListItem = ({ channel }: Props) => {
-  const { mutate } = trpc.channels.subscribeToChannel.useMutation();
+  const { server: serverId } = useParams();
+
+  const client = useQueryClient();
+
+  const queryKey = [
+    ["groups", "getGroupsByServerId"],
+    { input: { serverId: +serverId }, type: "query" },
+  ];
+
+  const { mutate: toggleSubscriptionMutation } =
+    trpc.channels.toggleChannelSubscription.useMutation({
+      onSuccess: (data) => {
+        // if (!data) throw new Error("no data");
+        //@ts-expect-error idk what to do and I"m annoyed so ignore please
+        client.setQueryData(queryKey, (old: Groups) =>
+          old.map((d) => ({
+            ...d,
+            channels: d.channels.map((c) =>
+              c.id === data.channelId
+                ? { ...c, isUserSubscribed: !c.isUserSubscribed }
+                : c,
+            ),
+          })),
+        );
+      },
+      onSettled: () => void client.invalidateQueries(queryKey),
+    });
+
   const handler = () => {
-    mutate({ id: channel.id });
+    toggleSubscriptionMutation({ id: channel.id });
   };
+
   return (
     <div className="group px-4 py-3 hover:bg-zinc-800" onClick={handler}>
       <li className="flex h-10 items-center justify-between">

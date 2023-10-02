@@ -1,8 +1,8 @@
 import {
   createChannel,
   deleteChannel,
-  subscribeToChannel,
   updateChannel,
+  toggleChannelSubscription,
 } from "@/lib/api/channels/mutations";
 import { getChannelById } from "@/lib/api/channels/queries";
 import {
@@ -26,7 +26,7 @@ export const channelsRouter = router({
   deleteChannel: publicProcedure
     .input(channelIdSchema)
     .mutation(async ({ input }) => deleteChannel(input.id)),
-  subscribeToChannel: protectedProcedure
+  toggleChannelSubscription: protectedProcedure
     .input(channelIdSchema)
-    .mutation(async ({ input }) => subscribeToChannel(input.id)),
+    .mutation(async ({ input }) => toggleChannelSubscription(input.id)),
 });

@@ -1,6 +1,5 @@
 "use client";
 import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import {
   useState,
@@ -72,7 +71,6 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         className="h-11 w-full appearance-none bg-neutral-600 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
         placeholder={`Send a message in ${channelName}`}
       />
-      <ReactQueryDevtools initialIsOpen={true} />
     </div>
   );
 };

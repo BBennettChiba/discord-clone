@@ -1,17 +1,21 @@
-import { serverTrpc } from "@/lib/trpc/caller";
+"use client";
+// import { serverTrpc } from "@/lib/trpc/caller";
+import { trpc } from "@/lib/trpc/client";
 import { Group } from "./Group";
 
-export const GroupList = async ({ serverId }: { serverId: number }) => {
-  const groups = (
-    await serverTrpc.groups.getGroupsByServerId({ serverId })
-  ).filter((g) => !g.channels.every((c) => !c.isUserSubscribed));
+export const GroupList = ({ serverId }: { serverId: number }) => {
+  const { data: groups, isError } = trpc.groups.getGroupsByServerId.useQuery({
+    serverId,
+  });
+
+  if (isError) return "error";
 
   return (
-    <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-900">
+    <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-900">
       <ul>
-        {groups.map((group) => (
-          <Group key={group.id} group={group} />
-        ))}
+        {groups
+          ?.filter((g) => !g.channels.every((c) => !c.isUserSubscribed))
+          .map((group) => <Group key={group.id} group={group} />)}
       </ul>
     </div>
   );

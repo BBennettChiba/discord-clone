@@ -1,16 +1,20 @@
 "use client";
-import { type inferRouterOutputs } from "@trpc/server";
-import React, { useState } from "react";
-import { type AppRouter } from "@/lib/server/routers/_app";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { trpc } from "@/lib/trpc/client";
 import { ChannelSearchBar } from "./ChannelSearchBar";
 import { Group } from "./Group";
 
-type Props = {
-  groups: inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"];
-};
-
-export const Browser = ({ groups }: Props) => {
+export const Browser = () => {
+  const { server: serverId } = useParams();
+  const {
+    data: groups,
+    isLoading,
+    isError,
+  } = trpc.groups.getGroupsByServerId.useQuery({ serverId: +serverId });
   const [search, setSearch] = useState("");
+  if (isLoading) return "loading";
+  if (isError) return "error";
   const searchResults = groups
     .map((g) => ({
       ...g,

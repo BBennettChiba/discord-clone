@@ -1,7 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { getUserAuth } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema/auth";
 import {
   type ChannelId,
   type NewChannelParams,
@@ -63,26 +62,33 @@ export const deleteChannel = async (id: ChannelId) => {
   }
 };
 
-export const unSubscribeToChannel = async (id: ChannelId) => {
+export const toggleChannelSubscription = async (id: ChannelId) => {
   const { id: channelId } = channelIdSchema.parse({ id });
   const { session } = await getUserAuth();
-  if (!session?.user) throw new Error(" no user in subscribeToChannel");
-  return await db
-    .delete(usersToChannels)
-    .where(
-      and(
-        eq(usersToChannels.userId, session.user.id),
-        eq(usersToChannels.channelId, channelId),
-      ),
-    )
-    .returning();
+  if (!session?.user) throw new Error(" no user in unsubscribeToChannel");
+  const userToChannelConnection = await db.query.usersToChannels.findFirst({
+    where: and(
+      eq(usersToChannels.userId, session.user.id),
+      eq(usersToChannels.channelId, channelId),
+    ),
+  });
+  if (!userToChannelConnection)
+    return subscribeToChannel(channelId, session.user.id);
+  else return unsubscribeToChannel(channelId, session.user.id);
 };
 
-export const subscribeToChannel = async (id: ChannelId) => {
-  const { id: channelId } = channelIdSchema.parse({ id });
-  const { session } = await getUserAuth();
-  if (!session?.user) throw new Error(" no user in subscribeToChannel");
-  return await db
-    .insert(usersToChannels)
-    .values({ userId: session.user.id, channelId });
-};
+const unsubscribeToChannel = async (channelId: number, userId: string) =>
+  (
+    await db
+      .delete(usersToChannels)
+      .where(
+        and(
+          eq(usersToChannels.userId, userId),
+          eq(usersToChannels.channelId, channelId),
+        ),
+      )
+      .returning()
+  )[0];
+
+const subscribeToChannel = async (channelId: number, userId: string) =>
+  (await db.insert(usersToChannels).values({ userId, channelId }).returning())[0]
