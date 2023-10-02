@@ -1,6 +1,7 @@
 import {
   createChannel,
   deleteChannel,
+  subscribeToChannel,
   updateChannel,
 } from "@/lib/api/channels/mutations";
 import { getChannelById } from "@/lib/api/channels/queries";
@@ -9,7 +10,7 @@ import {
   insertChannelParams,
   updateChannelParams,
 } from "@/lib/db/schema/channels";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const channelsRouter = router({
   // getChannels: publicProcedure.query(async () => getChannels()),
@@ -25,4 +26,7 @@ export const channelsRouter = router({
   deleteChannel: publicProcedure
     .input(channelIdSchema)
     .mutation(async ({ input }) => deleteChannel(input.id)),
+  subscribeToChannel: protectedProcedure
+    .input(channelIdSchema)
+    .mutation(async ({ input }) => subscribeToChannel(input.id)),
 });

@@ -1,5 +1,7 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { getUserAuth } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema/auth";
 import {
   type ChannelId,
   type NewChannelParams,
@@ -9,6 +11,7 @@ import {
   channels,
   channelIdSchema,
 } from "@/lib/db/schema/channels";
+import { usersToChannels } from "@/lib/db/schema/usersToChannels";
 
 export const createChannel = async (channel: NewChannelParams) => {
   const newChannel = insertChannelSchema.parse(channel);
@@ -58,4 +61,28 @@ export const deleteChannel = async (id: ChannelId) => {
     console.error(message);
     return { error: message };
   }
+};
+
+export const unSubscribeToChannel = async (id: ChannelId) => {
+  const { id: channelId } = channelIdSchema.parse({ id });
+  const { session } = await getUserAuth();
+  if (!session?.user) throw new Error(" no user in subscribeToChannel");
+  return await db
+    .delete(usersToChannels)
+    .where(
+      and(
+        eq(usersToChannels.userId, session.user.id),
+        eq(usersToChannels.channelId, channelId),
+      ),
+    )
+    .returning();
+};
+
+export const subscribeToChannel = async (id: ChannelId) => {
+  const { id: channelId } = channelIdSchema.parse({ id });
+  const { session } = await getUserAuth();
+  if (!session?.user) throw new Error(" no user in subscribeToChannel");
+  return await db
+    .insert(usersToChannels)
+    .values({ userId: session.user.id, channelId });
 };
