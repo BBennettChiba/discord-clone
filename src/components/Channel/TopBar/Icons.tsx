@@ -1,8 +1,8 @@
-import { Bell, Pin, TwoPeople } from "@/components/Icons";
+import { BellIcon, Pin, TwoPeople } from "@/components/Icons";
 
 export const icons = [
   {
-    svg: <Bell className="h-6 w-6" />,
+    svg: <BellIcon className="h-6 w-6" />,
     text: "Notification Settings",
   },
   {
