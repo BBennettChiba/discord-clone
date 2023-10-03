@@ -3,13 +3,18 @@
 //   deleteGroup,
 //   updateGroup,
 // } from "@/lib/api/groups/mutations";
+import {
+  subscribeToGroup,
+  unsubscribeFromGroup,
+} from "@/lib/api/groups/mutations";
 import { getGroupsByServerId } from "@/lib/api/groups/queries";
 import {
   getGroupsByServerIdSchema,
+  groupIdSchema,
   // insertGroupParams,
   // updateGroupParams,
 } from "@/lib/db/schema/groups";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const groupsRouter = router({
   // getGroups: publicProcedure.query(() => getGroups()),
@@ -25,4 +30,10 @@ export const groupsRouter = router({
   // deleteGroup: publicProcedure
   //   .input(groupIdSchema)
   //   .mutation(async ({ input }) => deleteGroup(input.id)),
+  unsubscribeFromGroup: protectedProcedure
+    .input(groupIdSchema)
+    .mutation(({ input }) => unsubscribeFromGroup(input.id)),
+  subscribeToGroup: protectedProcedure
+    .input(groupIdSchema)
+    .mutation(({ input }) => subscribeToGroup(input.id)),
 });

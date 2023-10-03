@@ -35,7 +35,6 @@ const ChannelBrowser = async ({
         <div>&nbsp;Browse Channels</div>
         <BackButton lastChannel={lastChannel} />
       </div>
-
       <Browser />
     </div>
   );

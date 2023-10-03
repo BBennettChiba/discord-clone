@@ -79,7 +79,7 @@ const Channel = ({ params: { channel } }: Props) => {
                   </div>
                 ) : null}
                 <div
-                    className="pt-[17px]"
+                  className="pt-[17px]"
                   ref={i === arr.length - 1 ? inner : undefined}
                 >
                   <Message msg={msg} />

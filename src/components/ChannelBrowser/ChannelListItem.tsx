@@ -27,7 +27,6 @@ export const ChannelListItem = ({ channel }: Props) => {
   const { mutate: toggleSubscriptionMutation } =
     trpc.channels.toggleChannelSubscription.useMutation({
       onSuccess: (data) => {
-        // if (!data) throw new Error("no data");
         //@ts-expect-error idk what to do and I"m annoyed so ignore please
         client.setQueryData(queryKey, (old: Groups) =>
           old.map((d) => ({

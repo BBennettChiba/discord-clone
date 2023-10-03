@@ -92,3 +92,4 @@ const unsubscribeToChannel = async (channelId: number, userId: string) =>
 
 const subscribeToChannel = async (channelId: number, userId: string) =>
   (await db.insert(usersToChannels).values({ userId, channelId }).returning())[0]
+
