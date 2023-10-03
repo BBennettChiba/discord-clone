@@ -1,3 +1,4 @@
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { type ReactNode } from "react";
 import { ChannelBrowserButton } from "@/components/ChannelSelection/ChannelBrowser";
 import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
@@ -25,6 +26,7 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
         <UserStatus />
       </div>
       {children}
+      <ReactQueryDevtools initialIsOpen={true} />
     </div>
   );
 };

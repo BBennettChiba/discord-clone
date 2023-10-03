@@ -14,6 +14,44 @@ type Props = {
   channel: Channel;
 };
 
+const MINUTE_IN_MILLISECONDS = 1000 * 60;
+
+const getRelativeTime = (timestamp: Date | undefined) => {
+  if (!timestamp) return "";
+  const rtf = new Intl.RelativeTimeFormat();
+
+  const differenceInMilliseconds = timestamp.getTime() - new Date().getTime();
+
+  const round = (num: number) => Math.round(num);
+
+  let difference =
+    differenceInMilliseconds / MINUTE_IN_MILLISECONDS +
+    new Date().getTimezoneOffset();
+
+  console.log(difference);
+
+  if (difference > -5) return "Just now";
+
+  if (difference > -60) {
+    return rtf.format(round(difference), "minutes");
+  }
+  difference /= 60;
+  if (difference > -24) {
+    return rtf.format(round(difference), "hours");
+  }
+  difference /= 24;
+  if (difference > -28) {
+    return rtf.format(round(difference), "days");
+  }
+  difference /= 28;
+  if (difference > -12) {
+    return rtf.format(round(difference), "months");
+  }
+  difference /= 12;
+
+  return rtf.format(round(difference), "years");
+};
+
 export const ChannelListItem = ({ channel }: Props) => {
   const { server: serverId } = useParams();
 
@@ -42,19 +80,39 @@ export const ChannelListItem = ({ channel }: Props) => {
       onSettled: () => void client.invalidateQueries(queryKey),
     });
 
+  const { data } = trpc.messages.getMessagesByChannelId.useInfiniteQuery({
+    channelId: channel.id,
+  });
+
   const handler = () => {
     toggleSubscriptionMutation({ id: channel.id });
   };
 
+  const dateOfNewestMessage = getRelativeTime(
+    data?.pages[0].messages[0].createdAt,
+  );
+
   return (
-    <div className="group px-4 py-3 hover:bg-zinc-800" onClick={handler}>
+    <div
+      className="group cursor-pointer px-4 py-3 hover:bg-zinc-800"
+      onClick={handler}
+    >
       <li className="flex h-10 items-center justify-between">
         <div>
           <div className="flex items-center">
             <Hash className="h-5 w-5" />
             <div>&nbsp;{channel.name}</div>
           </div>
-          <div className="text-xs">{channel.description}</div>
+          <div className="flex text-xs">
+            <div>Active {dateOfNewestMessage}</div>
+
+            <div className="px-2">
+              <div className="h-1 w-1 self-center rounded bg-zinc-600/[0.48] text-xs text-zinc-600/[0.48]">
+                ·
+              </div>
+            </div>
+            <div>{channel.description}</div>
+          </div>
         </div>
         <div className="flex">
           <div className="pr-8">

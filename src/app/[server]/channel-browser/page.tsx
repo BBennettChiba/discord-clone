@@ -20,11 +20,11 @@ const ChannelBrowser = async ({
     serverId: +server,
   });
 
-  const lastChannel = groups
+  let lastChannel = groups
     .map((g) => g.channels)
     .flat()
     .find((c) => c.id === +last);
-  if (!lastChannel) throw new Error("No last channel found");
+  if (!lastChannel) lastChannel = groups[0].channels[0];
 
   return (
     <div className="flex h-full w-full flex-col bg-zinc-800">

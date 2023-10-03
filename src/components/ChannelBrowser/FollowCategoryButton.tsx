@@ -48,7 +48,7 @@ export const FollowCategoryButton = ({ groupId, checked }: Props) => {
   };
 
   return (
-    <div onClick={handleClick} className="flex">
+    <div onClick={handleClick} className="flex cursor-pointer">
       <div
         // role="checkbox"
         className={`mr-[6px] h-[14px] w-[14px] rounded-sm ${
