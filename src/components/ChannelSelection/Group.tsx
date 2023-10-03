@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { type CompleteGroup } from "@/lib/db/schema/groups";
 import { ChannelList } from "./ChannelList";
@@ -9,7 +10,14 @@ type Props = {
 };
 
 export const Group = ({ group }: Props): JSX.Element => {
-  const [checked, setChecked] = useState(false);
+  const { channel: channelId } = useParams();
+  if (typeof channelId !== "string")
+    throw new Error("Invalid channel in ChannelSelection Group");
+
+  const [checked, setChecked] = useState(
+    group.channels.some((c) => c.id === +channelId),
+  );
+
   return (
     <>
       <div className="group pt-4">
@@ -40,7 +48,7 @@ export const Group = ({ group }: Props): JSX.Element => {
         </li>
       </div>
       <ul className={`${checked ? "block" : "hidden"}`}>
-        <ChannelList channels={group.channels} />
+        <ChannelList channels={group.channels} currentChannelId={+channelId}/>
       </ul>
     </>
   );
