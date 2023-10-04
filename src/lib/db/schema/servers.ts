@@ -15,6 +15,7 @@ import { type getServers } from "@/lib/api/servers/queries";
 import { users } from "./auth";
 import { channels } from "./channels";
 import { groups } from "./groups";
+import { invites } from "./invites";
 import { usersToServers } from "./usersToServers";
 
 export const servers = pgTable(
@@ -26,7 +27,7 @@ export const servers = pgTable(
     ownerId: text("owner_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    icon: text("icon_url").notNull()
+    icon: text("icon_url").notNull(),
   },
   (server) => ({
     ownerIdIndex: index("owner_id_idx").on(server.ownerId),
@@ -45,6 +46,7 @@ export const serversRealtions = relations(servers, ({ one, many }) => ({
     fields: [servers.defaultChannel],
     references: [channels.id],
   }),
+  invites: many(invites),
 }));
 
 // Schema for servers - used to validate API requests
@@ -72,4 +74,6 @@ export type UpdateServerParams = z.infer<typeof updateServerParams>;
 export type ServerId = z.infer<typeof serverIdSchema>;
 
 // this type infers the return from getServers() - meaning it will include any joins
-export type CompleteServer = NonNullable<Awaited<ReturnType<typeof getServers>>>[number];
+export type CompleteServer = NonNullable<
+  Awaited<ReturnType<typeof getServers>>
+>[number];

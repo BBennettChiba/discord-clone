@@ -71,6 +71,20 @@
       "when": 1696152152281,
       "tag": "0009_uneven_shard",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1696378345860,
+      "tag": "0010_productive_lilandra",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1696378532621,
+      "tag": "0011_icy_jack_power",
+      "breakpoints": true
     }
   ]
 }

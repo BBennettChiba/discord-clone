@@ -1,0 +1,1 @@
+ALTER TABLE "invites" ADD COLUMN "server_id" integer NOT NULL;
