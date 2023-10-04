@@ -10,15 +10,16 @@ type Props = {
 const InvitePage = async ({ params: { inviteId } }: Props) => {
   const invite = await serverTrpc.invites.getInviteById({ id: inviteId });
   if (!invite) return <>dude wtf</>;
+
   const imageSrc = invite.server.icon
     ? invite.server.icon
     : invite.creator.image;
-  console.log(invite);
+
   const session = await getServerSession(authOptions);
-  console.log(session);
+
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-indigo-500">
-      <div className="flex w-[480px] flex-col items-center bg-gray-800 p-8">
+      <div className="flex w-[480px] flex-col items-center rounded-md bg-gray-800 p-8">
         <div className="pb-6">
           <div className="h-16 w-16 overflow-hidden rounded-xl">
             <Image
@@ -29,10 +30,28 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
             />
           </div>
         </div>
-        <h2 className="text-gray-400">
+        <h2 className="pt-2 text-gray-400">
           {invite.creator.name} has invited you to join{" "}
         </h2>
-        <h1 className="text-xl">{invite.server.name}</h1>
+        <div className="pt-2">
+          <h1 className="text-xl">{invite.server.name}</h1>
+        </div>
+        <div className="flex pt-2">
+          {/* <div /> here put online number when I have that info*/}
+          <div className="flex items-center">
+            <div className="pr-1">
+              <div className="h-2 w-2 rounded-lg bg-gray-500" />
+            </div>
+            <span className="text-xs text-gray-400">
+              {invite.server.numberOfMembers} members
+            </span>
+          </div>
+        </div>
+        <div className="w-full pt-10">
+          <button className="h-11 w-full rounded-sm bg-indigo-500">
+            Accept Invite
+          </button>
+        </div>
       </div>
     </div>
   );
