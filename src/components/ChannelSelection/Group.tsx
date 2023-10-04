@@ -11,8 +11,6 @@ type Props = {
 
 export const Group = ({ group }: Props): JSX.Element => {
   const { channel: channelId } = useParams();
-  if (typeof channelId !== "string")
-    throw new Error("Invalid channel in ChannelSelection Group");
 
   const [checked, setChecked] = useState(
     group.channels.some((c) => c.id === +channelId),
@@ -48,7 +46,7 @@ export const Group = ({ group }: Props): JSX.Element => {
         </li>
       </div>
       <ul className={`${checked ? "block" : "hidden"}`}>
-        <ChannelList channels={group.channels} currentChannelId={+channelId}/>
+        <ChannelList channels={group.channels} currentChannelId={+channelId} />
       </ul>
     </>
   );
