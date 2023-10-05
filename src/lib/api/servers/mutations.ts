@@ -1,6 +1,5 @@
 import { type Session } from "next-auth";
 import { db } from "@/lib/db";
-import { serverIdSchema } from "@/lib/db/schema/servers";
 import { usersToServers } from "@/lib/db/schema/usersToServers";
 
 type Input = {
@@ -9,10 +8,9 @@ type Input = {
 };
 
 export const joinServer = async ({
-  input: { id },
+  input: { id: serverId },
   ctx: { session },
 }: Input) => {
-  const { id: serverId } = serverIdSchema.parse(id);
   const [insert] = await db
     .insert(usersToServers)
     .values({ serverId, userId: session.user.id })

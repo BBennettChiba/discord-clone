@@ -7,7 +7,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const servers = await serverTrpc.servers.getServers.query();
-  if (!servers) throw new Error("No servers");
+
   return (
     <CheckSession>
       <ServerList servers={servers} />

@@ -20,8 +20,10 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
 
   const joinServer = async () => {
     "use server";
-    await serverTrpc.servers.joinServer.mutate({ id: invite.server.id });
-    redirect(`/${invite.server.id}/${invite.server.defaultChannel}`);
+    const sub = await serverTrpc.servers.joinServer.mutate({
+      id: invite.server.id,
+    });
+    redirect(`/${sub.serverId}/${invite.server.defaultChannel}`);
   };
 
   return (
@@ -56,7 +58,8 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
         </div>
         {session?.user ? (
           <div className="w-full pt-10">
-            <form action={void joinServer}>
+            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises*/}
+            <form action={joinServer}>
               <button className="h-11 w-full rounded-sm bg-indigo-500">
                 Accept Invite
               </button>

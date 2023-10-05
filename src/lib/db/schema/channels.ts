@@ -4,6 +4,7 @@ import { createSelectSchema } from "drizzle-zod";
 import { groups } from "./groups";
 import { messages } from "./messages";
 import { usersToChannels } from "./usersToChannels";
+import type z from "zod";
 
 export const channels = pgTable(
   "channels",
@@ -27,4 +28,8 @@ export const channelsRelations = relations(channels, ({ many, one }) => ({
   }),
 }));
 
-export const channelIdSchema = createSelectSchema(channels).pick({ id: true });
+const channelSchema = createSelectSchema(channels);
+
+export const channelIdSchema = channelSchema.pick({ id: true });
+
+export type Channel = z.infer<typeof channelSchema>;
