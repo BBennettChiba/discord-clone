@@ -6,13 +6,7 @@ import {
   messages,
 } from "@/lib/db/schema/messages";
 
-export const getMessages = async () => {
-  const m = await db.query.messages.findMany();
-
-  return m;
-};
-
-export const getMesasgeById = async (id: number) => {
+export const getMessageById = async (id: number) => {
   const message = await db.query.messages.findFirst({
     where: eq(messages.id, id),
     with: { author: true },

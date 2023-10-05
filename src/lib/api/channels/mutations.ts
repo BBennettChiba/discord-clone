@@ -1,72 +1,17 @@
 import { and, eq } from "drizzle-orm";
-import { getUserAuth } from "@/lib/auth/utils";
+import { type Session } from "next-auth";
 import { db } from "@/lib/db";
-import {
-  type ChannelId,
-  type NewChannelParams,
-  type UpdateChannelParams,
-  updateChannelSchema,
-  insertChannelSchema,
-  channels,
-  channelIdSchema,
-} from "@/lib/db/schema/channels";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
-import { Session } from "next-auth";
 
-export const createChannel = async (channel: NewChannelParams) => {
-  const newChannel = insertChannelSchema.parse(channel);
-  try {
-    const [c] = await db.insert(channels).values(newChannel).returning();
-    return { channel: c };
-  } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Error, please try again";
-    console.error(message);
-    return { error: message };
-  }
+type Input = {
+  input: { id: number };
+  ctx: { session: Session };
 };
 
-export const updateChannel = async (
-  id: ChannelId,
-  channel: UpdateChannelParams,
-) => {
-  const { id: channelId } = channelIdSchema.parse({ id });
-  const newChannel = updateChannelSchema.parse(channel);
-  try {
-    const [c] = await db
-      .update(channels)
-      .set(newChannel)
-      .where(eq(channels.id, channelId))
-      .returning();
-    return { channel: c };
-  } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Error, please try again";
-    console.error(message);
-    return { error: message };
-  }
-};
-
-export const deleteChannel = async (id: ChannelId) => {
-  const { id: channelId } = channelIdSchema.parse({ id });
-  try {
-    const [c] = await db
-      .delete(channels)
-      .where(eq(channels.id, channelId))
-      .returning();
-    return { channel: c };
-  } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Error, please try again";
-    console.error(message);
-    return { error: message };
-  }
-};
-
-export const toggleChannelSubscription = async (id: ChannelId, session: Session) => {
-  const { id: channelId } = channelIdSchema.parse({ id });
-  // const { session } = await getUserAuth();
-  // if (!session?.user) throw new Error(" no user in unsubscribeToChannel");
+export const toggleChannelSubscription = async ({
+  input: { id: channelId },
+  ctx: { session },
+}: Input) => {
   const userToChannelConnection = await db.query.usersToChannels.findFirst({
     where: and(
       eq(usersToChannels.userId, session.user.id),
@@ -92,5 +37,6 @@ const unsubscribeToChannel = async (channelId: number, userId: string) =>
   )[0];
 
 const subscribeToChannel = async (channelId: number, userId: string) =>
-  (await db.insert(usersToChannels).values({ userId, channelId }).returning())[0]
-
+  (
+    await db.insert(usersToChannels).values({ userId, channelId }).returning()
+  )[0];

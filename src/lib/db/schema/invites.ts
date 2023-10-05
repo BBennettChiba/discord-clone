@@ -4,7 +4,7 @@ import { timestamp, varchar, pgTable, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { type getInvites } from "@/lib/api/invites/queries";
+import { type getInviteById } from "@/lib/api/invites/queries";
 import { users } from "./auth";
 import { servers } from "./servers";
 
@@ -59,5 +59,5 @@ export type InviteId = z.infer<typeof inviteIdSchema>["id"];
 
 // this type infers the return from getInvites() - meaning it will include any joins
 export type CompleteInvite = Awaited<
-  ReturnType<typeof getInvites>
->["invites"][number];
+  ReturnType<typeof getInviteById>
+>;

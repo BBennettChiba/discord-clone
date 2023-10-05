@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { type getMessages } from "@/lib/api/messages/queries";
+import { type getMessageById } from "@/lib/api/messages/queries";
 import { users } from "./auth";
 import { channels } from "./channels";
 
@@ -58,7 +58,7 @@ export const insertMessageParams = createSelectSchema(messages, {
   id: true,
   authorId: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
 });
 
 export const updateMessageSchema = createSelectSchema(messages);
@@ -86,8 +86,8 @@ export type Message = z.infer<typeof updateMessageSchema>;
 export type NewMessage = z.infer<typeof insertMessageSchema>;
 export type NewMessageParams = z.infer<typeof insertMessageParams>;
 export type UpdateMessageParams = z.infer<typeof updateMessageParams>;
-export type MessageId = z.infer<typeof messageIdSchema>['id']
+export type MessageId = z.infer<typeof messageIdSchema>["id"];
 export type MessageByChannelId = z.infer<typeof MessageByChannelIdSchema>;
 
 // this type infers the return from getMessages() - meaning it will include any joins
-export type CompleteMessage = Awaited<ReturnType<typeof getMessages>>[number];
+export type CompleteMessage = Awaited<ReturnType<typeof getMessageById>>;

@@ -6,11 +6,8 @@ import {
   type ServerId,
   serverIdSchema,
   servers,
-  // type Server,
 } from "@/lib/db/schema/servers";
 import { usersToServers } from "@/lib/db/schema/usersToServers";
-
-/* get servers where the user is a member of */
 
 export const getServers = async () => {
   const { session } = await getUserAuth();
@@ -43,6 +40,4 @@ export const getServerById = async ({ id }: ServerId) => {
   return server;
 };
 
-// const throwError = (msg: string): never => {
-//   throw new Error(msg);
-// };
+/**@TODO something, I forgot */

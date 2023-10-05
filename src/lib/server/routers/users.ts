@@ -3,12 +3,12 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema/auth";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, router } from "../trpc";
 
 const isNotNull = <T>(item: T | null): item is T => item !== null;
 
 export const usersRouter = router({
-  getUsersByChannel: publicProcedure
+  getUsersByChannel: protectedProcedure
     .input(z.object({ channelId: z.number() }))
     .query(async ({ input: { channelId } }) => {
       const members = (

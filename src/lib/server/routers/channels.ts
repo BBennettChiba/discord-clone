@@ -1,32 +1,23 @@
-import {
-  createChannel,
-  deleteChannel,
-  updateChannel,
-  toggleChannelSubscription,
-} from "@/lib/api/channels/mutations";
+import { toggleChannelSubscription } from "@/lib/api/channels/mutations";
 import { getChannelById } from "@/lib/api/channels/queries";
-import {
-  channelIdSchema,
-  insertChannelParams,
-  updateChannelParams,
-} from "@/lib/db/schema/channels";
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { channelIdSchema } from "@/lib/db/schema/channels";
+import { protectedProcedure, router } from "../trpc";
 
 export const channelsRouter = router({
-  // getChannels: publicProcedure.query(async () => getChannels()),
   getChannelById: protectedProcedure
     .input(channelIdSchema)
-    .query(async ({ input }) => getChannelById(input.id)),
-  createChannel: publicProcedure
-    .input(insertChannelParams)
-    .mutation(async ({ input }) => createChannel(input)),
-  updateChannel: publicProcedure
-    .input(updateChannelParams)
-    .mutation(async ({ input }) => updateChannel(input.id, input)),
-  deleteChannel: publicProcedure
-    .input(channelIdSchema)
-    .mutation(async ({ input }) => deleteChannel(input.id)),
+    .query(getChannelById),
   toggleChannelSubscription: protectedProcedure
     .input(channelIdSchema)
-    .mutation(async ({ input, ctx: {session} }) => toggleChannelSubscription(input.id, session)),
+    .mutation(toggleChannelSubscription),
+  // getChannels: publicProcedure.query(async () => getChannels()),
+  // createChannel: publicProcedure
+  //   .input(insertChannelParams)
+  //   .mutation(async ({ input }) => createChannel(input)),
+  // updateChannel: publicProcedure
+  //   .input(updateChannelParams)
+  //   .mutation(async ({ input }) => updateChannel(input.id, input)),
+  // deleteChannel: publicProcedure
+  //   .input(channelIdSchema)
+  //   .mutation(async ({ input }) => deleteChannel(input.id)),
 });

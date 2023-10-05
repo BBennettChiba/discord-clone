@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import { varchar, integer, serial, pgTable, index } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createSelectSchema } from "drizzle-zod";
 import { groups } from "./groups";
 import { messages } from "./messages";
 import { usersToChannels } from "./usersToChannels";
@@ -28,31 +27,4 @@ export const channelsRelations = relations(channels, ({ many, one }) => ({
   }),
 }));
 
-// Schema for channels - used to validate API requests
-export const insertChannelSchema = createInsertSchema(channels);
-
-export const insertChannelParams = createSelectSchema(channels, {
-  id: z.coerce.number(),
-}).omit({
-  id: true,
-});
-
-export const updateChannelSchema = createSelectSchema(channels);
-
-export const updateChannelParams = createSelectSchema(channels, {
-  id: z.coerce.number(),
-});
-
-export const channelIdSchema = updateChannelSchema.pick({ id: true });
-
-// Types for channels - used to type API request params and within Components
-export type Channel = z.infer<typeof updateChannelSchema>;
-export type NewChannel = z.infer<typeof insertChannelSchema>;
-export type NewChannelParams = z.infer<typeof insertChannelParams>;
-export type UpdateChannelParams = z.infer<typeof updateChannelParams>;
-export type ChannelId = z.infer<typeof channelIdSchema>["id"];
-
-// this type infers the return from getChannels() - meaning it will include any joins
-// export type CompleteChannel = Awaited<
-//   ReturnType<typeof getChannels>
-// >["channels"][number];
+export const channelIdSchema = createSelectSchema(channels).pick({ id: true });
