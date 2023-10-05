@@ -1,12 +1,16 @@
 import { and, desc, eq, lte } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
-  type MessageByChannelId,
-  MessageByChannelIdSchema,
   messages,
 } from "@/lib/db/schema/messages";
 
-export const getMessageById = async (id: number) => {
+type GetMessageByIdInput = {
+  input: { id: number };
+};
+
+export const getMessageById = async ({
+  input: { id },
+}: GetMessageByIdInput) => {
   const message = await db.query.messages.findFirst({
     where: eq(messages.id, id),
     with: { author: true },
@@ -14,11 +18,17 @@ export const getMessageById = async (id: number) => {
   return message;
 };
 
-const limit = 10;
+const LIMIT = 10;
 
-export const getMessagesByChannelId = async (input: MessageByChannelId) => {
-  let { cursor } = MessageByChannelIdSchema.parse(input);
-  const { channelId } = MessageByChannelIdSchema.parse(input);
+type GetMessagesByChannelIdInput = {
+  input: { cursor?: Date; channelId: number };
+};
+
+export const getMessagesByChannelId = async ({
+  input: { channelId },
+  input,
+}: GetMessagesByChannelIdInput) => {
+  let cursor = input.cursor;
 
   if (!cursor) {
     cursor = new Date();
@@ -32,12 +42,12 @@ export const getMessagesByChannelId = async (input: MessageByChannelId) => {
     ),
     with: { author: true },
     orderBy: desc(messages.createdAt),
-    limit: limit + 1,
+    limit: LIMIT + 1,
   });
 
   let nextCursor: typeof cursor | undefined = undefined;
 
-  if (m.length > limit) {
+  if (m.length > LIMIT) {
     const nextItem = m.pop();
     nextCursor = nextItem?.createdAt;
   }

@@ -6,6 +6,6 @@ import { protectedProcedure, publicProcedure, router } from "../trpc";
 export const invitesRouter = router({
   getInviteById: publicProcedure
     .input(inviteIdSchema)
-    .query(async ({ input }) => getInviteById(input.id)),
+    .query(getInviteById),
   createInvite: protectedProcedure.input(insertInviteParams).mutation(createInvite)
 });

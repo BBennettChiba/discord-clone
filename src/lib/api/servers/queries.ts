@@ -1,17 +1,15 @@
 import { eq, and } from "drizzle-orm";
-import { getUserAuth } from "@/lib/auth/utils";
+import { type Session } from "next-auth";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema/auth";
-import {
-  type ServerId,
-  serverIdSchema,
-  servers,
-} from "@/lib/db/schema/servers";
+import { servers } from "@/lib/db/schema/servers";
 import { usersToServers } from "@/lib/db/schema/usersToServers";
 
-export const getServers = async () => {
-  const { session } = await getUserAuth();
-  if (!session?.user) return null;
+type GetServersInput = {
+  ctx: { session: Session };
+};
+
+export const getServers = async ({ ctx: { session } }: GetServersInput) => {
   const s = await db
     .select({ servers })
     .from(servers)
@@ -22,9 +20,13 @@ export const getServers = async () => {
   return s.map((ser) => ser.servers);
 };
 
-export const getServerById = async ({ id }: ServerId) => {
-  // const { session } = await getUserAuth();
-  const { id: serverId } = serverIdSchema.parse({ id });
+type GetServerByIdInput = {
+  input: { id: number };
+};
+
+export const getServerById = async ({
+  input: { id: serverId },
+}: GetServerByIdInput) => {
   const [server] = await db
     .select()
     .from(servers)

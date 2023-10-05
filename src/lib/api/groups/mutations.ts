@@ -1,14 +1,19 @@
 import { and, eq, inArray } from "drizzle-orm";
-import { getUserAuth } from "@/lib/auth/utils";
+import { type Session } from "next-auth";
 import { db } from "@/lib/db";
 import { channels } from "@/lib/db/schema/channels";
-import { type GroupId, groupIdSchema, groups } from "@/lib/db/schema/groups";
+import { groups } from "@/lib/db/schema/groups";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
 
-export const unsubscribeFromGroup = async (id: GroupId) => {
-  const { session } = await getUserAuth();
-  if (!session?.user) throw new Error("no user in unsubscribeFromGroup");
-  const { id: groupId } = groupIdSchema.parse({ id });
+type SubscribeInput = {
+  input: { id: number };
+  ctx: { session: Session };
+};
+
+export const unsubscribeFromGroup = async ({
+  input: { id: groupId },
+  ctx: { session },
+}: SubscribeInput) => {
   const channelIds = await db
     .select({
       id: channels.id,
@@ -31,10 +36,10 @@ export const unsubscribeFromGroup = async (id: GroupId) => {
   return d;
 };
 
-export const subscribeToGroup = async (id: GroupId) => {
-  const { session } = await getUserAuth();
-  if (!session?.user) throw new Error("no user in subscribeToGroup");
-  const { id: groupId } = groupIdSchema.parse({ id });
+export const subscribeToGroup = async ({
+  input: { id: groupId },
+  ctx: { session },
+}: SubscribeInput) => {
   const channelIds = await db
     .select({
       id: channels.id,
@@ -51,4 +56,3 @@ export const subscribeToGroup = async (id: GroupId) => {
     .returning();
   return d;
 };
-

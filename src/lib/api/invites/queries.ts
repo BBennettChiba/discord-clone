@@ -1,14 +1,13 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import {
-  type InviteId,
-  inviteIdSchema,
-  invites,
-} from "@/lib/db/schema/invites";
+import { invites } from "@/lib/db/schema/invites";
 import { usersToServers } from "@/lib/db/schema/usersToServers";
 
-export const getInviteById = async (id: InviteId) => {
-  const { id: inviteId } = inviteIdSchema.parse({ id });
+type Input = {
+  input: { id: string };
+};
+
+export const getInviteById = async ({ input: { id: inviteId } }: Input) => {
   const invite = await db.query.invites.findFirst({
     where: eq(invites.id, inviteId),
     with: { creator: true, server: true },

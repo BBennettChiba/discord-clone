@@ -1,3 +1,4 @@
+import { type Session } from "next-auth";
 import { getUserAuth } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import {
@@ -7,7 +8,14 @@ import {
 } from "@/lib/db/schema/messages";
 import { getMessageById as getMessageById } from "./queries";
 
-export const createMessage = async (msgInput: NewMessageParams) => {
+type CreateMessageInput = {
+  input: NewMessageParams;
+  ctx: { session: Session };
+};
+
+export const createMessage = async ({
+  input: msgInput,
+}: CreateMessageInput) => {
   const { session } = await getUserAuth();
   if (!session) throw new Error("Session not found in createMessage");
   const newMessage = insertMessageSchema.parse({
@@ -16,7 +24,7 @@ export const createMessage = async (msgInput: NewMessageParams) => {
   });
   try {
     const [m] = await db.insert(messages).values(newMessage).returning();
-    const message = await getMessageById(m.id);
+    const message = await getMessageById({ input: { id: m.id } });
     return { message };
   } catch (err) {
     const errMessage =

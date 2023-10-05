@@ -10,14 +10,4 @@ export const channelsRouter = router({
   toggleChannelSubscription: protectedProcedure
     .input(channelIdSchema)
     .mutation(toggleChannelSubscription),
-  // getChannels: publicProcedure.query(async () => getChannels()),
-  // createChannel: publicProcedure
-  //   .input(insertChannelParams)
-  //   .mutation(async ({ input }) => createChannel(input)),
-  // updateChannel: publicProcedure
-  //   .input(updateChannelParams)
-  //   .mutation(async ({ input }) => updateChannel(input.id, input)),
-  // deleteChannel: publicProcedure
-  //   .input(channelIdSchema)
-  //   .mutation(async ({ input }) => deleteChannel(input.id)),
 });

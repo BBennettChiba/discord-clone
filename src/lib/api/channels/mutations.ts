@@ -3,7 +3,7 @@ import { type Session } from "next-auth";
 import { db } from "@/lib/db";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
 
-type Input = {
+type ToggleChannelSubscriptionInput = {
   input: { id: number };
   ctx: { session: Session };
 };
@@ -11,7 +11,7 @@ type Input = {
 export const toggleChannelSubscription = async ({
   input: { id: channelId },
   ctx: { session },
-}: Input) => {
+}: ToggleChannelSubscriptionInput) => {
   const userToChannelConnection = await db.query.usersToChannels.findFirst({
     where: and(
       eq(usersToChannels.userId, session.user.id),

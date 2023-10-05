@@ -7,16 +7,16 @@ import {
   getGroupsByServerIdSchema,
   groupIdSchema,
 } from "@/lib/db/schema/groups";
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { protectedProcedure,  router } from "../trpc";
 
 export const groupsRouter = router({
-  getGroupsByServerId: publicProcedure
+  getGroupsByServerId:protectedProcedure 
     .input(getGroupsByServerIdSchema)
-    .query(async ({ input }) => getGroupsByServerId(input)),
+    .query(getGroupsByServerId),
   unsubscribeFromGroup: protectedProcedure
     .input(groupIdSchema)
-    .mutation(({ input }) => unsubscribeFromGroup(input.id)),
+    .mutation(unsubscribeFromGroup),
   subscribeToGroup: protectedProcedure
     .input(groupIdSchema)
-    .mutation(({ input }) => subscribeToGroup(input.id)),
+    .mutation(subscribeToGroup),
 });

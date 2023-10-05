@@ -1,16 +1,18 @@
 import { eq } from "drizzle-orm";
-import { getUserAuth } from "@/lib/auth/utils";
+import { type Session } from "next-auth";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema/auth";
 import { groups } from "@/lib/db/schema/groups";
 
+type Input = {
+  input: { serverId: number };
+  ctx: { session: Session };
+};
+
 export const getGroupsByServerId = async ({
-  serverId,
-}: {
-  serverId: number;
-}) => {
-  const { session } = await getUserAuth();
-  if (!session?.user) throw new Error("no user found in getGroupByServerId");
+  input: { serverId },
+  ctx: { session },
+}: Input) => {
   const gs = await db.query.groups.findMany({
     with: { channels: true },
     where: eq(groups.serverId, serverId),

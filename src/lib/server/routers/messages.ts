@@ -9,8 +9,8 @@ import { protectedProcedure, router } from "../trpc";
 export const messagesRouter = router({
   getMessagesByChannelId: protectedProcedure
     .input(MessageByChannelIdSchema)
-    .query(async ({ input }) => getMessagesByChannelId(input)),
+    .query(getMessagesByChannelId),
   createMessage: protectedProcedure
     .input(insertMessageParams)
-    .mutation(async ({ input }) => createMessage(input)),
+    .mutation(createMessage),
 });
