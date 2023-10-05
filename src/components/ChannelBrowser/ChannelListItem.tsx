@@ -28,8 +28,6 @@ const getRelativeTime = (timestamp: Date | undefined) => {
     differenceInMilliseconds / MINUTE_IN_MILLISECONDS +
     new Date().getTimezoneOffset();
 
-  console.log(difference);
-
   if (difference > -5) return "Just now";
 
   if (difference > -60) {

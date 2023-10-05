@@ -1,6 +1,7 @@
 import {
   createServer,
   deleteServer,
+  joinServer,
   updateServer,
 } from "@/lib/api/servers/mutations";
 import { getServerById, getServers } from "@/lib/api/servers/queries";
@@ -9,9 +10,12 @@ import {
   insertServerParams,
   updateServerParams,
 } from "@/lib/db/schema/servers";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const serversRouter = router({
+  joinServer: protectedProcedure
+    .input(serverIdSchema)
+    .mutation(async ({ input }) => joinServer({ id: input.id })),
   getServers: publicProcedure.query(async () => getServers()),
   getServerById: publicProcedure
     .input(serverIdSchema)
@@ -26,3 +30,5 @@ export const serversRouter = router({
     .input(serverIdSchema)
     .mutation(async ({ input }) => deleteServer({ id: input.id })),
 });
+
+/**@TODO rewrite to most routes are protected and send the session */

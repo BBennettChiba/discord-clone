@@ -1,4 +1,5 @@
 import { and, eq } from "drizzle-orm";
+import { type Session } from "next-auth";
 import { getUserAuth } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import {
@@ -10,6 +11,7 @@ import {
   servers,
   serverIdSchema,
 } from "@/lib/db/schema/servers";
+import { usersToServers } from "@/lib/db/schema/usersToServers";
 
 export const createServer = async (server: NewServerParams) => {
   const { session } = await getUserAuth();
@@ -75,4 +77,16 @@ export const deleteServer = async (id: ServerId) => {
     console.error(message);
     return { error: message };
   }
+};
+
+export const joinServer = async (id: ServerId) => {
+  const { id: serverId } = serverIdSchema.parse(id);
+  const { session } = await getUserAuth();
+  if (!session) throw new Error("no session in join server");
+  const [insert] = await db
+    .insert(usersToServers)
+    .values({ serverId, userId: session.user.id })
+    .onConflictDoNothing()
+    .returning();
+  return insert;
 };

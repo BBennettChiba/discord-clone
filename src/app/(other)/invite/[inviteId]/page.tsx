@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { serverTrpc } from "@/lib/trpc/caller";
@@ -16,6 +17,14 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
     : invite.creator.image;
 
   const session = await getServerSession(authOptions);
+
+  const joinServer = async () => {
+    "use server";
+    const res = await serverTrpc.servers.joinServer({ id: invite.server.id });
+    res;
+    /**@TODO do checks to make sure user joined */
+    redirect(`/${invite.server.id}/${invite.server.defaultChannel}`);
+  };
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-indigo-500">
@@ -37,7 +46,7 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
           <h1 className="text-xl">{invite.server.name}</h1>
         </div>
         <div className="flex pt-2">
-          {/* <div /> here put online number when I have that info*/}
+          {/* <div /> here put online number when I have that info/ setup websockets?*/}
           <div className="flex items-center">
             <div className="pr-1">
               <div className="h-2 w-2 rounded-lg bg-gray-500" />
@@ -47,11 +56,15 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
             </span>
           </div>
         </div>
-        <div className="w-full pt-10">
-          <button className="h-11 w-full rounded-sm bg-indigo-500">
-            Accept Invite
-          </button>
-        </div>
+        {session?.user ? (
+          <div className="w-full pt-10">
+            <form action={void joinServer}>
+              <button className="h-11 w-full rounded-sm bg-indigo-500">
+                Accept Invite
+              </button>
+            </form>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -60,3 +73,5 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
 export default InvitePage;
 
 /**@TODO makes sure there is a src for the image. Also change the server to not require an image. if the user has no image and server has no image use css */
+
+/**@TODO setup user creation and/or login without losing invite */
