@@ -2,12 +2,12 @@ import { type ReactNode } from "react";
 import { MembersList } from "@/components/Channel/MembersList";
 import { MessageInput } from "@/components/Channel/MessageInput";
 import { TopBar } from "@/components/Channel/TopBar/TopBar";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = { children: ReactNode; params: { channel: string } };
 
 const Layout = async ({ children, params: { channel } }: Props) => {
-  const channelData = await serverTrpc.channels.getChannelById({
+  const channelData = await serverTrpc.channels.getChannelById.query({
     id: +channel,
   });
 

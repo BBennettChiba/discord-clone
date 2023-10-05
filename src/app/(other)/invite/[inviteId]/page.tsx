@@ -2,14 +2,14 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = {
   params: { inviteId: string };
 };
 
 const InvitePage = async ({ params: { inviteId } }: Props) => {
-  const invite = await serverTrpc.invites.getInviteById({ id: inviteId });
+  const invite = await serverTrpc.invites.getInviteById.query({ id: inviteId });
   if (!invite) return <>dude wtf</>;
 
   const imageSrc = invite.server.icon
@@ -20,9 +20,7 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
 
   const joinServer = async () => {
     "use server";
-    const res = await serverTrpc.servers.joinServer({ id: invite.server.id });
-    res;
-    /**@TODO do checks to make sure user joined */
+    await serverTrpc.servers.joinServer.mutate({ id: invite.server.id });
     redirect(`/${invite.server.id}/${invite.server.defaultChannel}`);
   };
 

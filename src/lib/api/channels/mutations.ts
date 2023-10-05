@@ -11,6 +11,7 @@ import {
   channelIdSchema,
 } from "@/lib/db/schema/channels";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
+import { Session } from "next-auth";
 
 export const createChannel = async (channel: NewChannelParams) => {
   const newChannel = insertChannelSchema.parse(channel);
@@ -62,10 +63,10 @@ export const deleteChannel = async (id: ChannelId) => {
   }
 };
 
-export const toggleChannelSubscription = async (id: ChannelId) => {
+export const toggleChannelSubscription = async (id: ChannelId, session: Session) => {
   const { id: channelId } = channelIdSchema.parse({ id });
-  const { session } = await getUserAuth();
-  if (!session?.user) throw new Error(" no user in unsubscribeToChannel");
+  // const { session } = await getUserAuth();
+  // if (!session?.user) throw new Error(" no user in unsubscribeToChannel");
   const userToChannelConnection = await db.query.usersToChannels.findFirst({
     where: and(
       eq(usersToChannels.userId, session.user.id),

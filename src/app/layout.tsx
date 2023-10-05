@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { type ReactNode } from "react";
 import { NextAuthProvider } from "@/lib/auth/Provider";
 import { TrpcProvider } from "@/lib/trpc/Provider";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 import type { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const servers = await serverTrpc.servers.getServers();
+  const servers = await serverTrpc.servers.getServers.query();
   if (!servers) throw new Error("No servers");
   return (
     <html lang="en">

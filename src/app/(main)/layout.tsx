@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { type ReactNode } from "react";
 import { ServerList } from "@/components/ServerList/ServerList";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const servers = await serverTrpc.servers.getServers();
+  const servers = await serverTrpc.servers.getServers.query();
   if (!servers) throw new Error("No servers");
   return (
     <CheckSession>

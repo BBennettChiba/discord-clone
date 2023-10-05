@@ -14,7 +14,7 @@ import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const channelsRouter = router({
   // getChannels: publicProcedure.query(async () => getChannels()),
-  getChannelById: publicProcedure
+  getChannelById: protectedProcedure
     .input(channelIdSchema)
     .query(async ({ input }) => getChannelById(input.id)),
   createChannel: publicProcedure
@@ -28,5 +28,5 @@ export const channelsRouter = router({
     .mutation(async ({ input }) => deleteChannel(input.id)),
   toggleChannelSubscription: protectedProcedure
     .input(channelIdSchema)
-    .mutation(async ({ input }) => toggleChannelSubscription(input.id)),
+    .mutation(async ({ input, ctx: {session} }) => toggleChannelSubscription(input.id, session)),
 });

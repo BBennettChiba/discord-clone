@@ -5,7 +5,7 @@ import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { MenuOpener } from "@/components/ChannelSelection/MenuOpener";
 import { UserStatus } from "@/components/ChannelSelection/UserStatus";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = {
   children: ReactNode;
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const Server = async ({ children, params: { server: serverId } }: Props) => {
-  const server = await serverTrpc.servers.getServerById({ id: +serverId });
+  const server = await serverTrpc.servers.getServerById.query({ id: +serverId });
 
   return (
     <div className="flex flex-1">

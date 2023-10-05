@@ -1,5 +1,4 @@
 import { and, eq } from "drizzle-orm";
-import { type Session } from "next-auth";
 import { getUserAuth } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import {

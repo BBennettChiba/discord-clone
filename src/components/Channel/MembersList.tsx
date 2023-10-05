@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = {
   channelId: number;
 };
 
 export const MembersList = async ({ channelId }: Props) => {
-  const users = await serverTrpc.users.getUsersByChannel({ channelId });
+  const users = await serverTrpc.users.getUsersByChannel.query({ channelId });
   return (
     <>
       <input type="checkbox" className="peer hidden" id="checkbox" />

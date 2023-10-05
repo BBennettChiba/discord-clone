@@ -1,7 +1,7 @@
 import { BackButton } from "@/components/ChannelBrowser/BackButton";
 import { Browser } from "@/components/ChannelBrowser/Browser";
 import { HashWithLookingGlass } from "@/components/Icons";
-import { serverTrpc } from "@/lib/trpc/caller";
+import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = {
   params: {
@@ -16,7 +16,7 @@ const ChannelBrowser = async ({
   params: { server },
   searchParams: { last },
 }: Props) => {
-  const groups = await serverTrpc.groups.getGroupsByServerId({
+  const groups = await serverTrpc.groups.getGroupsByServerId.query({
     serverId: +server,
   });
 

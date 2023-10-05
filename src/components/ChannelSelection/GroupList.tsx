@@ -1,5 +1,4 @@
 "use client";
-// import { serverTrpc } from "@/lib/trpc/caller";
 import { trpc } from "@/lib/trpc/client";
 import { Group } from "./Group";
 
