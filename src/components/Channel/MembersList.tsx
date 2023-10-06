@@ -7,21 +7,26 @@ type Props = {
 
 export const MembersList = async ({ channelId }: Props) => {
   const users = await serverTrpc.users.getUsersByChannel.query({ channelId });
+  console.log(users);
   return (
     <>
       <input type="checkbox" className="peer hidden" id="checkbox" />
-      <div className="w-0 flex-col overflow-hidden peer-checked:flex peer-checked:w-60">
+      <div className="w-0 flex-shrink-0 overflow-hidden bg-zinc-800 peer-checked:block peer-checked:w-60">
         {users.map((user) => (
-          <div key={user.id} className="flex h-[46px] w-full">
-            <div className="">
-              <Image
-                src={user.image || ""}
-                height={32}
-                width={32}
-                alt="avatar"
-              />
+          <div key={user.id} className="w-full p-2">
+            <div className="flex h-[46px] items-center text-gray-400">
+              <div className="pr-3">
+                <div className="overflow-hidden rounded-2xl">
+                  <Image
+                    src={user.image || ""}
+                    height={32}
+                    width={32}
+                    alt="avatar"
+                  />
+                </div>
+              </div>
+              <div>{user.name}</div>
             </div>
-            <div>{user.name}</div>
           </div>
         ))}
       </div>

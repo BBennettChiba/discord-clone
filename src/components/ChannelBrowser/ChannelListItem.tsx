@@ -95,7 +95,7 @@ export const ChannelListItem = ({ channel }: Props) => {
       className="group cursor-pointer px-4 py-3 hover:bg-zinc-800"
       onClick={handler}
     >
-      <li className="flex h-10 items-center justify-between">
+      <li className="flex h-10 items-center justify-between text-gray-400">
         <div>
           <div className="flex items-center">
             <Hash className="h-5 w-5" />
