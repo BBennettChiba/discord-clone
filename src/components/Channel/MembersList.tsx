@@ -7,7 +7,7 @@ type Props = {
 
 export const MembersList = async ({ channelId }: Props) => {
   const users = await serverTrpc.users.getUsersByChannel.query({ channelId });
-  console.log(users);
+
   return (
     <>
       <input type="checkbox" className="peer hidden" id="checkbox" />

@@ -1,3 +1,4 @@
+import { type inferRouterOutputs } from "@trpc/server";
 import { router } from "../trpc";
 import { channelsRouter } from "./channels";
 import { groupsRouter } from "./groups";
@@ -12,7 +13,9 @@ export const appRouter = router({
   channels: channelsRouter,
   groups: groupsRouter,
   users: usersRouter,
-  invites: invitesRouter
+  invites: invitesRouter,
 });
 
 export type AppRouter = typeof appRouter;
+
+export type RouterOutputs = inferRouterOutputs<AppRouter>;

@@ -1,11 +1,10 @@
-import { type inferRouterOutputs } from "@trpc/server";
 import React, { Fragment } from "react";
-import { type AppRouter } from "@/lib/server/routers/_app";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { ChannelListItem } from "./ChannelListItem";
 import { FollowCategoryButton } from "./FollowCategoryButton";
 
 type Props = {
-  group: inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"][number];
+  group: RouterOutputs["groups"]["getGroupsByServerId"][number];
 };
 
 export const Group = ({ group }: Props) => (

@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { type inferRouterOutputs } from "@trpc/server";
 import { useParams } from "next/navigation";
-import { type AppRouter } from "@/lib/server/routers/_app";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { Checkbox } from "../Icons";
 type Props = {
@@ -9,7 +8,7 @@ type Props = {
   checked: boolean;
 };
 
-type Groups = inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"];
+type Groups = RouterOutputs["groups"]["getGroupsByServerId"];
 
 export const FollowCategoryButton = ({ groupId, checked }: Props) => {
   const { server: serverId } = useParams();

@@ -1,12 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { type inferRouterOutputs } from "@trpc/server";
 import { useParams } from "next/navigation";
 import React from "react";
-import { type AppRouter } from "@/lib/server/routers/_app";
+import { type RouterOutputs} from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { Checkbox, Hash } from "../Icons";
 
-type Groups = inferRouterOutputs<AppRouter>["groups"]["getGroupsByServerId"];
+type Groups = RouterOutputs["groups"]["getGroupsByServerId"];
 
 type Channel = Groups[number]["channels"][number];
 

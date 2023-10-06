@@ -16,12 +16,6 @@ export const ServerList = ({ servers }: { servers: Server[] }): JSX.Element => {
 
   const [selected, setSelected] = useState<number>(currentServerIndex);
 
-  const Divider = () => (
-    <div className="relative flex h-3 w-full items-start justify-center">
-      <div className="h-[2px] w-8 bg-gray-700" />
-    </div>
-  );
-
   return (
     <div className="h-full w-[72px]">
       <div className="relative h-screen flex-grow bg-neutral-900 pt-3">
@@ -56,3 +50,9 @@ export const ServerList = ({ servers }: { servers: Server[] }): JSX.Element => {
     </div>
   );
 };
+
+const Divider = () => (
+  <div className="relative flex h-3 w-full items-start justify-center">
+    <div className="h-[2px] w-8 bg-gray-700" />
+  </div>
+);

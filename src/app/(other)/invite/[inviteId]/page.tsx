@@ -2,7 +2,9 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { serverTrpc } from "@/lib/trpc/api";
+import { invertColor } from "@/lib/utils";
 
 type Props = {
   params: { inviteId: string };
@@ -11,10 +13,6 @@ type Props = {
 const InvitePage = async ({ params: { inviteId } }: Props) => {
   const invite = await serverTrpc.invites.getInviteById.query({ id: inviteId });
   if (!invite) return <>dude wtf</>;
-
-  const imageSrc = invite.server.icon
-    ? invite.server.icon
-    : invite.creator.image;
 
   const session = await getServerSession(authOptions);
 
@@ -30,14 +28,7 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
     <div className="flex h-screen w-screen items-center justify-center bg-indigo-500">
       <div className="flex w-[480px] flex-col items-center rounded-md bg-gray-800 p-8">
         <div className="pb-6">
-          <div className="h-16 w-16 overflow-hidden rounded-xl">
-            <Image
-              src={imageSrc!}
-              alt="server logo or invite creator avatar"
-              width={64}
-              height={64}
-            />
-          </div>
+          <Img invite={invite} />
         </div>
         <h2 className="pt-2 text-gray-400">
           {invite.creator.name} has invited you to join{" "}
@@ -73,6 +64,49 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
 
 export default InvitePage;
 
-/**@TODO makes sure there is a src for the image. Also change the server to not require an image. if the user has no image and server has no image use css */
-
 /**@TODO setup user creation and/or login without losing invite */
+
+const Img = ({
+  invite,
+}: {
+  invite: NonNullable<RouterOutputs["invites"]["getInviteById"]>;
+}) => {
+  const { src, alt, rounding } = invite.server.icon
+    ? { src: invite.server.icon, alt: "server icon", rounding: "rounded-xl" }
+    : {
+        src: invite.creator.image,
+        alt: "creator avatar",
+        rounding: "rounded-[50px]",
+      };
+  if (src)
+    return (
+      <div className={`h-16 w-16 overflow-hidden ${rounding}`}>
+        <Image src={src} alt={alt} width={64} height={64} />;
+      </div>
+    );
+
+  const initials = invite.server.name
+    .split(" ")
+    .map((word) =>
+      word
+        .split("")
+        .filter((letter, i) => i === 0 || letter.toUpperCase() === letter)
+        .join(""),
+    )
+    .join("");
+
+  const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+  return (
+    <div
+      className="h-16 w-16 overflow-hidden rounded-xl"
+      style={{ background: randomColor }}
+    >
+      <div className="flex h-full items-center justify-center">
+        <div style={{ color: invertColor(randomColor) }}>{initials}</div>
+      </div>
+    </div>
+  );
+  {
+  }
+};

@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { type Session } from "next-auth";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema/auth";
@@ -27,18 +27,9 @@ type GetServerByIdInput = {
 export const getServerById = async ({
   input: { id: serverId },
 }: GetServerByIdInput) => {
-  const [server] = await db
-    .select()
-    .from(servers)
-    .where(
-      and(
-        eq(servers.id, serverId),
-        // eq(
-        //   usersToServers.userId,
-        //   session?.user.id || throwError("no session in getMessageById"),
-        // ),
-      ),
-    );
+  const server = db.query.servers.findFirst({
+    where: eq(servers.id, serverId),
+  });
   return server;
 };
 

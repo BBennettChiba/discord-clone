@@ -1,11 +1,10 @@
-import { type inferRouterOutputs } from "@trpc/server";
 import { Hash, LookingGlass } from "@/components/Icons";
-import { type AppRouter } from "@/lib/server/routers/_app";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { icons } from "./Icons";
 import { SearchBar } from "./SearchBar";
 
 type Props = {
-  channel: inferRouterOutputs<AppRouter>["channels"]["getChannelById"];
+  channel: RouterOutputs["channels"]["getChannelById"];
 };
 
 export const TopBar = ({ channel }: Props) => (

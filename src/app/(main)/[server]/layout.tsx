@@ -13,7 +13,9 @@ type Props = {
 };
 
 const Server = async ({ children, params: { server: serverId } }: Props) => {
-  const server = await serverTrpc.servers.getServerById.query({ id: +serverId });
+  const server = await serverTrpc.servers.getServerById.query({
+    id: +serverId,
+  });
 
   return (
     <div className="flex flex-1">
