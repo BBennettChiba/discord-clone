@@ -102,7 +102,7 @@ const Img = ({
       className="h-16 w-16 overflow-hidden rounded-xl"
       style={{ background: randomColor }}
     >
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full items-center justify-center select-none">
         <div style={{ color: invertColor(randomColor) }}>{initials}</div>
       </div>
     </div>
@@ -110,5 +110,3 @@ const Img = ({
   {
   }
 };
-
-/**@TODO make text not selectable */
