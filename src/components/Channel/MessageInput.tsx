@@ -13,9 +13,6 @@ type Props = { channelName: string; channelId: number };
 
 type Data = InfiniteData<Awaited<ReturnType<typeof getMessagesByChannelId>>>;
 
-/**
- * @TODO find out why new comments don't work, they're created but I can't fetch them. They update in the dom but the invalidate query erases it */
-
 export const MessageInput = ({ channelName, channelId }: Props) => {
   const queryClient = useQueryClient();
 
@@ -68,7 +65,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         type="text"
-        className="h-11 w-full appearance-none bg-neutral-600 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
+        className="h-11 w-full rounded-lg appearance-none bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
         placeholder={`Send a message in ${channelName}`}
       />
     </div>

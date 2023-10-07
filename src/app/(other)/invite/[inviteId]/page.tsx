@@ -110,3 +110,5 @@ const Img = ({
   {
   }
 };
+
+/**@TODO make text not selectable */

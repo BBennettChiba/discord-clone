@@ -49,6 +49,7 @@ const Channel = ({ params: { channel } }: Props) => {
 
   let lastDate: Date | undefined;
 
+  /**@TODO make the loading styles bearable, might also have to do with the sidebar opening while loading */
   if (isLoading) return <>loading</>;
 
   if (!data) return <div>error</div>;

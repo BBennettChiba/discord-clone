@@ -15,10 +15,12 @@ const Layout = async ({ children, params: { channel } }: Props) => {
     <div className="flex w-[calc(100dvw-312px)] flex-col bg-zinc-700">
       <TopBar channel={channelData} />
       <div className="flex">
-        {children}
+        <div className="flex flex-col">
+          {children}
+          <MessageInput channelName={channelData.name} channelId={+channel} />
+        </div>
         <MembersList channelId={+channel} />
       </div>
-      <MessageInput channelName={channelData.name} channelId={+channel} />
     </div>
   );
 };
@@ -26,5 +28,5 @@ const Layout = async ({ children, params: { channel } }: Props) => {
 export default Layout;
 
 /**
- * @TODO add tenor and emoji support
+ * @TODO add tenor support
  */
