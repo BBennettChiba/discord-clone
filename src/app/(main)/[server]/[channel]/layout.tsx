@@ -14,9 +14,9 @@ const Layout = async ({ children, params: { channel } }: Props) => {
   return (
     <div className="flex w-[calc(100dvw-312px)] flex-col bg-zinc-700">
       <TopBar channel={channelData} />
-      <div className="flex">
-        <div className="flex flex-col">
-          <div className="flex">
+      <div className="flex flex-1">
+        <div className="flex flex-col flex-1">
+          <div className="flex flex-1">
             {children}
             <div className="h-full w-1" />
           </div>
