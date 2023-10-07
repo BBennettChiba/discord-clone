@@ -23,14 +23,17 @@ export const MenuOpener = ({ name, children }: Props) => {
         </div>
         <div className="ml-auto pr-2">
           <div
-            className="group relative flex h-8 w-8 cursor-pointer items-center justify-center"
+            className={cn(
+              "group relative flex h-8 w-8 cursor-pointer items-center justify-center transition-all duration-300",
+              { "-rotate-90": isMenuOpen },
+            )}
             onClick={(): void => setIsMenuOpen((v) => !v)}
           >
-            <div className="absolute h-4 w-[1px] origin-center -translate-x-1/2 -rotate-45 bg-white transition-all" />
-            <div className="absolute h-4 w-[1px] origin-center translate-x-1/2 rotate-45 bg-white transition-all" />
+            <div className="absolute h-4 w-[1px] origin-center -rotate-45 bg-white transition-all" />
+            <div className="absolute h-4 w-[1px] origin-center rotate-45 bg-white transition-all" />
             <div
               className={cn(
-                "absolute bottom-0 h-[calc(50%-1px)] w-full bg-zinc-800 transition-all duration-500",
+                "absolute bottom-0 h-1/2 w-full bg-zinc-800 transition-all duration-300",
                 {
                   "h-0": isMenuOpen,
                 },

@@ -96,9 +96,8 @@ export const DropdownMenu = (): JSX.Element => (
       <div className="rounded-md bg-black px-2 py-2">
         {options.map((group, i) => (
           <Fragment key={i}>
-            {group.map((option, j) => {
+            {group.map(({ Wrapper, ...option }, j) => {
               if (!IS_ADMIN && option?.adminOption) return null;
-              const { Wrapper } = option;
               if (Wrapper)
                 return (
                   <Wrapper>
@@ -118,7 +117,7 @@ export const DropdownMenu = (): JSX.Element => (
 );
 
 type Props = {
-  option: (typeof options)[number][number];
+  option: Omit<(typeof options)[number][number], 'Wrapper'>;
   i: number;
 };
 

@@ -8,6 +8,8 @@ import { type getInviteById } from "@/lib/api/invites/queries";
 import { users } from "./auth";
 import { servers } from "./servers";
 
+/**@TODO add nullable field that points to a channel in the server. If it's null, the invite just points to the default channel */
+
 export const invites = pgTable("invites", {
   id: varchar("id", { length: 128 })
     .$defaultFn(() => createId())
@@ -57,6 +59,4 @@ export type UpdateInviteParams = z.infer<typeof updateInviteParams>;
 export type InviteId = z.infer<typeof inviteIdSchema>["id"];
 
 // this type infers the return from getInvites() - meaning it will include any joins
-export type CompleteInvite = Awaited<
-  ReturnType<typeof getInviteById>
->;
+export type CompleteInvite = Awaited<ReturnType<typeof getInviteById>>;
