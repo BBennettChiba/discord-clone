@@ -1,5 +1,6 @@
 "use client";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useState, useEffect } from "react";
+import { useInvite } from "@/contexts/InviteContext";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -9,6 +10,11 @@ type Props = {
 
 export const MenuOpener = ({ name, children }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isModalOpen } = useInvite();
+  useEffect(() => {
+    if (isModalOpen) setIsMenuOpen(false);
+  }, [isModalOpen]);
+
   return (
     <>
       <div className="mb-[-1px] flex h-12 w-full flex-none items-center border-b border-black pl-4">

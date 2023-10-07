@@ -33,11 +33,10 @@ export const invitesRelations = relations(invites, ({ one }) => ({
 // Schema for invites - used to validate API requests
 export const insertInviteSchema = createInsertSchema(invites);
 
-export const insertInviteParams = createSelectSchema(invites, {
-  createdAt: z.coerce.string(),
-}).omit({
+export const insertInviteParams = createSelectSchema(invites).omit({
   id: true,
-  userId: true,
+  creatorId: true,
+  createdAt: true,
 });
 
 export const updateInviteSchema = createSelectSchema(invites);

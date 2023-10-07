@@ -8,5 +8,3 @@ export const serversRouter = router({
   getServers: protectedProcedure.query(getServers),
   getServerById: protectedProcedure.input(serverIdSchema).query(getServerById),
 });
-
-/**@TODO rewrite to most routes are protected and send the session */

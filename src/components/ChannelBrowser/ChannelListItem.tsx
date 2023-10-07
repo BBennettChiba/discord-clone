@@ -131,5 +131,3 @@ export const ChannelListItem = ({ channel }: Props) => {
     </div>
   );
 };
-
-/**@TODO when following channel is selected the pointer goes to pointy instead of clickable */

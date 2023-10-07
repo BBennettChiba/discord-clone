@@ -1,10 +1,11 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { type ReactNode } from "react";
 import { ChannelBrowserButton } from "@/components/ChannelSelection/ChannelBrowser";
-import { DropdownMenu } from "@/components/ChannelSelection/DropdownMenu";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
+import { DropdownMenu } from "@/components/ChannelSelection/Menu/DropdownMenu";
 import { MenuOpener } from "@/components/ChannelSelection/MenuOpener";
 import { UserStatus } from "@/components/ChannelSelection/UserStatus";
+import { InviteContextProvider } from "@/contexts/InviteContext";
 import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = {
@@ -20,18 +21,20 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
   if (!server) throw new Error("no Server in main/server/layout");
 
   return (
-    <div className="flex flex-1">
-      <div className="relative flex h-screen w-60 flex-col bg-zinc-800">
-        <MenuOpener name={server.name}>
-          <DropdownMenu />
-        </MenuOpener>
-        <ChannelBrowserButton defaultChannel={server.defaultChannel} />
-        <GroupList serverId={+serverId} />
-        <UserStatus />
+    <InviteContextProvider>
+      <div className="flex flex-1">
+        <div className="relative flex h-screen w-60 flex-col bg-zinc-800">
+          <MenuOpener name={server.name}>
+            <DropdownMenu />
+          </MenuOpener>
+          <ChannelBrowserButton defaultChannel={server.defaultChannel} />
+          <GroupList serverId={+serverId} />
+          <UserStatus />
+        </div>
+        {children}
+        <ReactQueryDevtools initialIsOpen={true} />
       </div>
-      {children}
-      <ReactQueryDevtools initialIsOpen={true} />
-    </div>
+    </InviteContextProvider>
   );
 };
 
