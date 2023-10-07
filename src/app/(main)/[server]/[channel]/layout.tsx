@@ -16,7 +16,10 @@ const Layout = async ({ children, params: { channel } }: Props) => {
       <TopBar channel={channelData} />
       <div className="flex">
         <div className="flex flex-col">
-          {children}
+          <div className="flex">
+            {children}
+            <div className="h-full w-1" />
+          </div>
           <MessageInput channelName={channelData.name} channelId={+channel} />
         </div>
         <MembersList channelId={+channel} />

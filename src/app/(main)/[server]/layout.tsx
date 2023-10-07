@@ -17,6 +17,8 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
     id: +serverId,
   });
 
+  if (!server) throw new Error("no Server in main/server/layout");
+
   return (
     <div className="flex flex-1">
       <div className="relative flex h-screen w-60 flex-col bg-zinc-800">
