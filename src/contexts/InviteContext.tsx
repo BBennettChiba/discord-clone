@@ -17,7 +17,6 @@ type Props = {
 
 export type ToChannel = {
   id: number;
-  name: string;
 } | null;
 
 export const InviteContextProvider = ({ children }: Props) => {

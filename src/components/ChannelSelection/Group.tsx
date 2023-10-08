@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import z from "zod";
 import { type CompleteGroup } from "@/lib/db/schema/groups";
 import { ChannelList } from "./ChannelList";
 
@@ -9,8 +10,12 @@ type Props = {
   group: CompleteGroup;
 };
 
+const params = z.object({
+  channel: z.string(),
+});
+
 export const Group = ({ group }: Props): JSX.Element => {
-  const { channel: channelId } = useParams();
+  const { channel: channelId } = params.parse(useParams());
 
   const [checked, setChecked] = useState(
     group.channels.some((c) => c.id === +channelId),

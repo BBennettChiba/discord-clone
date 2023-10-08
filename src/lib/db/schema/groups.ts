@@ -3,7 +3,7 @@ import { varchar, serial, pgTable, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type z } from "zod";
 
-import { type getGroupsByServerId } from "@/lib/api/groups/queries";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { channels } from "./channels";
 import { servers } from "./servers";
 
@@ -46,7 +46,4 @@ export type NewGroupParams = z.infer<typeof insertGroupParams>;
 export type UpdateGroupParams = z.infer<typeof updateGroupParams>;
 export type GroupId = z.infer<typeof groupIdSchema>["id"];
 
-// this type infers the return from getGroups() - meaning it will include any joins
-export type CompleteGroup = Awaited<
-  ReturnType<typeof getGroupsByServerId>
->[number];
+export type CompleteGroup = RouterOutputs["groups"]["getGroupsByServerId"][number];
