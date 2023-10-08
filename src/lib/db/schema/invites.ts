@@ -30,7 +30,7 @@ export const invitesRelations = relations(invites, ({ one }) => ({
     fields: [invites.serverId],
     references: [servers.id],
   }),
-  channel: one(channels, {
+  toChannel: one(channels, {
     fields: [invites.toChannelId],
     references: [channels.id],
   }),
