@@ -2,14 +2,17 @@
 import { type ReactNode } from "react";
 import { useInvite } from "@/contexts/InviteContext";
 
-export const InvitePeopleWrapper = ({ children }: { children: ReactNode }) => {
-  const { openModal } = useInvite();
+const InvitePeopleWrapper = ({ children }: { children: ReactNode }) => {
+  const { toggleModal } = useInvite();
   return (
     <div
-      onClick={() => openModal()}
-      className="text-[#959CF6] cursor-pointer hover:text-white"
+      onClick={() => toggleModal()}
+      className="cursor-pointer text-[#959CF6] hover:text-white"
     >
       {children}
     </div>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default InvitePeopleWrapper;

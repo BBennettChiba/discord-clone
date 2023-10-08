@@ -4,7 +4,7 @@ import { InviteModal } from "@/components/ChannelSelection/Menu/InviteModal";
 
 type Context = {
   isModalOpen: boolean;
-  openModal: (val?: number) => void;
+  toggleModal: (val?: ToChannel) => void;
 };
 
 const context = createContext({} as Context);
@@ -15,19 +15,25 @@ type Props = {
   children: ReactNode;
 };
 
+export type ToChannel = {
+  id: number;
+  name: string;
+} | null;
+
 export const InviteContextProvider = ({ children }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [toChannelId, setToChannelId] = useState<null | number>(null);
+  const [toChannel, setToChannel] = useState<ToChannel>(null);
 
-  const openModal = (toChannel?: number) => {
-    setIsModalOpen(true);
-    if (toChannel) setToChannelId(toChannel);
+  const toggleModal = (toChannelVal?: ToChannel) => {
+    setIsModalOpen((v) => !v);
+    if (toChannelVal) setToChannel(toChannelVal);
+    else setToChannel(null);
   };
 
   return (
-    <context.Provider value={{ isModalOpen, openModal }}>
+    <context.Provider value={{ isModalOpen, toggleModal }}>
       {children}
-      {isModalOpen ? <InviteModal toChannelId={toChannelId} /> : null}
+      {isModalOpen ? <InviteModal toChannel={toChannel} /> : null}
     </context.Provider>
   );
 };

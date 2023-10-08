@@ -14,8 +14,7 @@ import {
   PeoplePlusIcon,
 } from "../../Icons";
 
-//**I get a weird can't dot into client components error unless I do this */
-import * as W from "./InvitePeopleWrapper";
+import  InvitePeopleWrapper  from "./InvitePeopleWrapper";
 
 const ICON_SIZE = "h[18px] w-[18px]";
 
@@ -24,7 +23,7 @@ const options = [
     {
       adminOption: false,
       text: "Invite People",
-      Wrapper: W.InvitePeopleWrapper,
+      wrapper: true,
       icon: <PeoplePlusIcon className={ICON_SIZE} />,
     },
     {
@@ -98,13 +97,13 @@ export const DropdownMenu = (): JSX.Element => (
       <div className="rounded-md bg-black px-2 py-2">
         {options.map((group, i) => (
           <Fragment key={i}>
-            {group.map(({ Wrapper, ...option }, j) => {
+            {group.map(({ wrapper, ...option }, j) => {
               if (!IS_ADMIN && option?.adminOption) return null;
-              if (Wrapper)
+              if (wrapper)
                 return (
-                  <Wrapper>
+                  <InvitePeopleWrapper>
                     <Content option={option} i={i} />
-                  </Wrapper>
+                  </InvitePeopleWrapper>
                 );
               return <Content key={j} option={option} i={i} />;
             })}
@@ -119,7 +118,7 @@ export const DropdownMenu = (): JSX.Element => (
 );
 
 type Props = {
-  option: Omit<(typeof options)[number][number], "Wrapper">;
+  option: Omit<(typeof options)[number][number], "wrapper">;
   i: number;
 };
 
