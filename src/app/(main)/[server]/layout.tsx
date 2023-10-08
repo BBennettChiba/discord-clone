@@ -1,4 +1,3 @@
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { type ReactNode } from "react";
 import { ChannelBrowserButton } from "@/components/ChannelSelection/ChannelBrowser";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
@@ -32,7 +31,6 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
           <UserStatus />
         </div>
         {children}
-        <ReactQueryDevtools initialIsOpen={true} />
       </div>
     </InviteContextProvider>
   );

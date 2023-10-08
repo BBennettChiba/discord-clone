@@ -26,17 +26,17 @@ type Props = {
 
 export const InviteContextProvider = ({ children }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [inviteChannel, setInviteChannel] = useState<null | number>(null);
+  const [toChannelId, setToChannelId] = useState<null | number>(null);
 
-  const openModal = (chan?: number) => {
+  const openModal = (toChannel?: number) => {
     setIsModalOpen(true);
-    if (chan) setInviteChannel(chan);
+    if (toChannel) setToChannelId(toChannel);
   };
 
   return (
     <context.Provider value={{ isModalOpen, openModal }}>
       {children}
-      {isModalOpen ? <Modal inviteChannel={inviteChannel} /> : null}
+      {isModalOpen ? <Modal toChannelId={toChannelId} /> : null}
     </context.Provider>
   );
 };
@@ -45,7 +45,7 @@ const paramsSchema = z.object({
   server: z.coerce.number(),
 });
 
-const Modal = ({ inviteChannel }: { inviteChannel: null | number }) => {
+const Modal = ({ toChannelId}: { toChannelId: null | number }) => {
   const [invite, setInvite] = useState<Invite | null>(null);
   const { mutate: createInvite } = trpc.invites.createInvite.useMutation({
     onSuccess: (data) => setInvite(data),
@@ -53,14 +53,14 @@ const Modal = ({ inviteChannel }: { inviteChannel: null | number }) => {
 
   const { server: serverId } = paramsSchema.parse(useParams());
   useEffect(() => {
-    createInvite({ serverId });
-  }, [createInvite, serverId]);
+    createInvite({ serverId, toChannelId});
+  }, [createInvite, serverId, toChannelId]);
 
   return (
     <div className="absolute h-screen w-screen bg-black opacity-60">
       <div className="flex h-full w-full items-center justify-center">
         <div className="h-72 w-96">
-          server num: {serverId} chan: {inviteChannel}
+          server num: {serverId} chan: {toChannelId}
           {JSON.stringify(invite)}
         </div>
       </div>

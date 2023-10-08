@@ -6,9 +6,8 @@ import { z } from "zod";
 
 import { type getInviteById } from "@/lib/api/invites/queries";
 import { users } from "./auth";
+import { channels } from "./channels";
 import { servers } from "./servers";
-
-/**@TODO add nullable field that points to a channel in the server. If it's null, the invite just points to the default channel */
 
 export const invites = pgTable("invites", {
   id: varchar("id", { length: 128 })
@@ -19,6 +18,7 @@ export const invites = pgTable("invites", {
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   serverId: integer("server_id").notNull(),
+  toChannelId: integer("to_channel_id"),
 });
 
 export const invitesRelations = relations(invites, ({ one }) => ({
@@ -29,6 +29,10 @@ export const invitesRelations = relations(invites, ({ one }) => ({
   server: one(servers, {
     fields: [invites.serverId],
     references: [servers.id],
+  }),
+  channel: one(channels, {
+    fields: [invites.toChannelId],
+    references: [channels.id],
   }),
 }));
 

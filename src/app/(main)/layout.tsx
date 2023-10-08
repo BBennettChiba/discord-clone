@@ -1,3 +1,4 @@
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { type ReactNode } from "react";
@@ -7,11 +8,12 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const servers = await serverTrpc.servers.getServers.query();
-  
+
   return (
     <CheckSession>
       <ServerList servers={servers} />
       {children}
+      <ReactQueryDevtools initialIsOpen={true} />
     </CheckSession>
   );
 };
