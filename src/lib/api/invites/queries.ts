@@ -13,22 +13,20 @@ export const getInviteById = async ({ input: { id: inviteId } }: Input) => {
     with: { creator: true, server: true },
   });
 
+  if (!invite) throw new Error("No invite found");
+
   const [{ numberOfMembers }] = await db
     .select({
-      numberOfMembers: sql<number>`count(${usersToServers.userId})`
-        .mapWith(Number)
-        .as("count"),
+      numberOfMembers: sql<number>`count(*)`.mapWith(Number).as("count"),
     })
     .from(usersToServers)
-    .leftJoin(invites, eq(invites.serverId, usersToServers.serverId))
-    .where(eq(invites.serverId, usersToServers.serverId));
+    // .leftJoin(invites, eq(invite.server.id, usersToServers.serverId));
+    .where(eq(usersToServers.serverId, invite.server.id));
 
-  const inviteWithCount = invite
-    ? {
-        ...invite,
-        server: { ...invite.server, numberOfMembers },
-      }
-    : null;
+  const inviteWithCount = {
+    ...invite,
+    server: { ...invite.server, numberOfMembers },
+  };
 
   return inviteWithCount;
 };

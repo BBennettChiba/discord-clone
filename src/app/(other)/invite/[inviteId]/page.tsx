@@ -24,6 +24,8 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
     redirect(`/${sub.serverId}/${invite.server.defaultChannel}`);
   };
 
+  console.log(invite);
+
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-indigo-500">
       <div className="flex w-[480px] flex-col items-center rounded-md bg-gray-800 p-8">
@@ -102,7 +104,7 @@ const Img = ({
       className="h-16 w-16 overflow-hidden rounded-xl"
       style={{ background: randomColor }}
     >
-      <div className="flex h-full items-center justify-center select-none">
+      <div className="flex h-full select-none items-center justify-center">
         <div style={{ color: invertColor(randomColor) }}>{initials}</div>
       </div>
     </div>
