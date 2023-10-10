@@ -8,6 +8,7 @@ module.exports = {
       files: [
         "src/app/**/layout.tsx",
         "src/app/**/page.tsx",
+        "src/app/**/error.tsx",
         "tailwind.config.ts",
         "drizzle.config.ts",
       ],

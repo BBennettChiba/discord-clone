@@ -45,14 +45,14 @@ export const InviteModal = ({ toChannel }: { toChannel: ToChannel }) => {
               overflow: "hidden auto",
             }}
           >
-            <button className="absolute bottom-[6.13rem] left-[25.38rem] right-[0.88rem] top-[0.88rem] z-[3] flex h-7 w-3 cursor-pointer items-center justify-center rounded p-1 text-gray-400 opacity-50">
+            <button className="absolute bottom-[6.13rem] left-[25.38rem] right-[0.88rem] top-[0.88rem] z-[3] flex h-7 w-3 cursor-pointer items-center justify-center rounded p-1 text-gray-400 opacity-50 hover:text-white hover:opacity-100 transition-all duration-300">
               <div
                 style={{
                   backgroundImage:
                     "linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) calc(2px), rgba(0, 0, 0, 0) calc(2px))",
                 }}
               >
-                <div onClick={() => toggleModal()}>
+                <div className="" onClick={() => toggleModal()}>
                   <X className="inline h-6 w-6" />
                 </div>
               </div>

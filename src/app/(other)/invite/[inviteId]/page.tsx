@@ -12,7 +12,6 @@ type Props = {
 
 const InvitePage = async ({ params: { inviteId } }: Props) => {
   const invite = await serverTrpc.invites.getInviteById.query({ id: inviteId });
-  if (!invite) return <>dude wtf</>;
 
   const session = await getServerSession(authOptions);
 
@@ -23,8 +22,8 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
     });
     redirect(`/${sub.serverId}/${invite.server.defaultChannel}`);
   };
+  
 
-  console.log(invite);
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-indigo-500">

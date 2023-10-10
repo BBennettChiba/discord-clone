@@ -20,7 +20,6 @@ export const getInviteById = async ({ input: { id: inviteId } }: Input) => {
       numberOfMembers: sql<number>`count(*)`.mapWith(Number).as("count"),
     })
     .from(usersToServers)
-    // .leftJoin(invites, eq(invite.server.id, usersToServers.serverId));
     .where(eq(usersToServers.serverId, invite.server.id));
 
   const inviteWithCount = {
