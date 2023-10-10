@@ -54,6 +54,7 @@ export const insertMessageSchema = createInsertSchema(messages);
 
 export const insertMessageParams = createSelectSchema(messages, {
   channelId: z.coerce.number(),
+  body: z.string().min(1),
 }).omit({
   id: true,
   authorId: true,

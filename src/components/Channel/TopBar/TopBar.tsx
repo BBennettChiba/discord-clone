@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const TopBar = ({ channel }: Props) => (
-  <div className="flex h-12 items-center border-b border-black">
+  <div className="flex flex-shrink-0 h-12 items-center border-b border-black">
     <div className="pl-4">
       <Hash className="h-6 w-6" />
     </div>

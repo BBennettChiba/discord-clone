@@ -68,7 +68,7 @@ const Channel = ({ params: { channel } }: Props) => {
   if (isVisible && hasNextPage) void fetchNextPage();
 
   return (
-    <div ref={outer} className="relative">
+    <div ref={outer} className="relative flex flex-1">
       <ScrollContainer>
         {data.pages
           .flatMap((d) => d.messages)

@@ -11,14 +11,14 @@ type Props = {
 };
 
 const params = z.object({
-  channel: z.string(),
+  channel: z.coerce.number().optional(),
 });
 
 export const Group = ({ group }: Props): JSX.Element => {
   const { channel: channelId } = params.parse(useParams());
 
   const [checked, setChecked] = useState(
-    group.channels.some((c) => c.id === +channelId),
+    !channelId ? false : group.channels.some((c) => c.id === +channelId),
   );
 
   return (
@@ -51,7 +51,7 @@ export const Group = ({ group }: Props): JSX.Element => {
         </li>
       </div>
       <ul className={`${checked ? "block" : "hidden"}`}>
-        <ChannelList channels={group.channels} currentChannelId={+channelId} />
+        <ChannelList channels={group.channels} currentChannelId={channelId} />
       </ul>
     </>
   );

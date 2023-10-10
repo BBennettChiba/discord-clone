@@ -7,7 +7,7 @@ import { Hash, PeoplePlusIcon } from "../Icons";
 
 type Props = {
   channels: CompleteGroup["channels"];
-  currentChannelId: number;
+  currentChannelId: number | undefined
 };
 
 export const ChannelList = ({ channels, currentChannelId }: Props) => {

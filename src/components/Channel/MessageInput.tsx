@@ -6,6 +6,7 @@ import {
   type ChangeEventHandler,
   type KeyboardEventHandler,
 } from "react";
+import { useInputHeight } from "@/contexts/InputHeightContext";
 import { type getMessagesByChannelId } from "@/lib/api/messages/queries";
 import { trpc } from "@/lib/trpc/client";
 
@@ -15,6 +16,7 @@ type Data = InfiniteData<Awaited<ReturnType<typeof getMessagesByChannelId>>>;
 
 export const MessageInput = ({ channelName, channelId }: Props) => {
   const queryClient = useQueryClient();
+  const { inputRows, setInputRows } = useInputHeight();
 
   const [body, setBody] = useState("");
   const { mutate } = trpc.messages.createMessage.useMutation({
@@ -44,28 +46,34 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
     },
   });
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setBody(e.target.value);
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === "Enter") {
+  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
+    if (event.key === "Enter" && event.shiftKey)
+      return setInputRows((r) => r + 1);
+    if (event.key === "Enter") event.preventDefault();
+    if (event.key === "Enter" && body.length > 0) {
       mutate({
         body,
         channelId,
         parentId: null,
       });
+      setInputRows(1);
     }
   };
 
+  console.log(body);
+
   return (
-    <div className="px-4 pb-6">
-      <input
+    <div className="flex flex-shrink-0 justify-self-end px-4 pb-6 align-bottom">
+      <textarea
+        rows={inputRows}
         value={body}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        type="text"
-        className="h-11 w-full rounded-lg appearance-none bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
+        className="align-botttom w-full appearance-none rounded-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
         placeholder={`Send a message in ${channelName}`}
       />
     </div>
