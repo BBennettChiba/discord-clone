@@ -5,6 +5,7 @@ import {
   useState,
   type ChangeEventHandler,
   type KeyboardEventHandler,
+  useEffect,
 } from "react";
 import { useInputHeight } from "@/contexts/InputHeightContext";
 import { type getMessagesByChannelId } from "@/lib/api/messages/queries";
@@ -51,8 +52,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
-    if (event.key === "Enter" && event.shiftKey)
-      return setInputRows((r) => r + 1);
+    if (event.key === "Enter" && event.shiftKey) return;
     if (event.key === "Enter") event.preventDefault();
     if (event.key === "Enter" && body.length > 0) {
       mutate({
@@ -60,11 +60,13 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         channelId,
         parentId: null,
       });
-      setInputRows(1);
     }
   };
 
-  console.log(body);
+  useEffect(() => {
+    const numberOfBreaks = (body.match(/\n/g) || []).length;
+    setInputRows(numberOfBreaks + 1);
+  }, [body, setInputRows]);
 
   return (
     <div className="flex flex-shrink-0 justify-self-end px-4 pb-6 align-bottom">
@@ -73,9 +75,10 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         value={body}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="align-botttom w-full appearance-none rounded-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
+        className="align-botttom w-full resize-none appearance-none overflow-hidden rounded-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
         placeholder={`Send a message in ${channelName}`}
       />
     </div>
   );
 };
+/**@TODO fix date lines moving when opening side panel */
