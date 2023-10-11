@@ -81,4 +81,3 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
     </div>
   );
 };
-/**@TODO fix date lines moving when opening side panel */

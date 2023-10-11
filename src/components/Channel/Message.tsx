@@ -14,32 +14,47 @@ type MessageT = Awaited<
 >;
 type Props = {
   msg: MessageT;
+  i: number;
+  arr: Array<MessageT>;
 };
 
-export const Message = ({ msg }: Props) => {
+export const Message = ({ msg, i, arr }: Props) => {
   const { isOpenWhere } = useEmojiPicker();
   const today = new Date().getDay();
+  const lastMessage = arr[i + 1];
+  let displayAllInfo = true;
+  if (
+    lastMessage &&
+    lastAuthorIsSame(msg, lastMessage) &&
+    tenMinutesHaveNotPassed(msg, lastMessage)
+  ) {
+    displayAllInfo = false;
+  }
   return (
     <div className="min-h-12 group relative flex hover:bg-zinc-800 hover:bg-opacity-30">
-      <div className="absolute left-[16px] top-1 overflow-hidden rounded-3xl">
-        <Image
-          src={msg.author.image || ""}
-          alt={msg.author.name!}
-          height={40}
-          width={40}
-        />
-      </div>
+      {displayAllInfo ? (
+        <div className="absolute left-[16px] top-1 overflow-hidden rounded-3xl">
+          <Image
+            src={msg.author.image || ""}
+            alt={msg.author.name!}
+            height={40}
+            width={40}
+          />
+        </div>
+      ) : null}
       <div className="pl-[72px]">
-        <div className="flex">
-          <div className="text-purple-600">{msg.author.name}</div>
-          <div className="flex items-center pl-2 text-xs">
-            <div>
-              {msg.createdAt.getDate() === today
-                ? `today at ${msg.createdAt.toLocaleTimeString()}`
-                : msg.createdAt.toLocaleString()}
+        {displayAllInfo ? (
+          <div className="flex">
+            <div className="text-purple-600">{msg.author.name}</div>
+            <div className="flex items-center pl-2 text-xs">
+              <div>
+                {msg.createdAt.getDate() === today
+                  ? `today at ${msg.createdAt.toLocaleTimeString()}`
+                  : msg.createdAt.toLocaleString()}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
         <div>{msg.body}</div>
       </div>
       <div
@@ -55,3 +70,14 @@ export const Message = ({ msg }: Props) => {
     </div>
   );
 };
+
+const tenMinutesHaveNotPassed = (message1: MessageT, message2: MessageT) =>
+  !(message1.createdAt.getTime() - message2.createdAt.getTime() > 600000);
+
+const lastAuthorIsSame = (message1: MessageT, message2: MessageT) =>
+  message1.authorId === message2.authorId;
+
+/**
+ * @TODO display time on hover when !displayAllInfo 
+ * @TODO add delete message and create menu for ... menu or right click
+*/

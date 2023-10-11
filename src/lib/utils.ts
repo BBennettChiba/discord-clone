@@ -9,7 +9,7 @@ export const invertColor = (hex: string) => {
   }
   // convert 3-digit hex to 6-digits.
   if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    hex = hex[0] + hex[0]! + hex[1] + hex[1] + hex[2] + hex[2];
   }
   if (hex.length !== 6) {
     throw new Error("Invalid HEX color.");
@@ -26,3 +26,5 @@ const padZero = (str: string, len = 2) => {
   const zeros = new Array(len).join("0");
   return (zeros + str).slice(-len);
 };
+
+export const isNotNull = <T>(item: T | null): item is T => item !== null;

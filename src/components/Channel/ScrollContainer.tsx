@@ -23,7 +23,7 @@ export const ScrollContainer = ({ children }: Props) => {
   return (
     <div
       style={{ height: `calc(100dvh-${HEIGHT}px)` }}
-      className="flex flex-1 flex-col-reverse overflow-y-auto whitespace-pre bg-zinc-700 text-gray-400 scrollbar-thin scrollbar-track-zinc-800 scrollbar-thumb-zinc-900"
+      className="flex flex-1 flex-col-reverse overflow-y-auto whitespace-pre-wrap bg-zinc-700 text-gray-400 scrollbar-thin scrollbar-track-zinc-800 scrollbar-thumb-zinc-900"
     >
       <div className="pb-4" ref={ref} />
       {children}
@@ -31,5 +31,3 @@ export const ScrollContainer = ({ children }: Props) => {
   );
 };
 
-/**@TODO make it so mutliples posts by the same user in a row are grouped together
- */
