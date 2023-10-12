@@ -4,7 +4,9 @@ import { Message } from "@/components/Channel/Message";
 import { ScrollContainer } from "@/components/Channel/ScrollContainer";
 import { EmojiContextProvider, useEmojiPicker } from "@/contexts/EmojiContext";
 import { useIntersectionObserver } from "@/hooks";
+import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { trpc } from "@/lib/trpc/client";
+import { cn } from "@/lib/utils";
 
 type Props = {
   params: { channel: string };
@@ -76,7 +78,15 @@ const Channel = ({ params: { channel } }: Props) => {
             const newDay =
               lastDate?.getDay() !== msg.createdAt.getDay() && i !== 0;
             lastDate = msg.createdAt;
-
+            const lastMessage = arr[i + 1];
+            let displayAllInfo = true;
+            if (
+              lastMessage &&
+              lastAuthorIsSame(msg, lastMessage) &&
+              tenMinutesHaveNotPassed(msg, lastMessage)
+            ) {
+              displayAllInfo = false;
+            }
             return (
               <Fragment key={msg.id}>
                 {newDay ? (
@@ -91,10 +101,10 @@ const Channel = ({ params: { channel } }: Props) => {
                   </div>
                 ) : null}
                 <div
-                  className="pt-[17px]"
+                  className={cn("pt-[17px]", { "pt-0": !displayAllInfo })}
                   ref={i === arr.length - 1 ? inner : undefined}
                 >
-                  <Message msg={msg} i={i} arr={arr} />
+                  <Message msg={msg} displayAllInfo={displayAllInfo} />
                 </div>
               </Fragment>
             );
@@ -112,3 +122,13 @@ const Provider = (props: Props) => (
 );
 
 export default Provider;
+
+const tenMinutesHaveNotPassed = (
+  message1: NonNullable<CompleteMessage>,
+  message2: NonNullable<CompleteMessage>,
+) => !(message1.createdAt.getTime() - message2.createdAt.getTime() > 600000);
+
+const lastAuthorIsSame = (
+  message1: NonNullable<CompleteMessage>,
+  message2: NonNullable<CompleteMessage>,
+) => message1.authorId === message2.authorId;

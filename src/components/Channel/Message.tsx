@@ -1,39 +1,22 @@
 import Image from "next/image";
 import { useEmojiPicker } from "@/contexts/EmojiContext";
-import { type trpc } from "@/lib/trpc/client";
+import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { cn } from "@/lib/utils";
 import { MessageHoverToolbar } from "./MessageHoverToolbar";
 
-type MessageT = Awaited<
-  Exclude<
-    ReturnType<
-      typeof trpc.messages.getMessagesByChannelId.useInfiniteQuery
-    >["data"],
-    undefined
-  >["pages"][number]["messages"][number]
->;
 type Props = {
-  msg: MessageT;
-  i: number;
-  arr: Array<MessageT>;
+  msg: NonNullable<CompleteMessage>;
+  displayAllInfo: boolean;
 };
 
-export const Message = ({ msg, i, arr }: Props) => {
+export const Message = ({ msg, displayAllInfo }: Props) => {
   const { isOpenWhere } = useEmojiPicker();
   const today = new Date().getDay();
-  const lastMessage = arr[i + 1];
-  let displayAllInfo = true;
-  if (
-    lastMessage &&
-    lastAuthorIsSame(msg, lastMessage) &&
-    tenMinutesHaveNotPassed(msg, lastMessage)
-  ) {
-    displayAllInfo = false;
-  }
+  const time = `${msg.createdAt.getHours()}:${msg.createdAt.getMinutes()}`;
   return (
     <div className="min-h-12 group relative flex hover:bg-zinc-800 hover:bg-opacity-30">
       {displayAllInfo ? (
-        <div className="absolute left-[16px] top-1 overflow-hidden rounded-3xl">
+        <div className="absolute left-4 top-1 overflow-hidden rounded-3xl">
           <Image
             src={msg.author.image || ""}
             alt={msg.author.name!}
@@ -41,7 +24,13 @@ export const Message = ({ msg, i, arr }: Props) => {
             width={40}
           />
         </div>
-      ) : null}
+      ) : (
+        <div className="flex items-center">
+          <div className="absolute left-4 hidden text-xs group-hover:block">
+            {time}
+          </div>
+        </div>
+      )}
       <div className="pl-[72px]">
         {displayAllInfo ? (
           <div className="flex">
@@ -71,13 +60,6 @@ export const Message = ({ msg, i, arr }: Props) => {
   );
 };
 
-const tenMinutesHaveNotPassed = (message1: MessageT, message2: MessageT) =>
-  !(message1.createdAt.getTime() - message2.createdAt.getTime() > 600000);
-
-const lastAuthorIsSame = (message1: MessageT, message2: MessageT) =>
-  message1.authorId === message2.authorId;
-
 /**
- * @TODO display time on hover when !displayAllInfo 
  * @TODO add delete message and create menu for ... menu or right click
-*/
+ */
