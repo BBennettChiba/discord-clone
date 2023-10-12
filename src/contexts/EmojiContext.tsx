@@ -57,6 +57,7 @@ export const EmojiContextProvider = ({ children }: Props) => {
     const emoji = useRef("");
 
     const onEmojiSelect = (v: Emoji) => {
+      console.log(v)
       emoji.current = v.native;
     };
 
@@ -64,8 +65,6 @@ export const EmojiContextProvider = ({ children }: Props) => {
     const { ref } = usePreventOverlapping();
 
     if (!isOpenWhere) return null;
-
-    console.log(emoji.current);
 
     return (
       <div

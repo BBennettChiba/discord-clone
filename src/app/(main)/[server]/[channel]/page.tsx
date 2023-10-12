@@ -36,7 +36,6 @@ const Channel = ({ params: { channel } }: Props) => {
     threshold: 0,
   });
 
-
   const { data, isLoading, fetchNextPage, hasNextPage } =
     trpc.messages.getMessagesByChannelId.useInfiniteQuery(
       {
@@ -100,6 +99,7 @@ const Channel = ({ params: { channel } }: Props) => {
                 ) : null}
                 <div
                   className={cn("pt-[17px]", { "pt-0": !displayAllInfo })}
+                  style={{ zIndex: 999999 - i }}
                   ref={i === arr.length - 1 ? inner : undefined}
                 >
                   <Message msg={msg} displayAllInfo={displayAllInfo} />
