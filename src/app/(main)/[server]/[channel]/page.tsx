@@ -99,7 +99,7 @@ const Channel = ({ params: { channel } }: Props) => {
                 ) : null}
                 <div
                   className={cn("pt-[17px]", { "pt-0": !displayAllInfo })}
-                  style={{ zIndex: 999999 - i }}
+                  style={{ zIndex: 999 - i }}
                   ref={i === arr.length - 1 ? inner : undefined}
                 >
                   <Message msg={msg} displayAllInfo={displayAllInfo} />

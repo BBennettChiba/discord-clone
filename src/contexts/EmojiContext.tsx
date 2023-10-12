@@ -25,14 +25,12 @@ type Emoji = {
 };
 
 type Context = {
-  Picker: () => JSX.Element | null;
   openPicker: (id: number, top: number, left: number) => void;
   closePicker: () => void;
   isOpenWhere: number | null;
 };
 
 const context = createContext<Context>({
-  Picker: () => null,
   openPicker: () => {},
   closePicker: () => {},
   isOpenWhere: null,
@@ -69,7 +67,7 @@ export const EmojiContextProvider = ({ children }: Props) => {
     return (
       <div
         ref={ref}
-        className="right absolute -translate-x-full"
+        className="z-[999] absolute -translate-x-full"
         style={{ top: `${position.top}px`, left: `${position.left}px` }}
       >
         <EmojiPicker
@@ -82,7 +80,7 @@ export const EmojiContextProvider = ({ children }: Props) => {
   };
 
   return (
-    <context.Provider value={{ isOpenWhere, openPicker, closePicker, Picker }}>
+    <context.Provider value={{ isOpenWhere, openPicker, closePicker }}>
       {children}
       <Picker />
     </context.Provider>
