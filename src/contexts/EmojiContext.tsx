@@ -1,3 +1,4 @@
+"use client"
 import data from "@emoji-mart/data";
 import EmojiPicker from "@emoji-mart/react";
 import {
@@ -84,6 +85,7 @@ export const EmojiContextProvider = ({ children }: Props) => {
   return (
     <context.Provider value={{ isOpenWhere, openPicker, closePicker, Picker }}>
       {children}
+      <Picker />
     </context.Provider>
   );
 };

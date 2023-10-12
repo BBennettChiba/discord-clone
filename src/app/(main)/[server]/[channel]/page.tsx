@@ -2,7 +2,6 @@
 import { Fragment, useRef } from "react";
 import { Message } from "@/components/Channel/Message";
 import { ScrollContainer } from "@/components/Channel/ScrollContainer";
-import { EmojiContextProvider, useEmojiPicker } from "@/contexts/EmojiContext";
 import { useIntersectionObserver } from "@/hooks";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { trpc } from "@/lib/trpc/client";
@@ -37,7 +36,6 @@ const Channel = ({ params: { channel } }: Props) => {
     threshold: 0,
   });
 
-  const { Picker } = useEmojiPicker();
 
   const { data, isLoading, fetchNextPage, hasNextPage } =
     trpc.messages.getMessagesByChannelId.useInfiniteQuery(
@@ -110,18 +108,11 @@ const Channel = ({ params: { channel } }: Props) => {
             );
           })}
       </ScrollContainer>
-      <Picker />
     </div>
   );
 };
 
-const Provider = (props: Props) => (
-  <EmojiContextProvider>
-    <Channel {...props} />
-  </EmojiContextProvider>
-);
-
-export default Provider;
+export default Channel;
 
 const tenMinutesHaveNotPassed = (
   message1: NonNullable<CompleteMessage>,

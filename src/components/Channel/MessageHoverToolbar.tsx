@@ -5,12 +5,11 @@ import { useEmojiPicker } from "@/contexts/EmojiContext";
 export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { openPicker } = useEmojiPicker();
+
   const openEmojiPicker = () => {
     if (!ref.current) throw new Error("No current");
     const { top, left } = ref.current.getBoundingClientRect();
-    const TOP_HEIGHT = 48;
-    const LEFT__WIDTH = 312;
-    openPicker(messageId, top - TOP_HEIGHT, left - LEFT__WIDTH);
+    openPicker(messageId, top, left);
   };
 
   return (
