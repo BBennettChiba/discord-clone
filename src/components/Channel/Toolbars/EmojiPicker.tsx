@@ -1,7 +1,8 @@
-'use client'
+"use client";
 import data from "@emoji-mart/data";
 import EmojiPicker from "@emoji-mart/react";
 import { useRef } from "react";
+import { type MenuType } from "@/contexts/MenuContext";
 
 type Emoji = {
   id: string;
@@ -13,13 +14,7 @@ type Emoji = {
   emoticons: string[];
 };
 
-export const Picker = ({
-  closeMenu,
-  isOpenWhere,
-}: {
-  closeMenu: () => void;
-  isOpenWhere: null | number;
-}) => {
+export const Picker: MenuType = ({ closeMenu }) => {
   const emoji = useRef("");
 
   const onEmojiSelect = (v: Emoji) => {
@@ -28,8 +23,6 @@ export const Picker = ({
   };
 
   const onClickOutside = () => closeMenu();
-
-  if (!isOpenWhere) return null;
 
   return (
     <EmojiPicker

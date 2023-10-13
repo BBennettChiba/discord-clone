@@ -3,9 +3,9 @@ import { MembersList } from "@/components/Channel/MembersList";
 import { MessageInput } from "@/components/Channel/MessageInput";
 import { TopBar } from "@/components/Channel/TopBar/TopBar";
 import { InputHeightProvider } from "@/contexts/InputHeightContext";
+import { OptionsMenuProvider } from "@/contexts/OptionsMenuContext";
 import { PickerMenuProvider } from "@/contexts/PickerMenuContext";
 import { serverTrpc } from "@/lib/trpc/api";
-import { OptionsMenuProvider } from "@/contexts/OptionsMenuContext";
 
 type Props = { children: ReactNode; params: { channel: string } };
 
