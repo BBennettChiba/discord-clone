@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEmojiPicker } from "@/contexts/EmojiContext";
+import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { cn } from "@/lib/utils";
 import { MessageHoverToolbar } from "./MessageHoverToolbar";
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const Message = ({ msg, displayAllInfo }: Props) => {
-  const { isOpenWhere } = useEmojiPicker();
+  const { isOpenWhere } = usePickerMenu();
   const today = new Date().getDay();
   const time = `${msg.createdAt.getHours()}:${msg.createdAt.getMinutes()}`;
   return (

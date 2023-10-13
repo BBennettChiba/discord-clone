@@ -2,10 +2,10 @@ import { type ReactNode } from "react";
 import { MembersList } from "@/components/Channel/MembersList";
 import { MessageInput } from "@/components/Channel/MessageInput";
 import { TopBar } from "@/components/Channel/TopBar/TopBar";
-import { EmojiContextProvider } from "@/contexts/EmojiContext";
 import { InputHeightProvider } from "@/contexts/InputHeightContext";
-import { OptionsMenuContextProvider } from "@/contexts/OptionsMenuContext";
+import { PickerMenuProvider } from "@/contexts/PickerMenuContext";
 import { serverTrpc } from "@/lib/trpc/api";
+import { OptionsMenuProvider } from "@/contexts/OptionsMenuContext";
 
 type Props = { children: ReactNode; params: { channel: string } };
 
@@ -17,8 +17,8 @@ const Layout = async ({ children, params: { channel } }: Props) => {
   return (
     <div className="flex h-screen flex-1 flex-col bg-zinc-700">
       <InputHeightProvider>
-        <EmojiContextProvider>
-          <OptionsMenuContextProvider>
+        <PickerMenuProvider>
+          <OptionsMenuProvider>
             <TopBar channel={channelData} />
             <div className="flex min-h-0 flex-1 overflow-hidden">
               {children}
@@ -26,8 +26,8 @@ const Layout = async ({ children, params: { channel } }: Props) => {
               <MembersList channelId={+channel} />
             </div>
             <MessageInput channelName={channelData.name} channelId={+channel} />
-          </OptionsMenuContextProvider>
-        </EmojiContextProvider>
+          </OptionsMenuProvider>
+        </PickerMenuProvider>
       </InputHeightProvider>
     </div>
   );

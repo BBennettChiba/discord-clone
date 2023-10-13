@@ -1,25 +1,25 @@
 "use client";
 import { useRef } from "react";
-import { useEmojiPicker } from "@/contexts/EmojiContext";
 import { useOptionsMenu } from "@/contexts/OptionsMenuContext";
+import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { DotDotDotIcon, EmojiIcon, ReplyIcon } from "../Icons";
 
 export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
   const optionsButtonRef = useRef<HTMLDivElement | null>(null);
   const reactionsButtonRef = useRef<HTMLDivElement>(null);
-  const { openPicker } = useEmojiPicker();
-  const { openMenu } = useOptionsMenu();
+  const { openMenu: openPickerMenu } = usePickerMenu();
+  const { openMenu: openOptionsMenu } = useOptionsMenu();
 
   const openEmojiPicker = () => {
     if (!reactionsButtonRef.current) throw new Error("No current");
     const { top, left } = reactionsButtonRef.current.getBoundingClientRect();
-    openPicker(messageId, top, left);
+    openPickerMenu(messageId, top, left);
   };
 
   const handleOptionsButtonClick = () => {
     if (!optionsButtonRef.current) throw new Error("no current");
     const { top, left } = optionsButtonRef.current.getBoundingClientRect();
-    openMenu(messageId, { top, left });
+    openOptionsMenu(messageId, top, left);
   };
 
   return (
