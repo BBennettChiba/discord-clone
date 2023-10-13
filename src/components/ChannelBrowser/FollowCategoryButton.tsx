@@ -15,16 +15,17 @@ export const FollowCategoryButton = ({ groupId, checked }: Props) => {
 
   const callbacks = {
     onSuccess: (data: { channelId: number; userId: string }[]) => {
-      //@ts-expect-error idk what to do and I"m annoyed so ignore please
-      client.setQueryData(queryKey, (old: Groups) =>
-        old.map((group) => ({
-          ...group,
-          channels: group.channels.map((c) =>
-            data.map((datum) => datum.channelId).includes(c.id)
-              ? { ...c, isUserSubscribed: !c.isUserSubscribed }
-              : c,
-          ),
-        })),
+      client.setQueryData<Groups>(queryKey, (old) =>
+        old
+          ? old.map((group) => ({
+              ...group,
+              channels: group.channels.map((c) =>
+                data.map((datum) => datum.channelId).includes(c.id)
+                  ? { ...c, isUserSubscribed: !c.isUserSubscribed }
+                  : c,
+              ),
+            }))
+          : old,
       );
     },
     onSettled: () => void client.invalidateQueries(queryKey),

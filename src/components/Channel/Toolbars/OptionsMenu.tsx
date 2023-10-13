@@ -3,7 +3,6 @@
 import {
   useEffect,
   useRef,
-  type MouseEventHandler,
 } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
 
@@ -15,8 +14,8 @@ export const OptionsMenu: MenuType = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const handleClickOutside: MouseEventHandler = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         closeMenu();
       }
     };

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
-import { type RouterOutputs} from "@/lib/server/routers/_app";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { Checkbox, Hash } from "../Icons";
 
@@ -62,16 +62,18 @@ export const ChannelListItem = ({ channel }: Props) => {
   const { mutate: toggleSubscriptionMutation } =
     trpc.channels.toggleChannelSubscription.useMutation({
       onSuccess: (data) => {
-        //@ts-expect-error idk what to do and I"m annoyed so ignore please
-        client.setQueryData(queryKey, (old: Groups) =>
-          old.map((d) => ({
-            ...d,
-            channels: d.channels.map((c) =>
-              c.id === data.channelId
-                ? { ...c, isUserSubscribed: !c.isUserSubscribed }
-                : c,
-            ),
-          })),
+        if (!data) throw new Error(" no data in optimistic update");
+        client.setQueryData<Groups>(queryKey, (old) =>
+          old
+            ? old.map((d) => ({
+                ...d,
+                channels: d.channels.map((c) =>
+                  c.id === data.channelId
+                    ? { ...c, isUserSubscribed: !c.isUserSubscribed }
+                    : c,
+                ),
+              }))
+            : old,
         );
       },
       onSettled: () => void client.invalidateQueries(queryKey),

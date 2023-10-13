@@ -28,13 +28,13 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
         <div
           className="rounded-l-md p-[6px] hover:bg-white/10"
           onClick={openEmojiPicker}
+          ref={reactionsButtonRef}
         >
           <div
             aria-label="Add Reaction"
             aria-expanded="false"
             role="button"
             tabIndex={0}
-            ref={reactionsButtonRef}
           >
             <EmojiIcon />
           </div>
@@ -47,13 +47,13 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
         <div
           ref={optionsButtonRef}
           className="rounded-r-md p-[6px] hover:bg-white/10"
+          onClick={handleOptionsButtonClick}
         >
           <div
             aria-label="More"
             aria-expanded="false"
             role="button"
             tabIndex={0}
-            onClick={handleOptionsButtonClick}
           >
             <DotDotDotIcon />
           </div>
@@ -62,3 +62,4 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
     </div>
   );
 };
+/**@TODO when comment is your own the option to reply is one to edit */
