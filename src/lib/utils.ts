@@ -28,3 +28,7 @@ const padZero = (str: string, len = 2) => {
 };
 
 export const isNotNull = <T>(item: T | null): item is T => item !== null;
+
+export const throwError = (msg: string) => {
+  throw new Error(msg);
+};
