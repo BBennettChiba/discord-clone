@@ -1,4 +1,5 @@
 import { type MutableRefObject, useEffect, useState, useRef } from "react";
+import { throwError } from "@/lib/utils";
 
 type Options = {
   rootMargin: string;
@@ -18,6 +19,7 @@ export const useIntersectionObserver = (
 
   const callbackFunction = (entries: IntersectionObserverEntry[]) => {
     const [entry] = entries;
+    if (!entry) return throwError("error in accessing entries array");
     setIsVisible(entry.isIntersecting);
   };
 
