@@ -24,6 +24,7 @@ export const createMessage = async ({
   });
   try {
     const [m] = await db.insert(messages).values(newMessage).returning();
+    if (!m) throw new Error("messages not found in createMessage");
     const message = await getMessageById({ input: { id: m.id } });
     return { message };
   } catch (err) {
