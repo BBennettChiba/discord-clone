@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
+import { paramsSchema } from "@/lib/utils";
 import { Checkbox, Hash } from "../Icons";
 
 type Groups = RouterOutputs["groups"]["getGroupsByServerId"];
@@ -50,13 +51,13 @@ const getRelativeTime = (timestamp: Date | undefined) => {
 };
 
 export const ChannelListItem = ({ channel }: Props) => {
-  const { server: serverId } = useParams();
+  const { server: serverId } = paramsSchema.parse(useParams());
 
   const client = useQueryClient();
 
   const queryKey = [
     ["groups", "getGroupsByServerId"],
-    { input: { serverId: +serverId }, type: "query" },
+    { input: { serverId }, type: "query" },
   ];
 
   const { mutate: toggleSubscriptionMutation } =
@@ -88,7 +89,7 @@ export const ChannelListItem = ({ channel }: Props) => {
   };
 
   const dateOfNewestMessage = getRelativeTime(
-    data?.pages[0].messages[0].createdAt,
+    data?.pages[0]?.messages[0]?.createdAt,
   );
 
   return (
