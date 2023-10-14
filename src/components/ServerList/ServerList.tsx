@@ -4,15 +4,15 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { type Server } from "@/lib/db/schema/servers";
+import { paramsSchema } from "@/lib/utils";
 import { PlusButton } from "../ChannelSelection/MenuOpener";
 import { DiscordIcon } from "../Icons";
 import { ServerIcon } from "./ServerIcon";
 
 export const ServerList = ({ servers }: { servers: Server[] }): JSX.Element => {
-  const { server } = useParams();
+  const { server } = paramsSchema.parse(useParams());
 
-  const currentServerIndex =
-    servers.findIndex((s) => s.id === +server) + 1 || 0;
+  const currentServerIndex = servers.findIndex((s) => s.id === server) + 1 || 0;
 
   const [selected, setSelected] = useState<number>(currentServerIndex);
 
@@ -31,7 +31,9 @@ export const ServerList = ({ servers }: { servers: Server[] }): JSX.Element => {
           <div onClick={(): void => setSelected(i + 1)} key={id}>
             <Link href={`/${id}/${defaultChannel}`}>
               <ServerIcon title={name} selected={i + 1 === selected}>
-                <Image height={48} width={48} src={icon} alt={icon} />
+                {icon ? (
+                  <Image height={48} width={48} src={icon} alt={icon} />
+                ) : null}
               </ServerIcon>
             </Link>
           </div>

@@ -1,13 +1,9 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import z from "zod";
 import { Hash, X } from "@/components/Icons";
 import { type ToChannel, useInvite } from "@/contexts/InviteContext";
 import { trpc } from "@/lib/trpc/client";
-
-const paramsSchema = z.object({
-  server: z.coerce.number(),
-});
+import { paramsSchema } from "@/lib/utils";
 
 export const InviteModal = ({ toChannel }: { toChannel: ToChannel }) => {
   const { toggleModal } = useInvite();
@@ -45,7 +41,7 @@ export const InviteModal = ({ toChannel }: { toChannel: ToChannel }) => {
               overflow: "hidden auto",
             }}
           >
-            <button className="absolute bottom-[6.13rem] left-[25.38rem] right-[0.88rem] top-[0.88rem] z-[3] flex h-7 w-3 cursor-pointer items-center justify-center rounded p-1 text-gray-400 opacity-50 hover:text-white hover:opacity-100 transition-all duration-300">
+            <button className="absolute bottom-[6.13rem] left-[25.38rem] right-[0.88rem] top-[0.88rem] z-[3] flex h-7 w-3 cursor-pointer items-center justify-center rounded p-1 text-gray-400 opacity-50 transition-all duration-300 hover:text-white hover:opacity-100">
               <div
                 style={{
                   backgroundImage:

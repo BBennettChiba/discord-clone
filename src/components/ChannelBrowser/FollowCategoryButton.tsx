@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
+import { paramsSchema } from "@/lib/utils";
 import { Checkbox } from "../Icons";
 type Props = {
   groupId: number;
@@ -11,7 +12,7 @@ type Props = {
 type Groups = RouterOutputs["groups"]["getGroupsByServerId"];
 
 export const FollowCategoryButton = ({ groupId, checked }: Props) => {
-  const { server: serverId } = useParams();
+  const { server: serverId } = paramsSchema.parse(useParams());
 
   const callbacks = {
     onSuccess: (data: { channelId: number; userId: string }[]) => {
@@ -39,7 +40,7 @@ export const FollowCategoryButton = ({ groupId, checked }: Props) => {
 
   const queryKey = [
     ["groups", "getGroupsByServerId"],
-    { input: { serverId: +serverId }, type: "query" },
+    { input: { serverId }, type: "query" },
   ];
 
   const handleClick = () => {

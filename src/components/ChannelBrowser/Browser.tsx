@@ -2,16 +2,18 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
+import { paramsSchema } from "@/lib/utils";
 import { ChannelSearchBar } from "./ChannelSearchBar";
 import { Group } from "./Group";
 
 export const Browser = () => {
-  const { server: serverId } = useParams();
+  const { server: serverId } = paramsSchema.parse( useParams());
+
   const {
     data: groups,
     isLoading,
     isError,
-  } = trpc.groups.getGroupsByServerId.useQuery({ serverId: +serverId });
+  } = trpc.groups.getGroupsByServerId.useQuery({ serverId});
   const [search, setSearch] = useState("");
   if (isLoading) return "loading";
   if (isError) return "error";

@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import z from "zod";
 
 export const cn = (...args: ClassValue[]): string => twMerge(clsx(args));
 
@@ -32,3 +33,8 @@ export const isNotNull = <T>(item: T | null): item is T => item !== null;
 export const throwError = (msg: string) => {
   throw new Error(msg);
 };
+
+export const paramsSchema = z.object({
+  server: z.coerce.number(),
+  channel: z.coerce.number().optional(),
+});
