@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { throwError } from "../utils";
 import { users } from "./schema/auth";
 import { channels, type Channel } from "./schema/channels";
 import { groups, type Group } from "./schema/groups";
@@ -35,7 +36,8 @@ const createUserData = (numOfUsers: number) => {
 const fakeUsers = createUserData(5);
 
 const getRandomUser = (listOfUsers: User[]) =>
-  listOfUsers[Math.floor(Math.random() * listOfUsers.length)];
+  listOfUsers[Math.floor(Math.random() * listOfUsers.length)] ||
+  throwError("couldn't index into listOfUsers");
 
 const createServerData = (numOfServers: number) => {
   const fakeServers = [];
