@@ -2,6 +2,7 @@ import { BackButton } from "@/components/ChannelBrowser/BackButton";
 import { Browser } from "@/components/ChannelBrowser/Browser";
 import { HashWithLookingGlass } from "@/components/Icons";
 import { serverTrpc } from "@/lib/trpc/api";
+import { throwError } from "@/lib/utils";
 
 type Props = {
   params: {
@@ -24,7 +25,9 @@ const ChannelBrowser = async ({
     .map((g) => g.channels)
     .flat()
     .find((c) => c.id === +last);
-  if (!lastChannel) lastChannel = groups[0].channels[0];
+  if (!lastChannel)
+    lastChannel =
+      groups[0]?.channels[0] || throwError("no last channel found ");
 
   return (
     <div className="flex h-full w-full flex-col bg-zinc-800">
