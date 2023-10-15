@@ -1,17 +1,18 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
+import { trpc } from "@/lib/trpc/client";
 
-export const OptionsMenu: MenuType = ({
-  closeMenu,
-}: {
+type Props = {
+  id: number;
   closeMenu: () => void;
-}) => {
+};
+
+export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
+
+  const { mutate } = trpc.messages.deleteMessage.useMutation();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -25,9 +26,13 @@ export const OptionsMenu: MenuType = ({
     };
   }, [ref, closeMenu]);
 
+  const handleDelete = () => {
+    mutate({ id });
+  };
+
   return (
     <div ref={ref} className="h-96 w-[204px] bg-black">
-      yo
+      <button onClick={handleDelete}>delete {id}</button>
     </div>
   );
 };

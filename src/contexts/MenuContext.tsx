@@ -20,9 +20,10 @@ type ContextT = {
 
 type MenuArgs = {
   closeMenu: () => void;
+  id: number
 };
 
-export type MenuType = ({ closeMenu }: MenuArgs) => JSX.Element | null;
+export type MenuType = ({ closeMenu, id }: MenuArgs) => JSX.Element | null;
 
 export const createMenuContextProvider = (
   Menu: MenuType,
@@ -51,7 +52,7 @@ export const createMenuContextProvider = (
           className="absolute z-[999] -translate-x-full"
           style={{ top: `${position.top}px`, left: `${position.left}px` }}
         >
-          {isOpenWhere ? <Menu closeMenu={closeMenu} /> : null}
+          {isOpenWhere ? <Menu closeMenu={closeMenu} id={isOpenWhere} /> : null}
         </div>
       </context.Provider>
     );

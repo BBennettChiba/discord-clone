@@ -87,7 +87,7 @@ export type Message = z.infer<typeof updateMessageSchema>;
 export type NewMessage = z.infer<typeof insertMessageSchema>;
 export type NewMessageParams = z.infer<typeof insertMessageParams>;
 export type UpdateMessageParams = z.infer<typeof updateMessageParams>;
-export type MessageId = z.infer<typeof messageIdSchema>["id"];
+export type MessageId = z.infer<typeof messageIdSchema>;
 export type MessageByChannelId = z.infer<typeof MessageByChannelIdSchema>;
 
 // this type infers the return from getMessages() - meaning it will include any joins
