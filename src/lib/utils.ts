@@ -35,6 +35,6 @@ export const throwError = (msg: string) => {
 };
 
 export const paramsSchema = z.object({
-  server: z.coerce.number(),
+  server: z.coerce.number().optional(),
   channel: z.coerce.number().optional(),
 });
