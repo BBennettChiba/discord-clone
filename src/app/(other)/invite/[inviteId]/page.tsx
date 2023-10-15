@@ -20,8 +20,6 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
     const sub = await serverTrpc.servers.joinServer.mutate({
       id: invite.server.id,
     });
-    if (!sub) throw new Error("Could not join server");
-    /**@TODO maybe throw error on server instead ? */
     redirect(`/${sub.serverId}/${invite.server.defaultChannel}`);
   };
 

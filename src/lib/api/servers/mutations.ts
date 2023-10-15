@@ -16,5 +16,6 @@ export const joinServer = async ({
     .values({ serverId, userId: session.user.id })
     .onConflictDoNothing()
     .returning();
+  if (!insert) throw new Error("Could not insert into usersToServers");
   return insert;
 };
