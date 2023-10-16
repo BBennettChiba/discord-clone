@@ -41,7 +41,7 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
         </div>
         <div className="p-[6px] hover:bg-white/10">
           <div aria-label="Reply" role="button" tabIndex={0}>
-            <ReplyIcon />
+            <ReplyIcon className="h-5 w-5" />
           </div>
         </div>
         <div
