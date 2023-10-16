@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
 import { trpc } from "@/lib/trpc/client";
-import { paramsSchema } from "@/lib/utils";
+import { cn, paramsSchema } from "@/lib/utils";
 import { type Messages } from "../MessageInput";
 
 type Props = {
@@ -88,22 +88,34 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   });
 
   return (
-    <div ref={ref} className="h-96 w-[204px] bg-black px-2 py-[6px]">
-      <div className="flex">
+    <div ref={ref} className="w-[204px] bg-black px-2 py-[6px]">
+      <div className="flex justify-between py-[6px] pl-[2px]">
         {EMOJI.map((e) => (
-          <div key={e}>{e}</div>
+          <div
+            key={e}
+            className="flex h-10 w-10 items-center justify-center rounded-3xl bg-gray-900"
+          >
+            <button>
+              <div className="h-5 w-5 text-xl ">{e}</div>
+            </button>
+          </div>
         ))}
       </div>
       <ul>
         {filteredOptions.map((option) => (
-          <li key={option.title}>{option.title}</li>
+          <li
+            key={option.title}
+            className="rounded-sm p-[6px] hover:bg-indigo-500 cursor-pointer"
+          >
+            <div className="h-5 text-xs w-full leading-5">{option.title}</div>
+          </li>
         ))}
       </ul>
     </div>
   );
 };
 
-const EMOJI = ["smi", "thu", "100", "up"];
+const EMOJI = ["😆", "👍", "💯", "☝️"];
 
 const OPTIONS = [
   { title: "Add Reaction", generalAction: true },
