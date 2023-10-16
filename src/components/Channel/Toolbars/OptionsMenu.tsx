@@ -2,6 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
 import { trpc } from "@/lib/trpc/client";
@@ -13,16 +14,33 @@ type Props = {
   closeMenu: () => void;
 };
 
+const USER_IS_ADMIN = false;
+
 export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const queryClient = useQueryClient();
   const { channel: channelId } = paramsSchema.parse(useParams());
   if (!channelId) throw new Error("Invalid channelID in Options Menu");
+  const { data: session } = useSession();
+  if (!session) throw new Error("Invalid session in Options Menu");
 
   const KEY = [
     ["messages", "getMessagesByChannelId"],
     { input: { channelId }, type: "infinite" },
   ];
+
+  const messages = queryClient.getQueryData<Messages>(KEY);
+  if (!messages) throw new Error("No messages in getQueryData");
+
+  const thisMessage = messages.pages
+    .map((page) => page.messages)
+    .flat()
+    .find((m) => m.id === id);
+  if (!thisMessage) throw new Error("thisMessage is not found in OptionsMenu");
+
+  const userIsOwner = thisMessage.authorId === session.user.id;
+
+  console.log("user is owner", userIsOwner);
 
   const { mutate } = trpc.messages.deleteMessage.useMutation({
     onSuccess: ({ id: deletedMessageId }) => {
@@ -58,9 +76,44 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
     mutate({ id });
   };
 
+  const filteredOptions = OPTIONS.filter((option) => {
+    if (option.generalAction) return true;
+    if (option.ownerAction && userIsOwner) return true;
+    if (option.adminAction && USER_IS_ADMIN) return true;
+    if (option.neitherOwnerNorUserAction && !USER_IS_ADMIN && !userIsOwner)
+      return true;
+    if (option.ownerOrAdminAction && (userIsOwner || USER_IS_ADMIN))
+      return true;
+    return false;
+  });
+
   return (
-    <div ref={ref} className="h-96 w-[204px] bg-black">
-      <button onClick={handleDelete}>delete {id}</button>
+    <div ref={ref} className="h-96 w-[204px] bg-black px-2 py-[6px]">
+      <div className="flex">
+        {EMOJI.map((e) => (
+          <div key={e}>{e}</div>
+        ))}
+      </div>
+      <ul>
+        {filteredOptions.map((option) => (
+          <li key={option.title}>{option.title}</li>
+        ))}
+      </ul>
     </div>
   );
 };
+
+const EMOJI = ["smi", "thu", "100", "up"];
+
+const OPTIONS = [
+  { title: "Add Reaction", generalAction: true },
+  { title: "Edit Message", ownerAction: true },
+  { title: "Pin Message", adminAction: true },
+  { title: "Reply", generalAction: true },
+  { title: "Copy Text", generalAction: true },
+  { title: "Mark Unread", generalAction: true },
+  { title: "Copy Message Link", generalAction: true },
+  { title: "Report Message", neitherOwnerNorUserAction: true },
+  { title: "Delete Message", ownerOrAdminAction: true },
+  { title: "Copy Message ID", generalAction: true },
+];
