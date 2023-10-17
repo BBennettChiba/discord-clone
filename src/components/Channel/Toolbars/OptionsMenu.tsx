@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MouseEventHandler } from "react";
 import {
   CopyTextIcon,
   FlagIcon,
@@ -27,7 +27,7 @@ type Props = {
   closeMenu: () => void;
 };
 
-const USER_IS_ADMIN = false;
+const USER_IS_ADMIN = (() => Math.random() < 0.5)();
 
 export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -71,7 +71,7 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   });
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: globalThis.MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         closeMenu();
       }
@@ -183,7 +183,7 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
             icon,
             extraStyles,
             onClick = (e) => console.log(e.target),
-          }) => (
+          }: Option) => (
             <li
               onClick={onClick}
               key={title}
@@ -202,6 +202,13 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
       </ul>
     </div>
   );
+};
+
+type Option = {
+  title: string;
+  icon: JSX.Element;
+  extraStyles?: string;
+  onClick?: MouseEventHandler;
 };
 
 const EMOJI = ["😆", "👍", "💯", "☝️"];
