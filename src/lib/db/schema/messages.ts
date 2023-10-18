@@ -10,9 +10,10 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { type getMessageById } from "@/lib/api/messages/queries";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { users } from "./auth";
 import { channels } from "./channels";
+import { reactionsToMessages } from "./reactionsToMessages";
 
 export const messages = pgTable(
   "messages",
@@ -34,7 +35,7 @@ export const messages = pgTable(
   }),
 );
 
-export const messagesRelations = relations(messages, ({ one }) => ({
+export const messagesRelations = relations(messages, ({ one, many }) => ({
   parent: one(messages, {
     fields: [messages.parentId],
     references: [messages.id],
@@ -47,6 +48,7 @@ export const messagesRelations = relations(messages, ({ one }) => ({
     fields: [messages.authorId],
     references: [users.id],
   }),
+  reactions: many(reactionsToMessages),
 }));
 
 // Schema for messages - used to validate API requests
@@ -91,4 +93,5 @@ export type MessageId = z.infer<typeof messageIdSchema>;
 export type MessageByChannelId = z.infer<typeof MessageByChannelIdSchema>;
 
 // this type infers the return from getMessages() - meaning it will include any joins
-export type CompleteMessage = Awaited<ReturnType<typeof getMessageById>>;
+export type CompleteMessage =
+  RouterOutputs["messages"]["getMessagesByChannelId"]['messages'][number];
