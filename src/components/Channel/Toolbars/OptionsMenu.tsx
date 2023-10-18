@@ -87,6 +87,10 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
     closeMenu();
   };
 
+  const dimensions = "h-[18px] w-[18px]";
+
+  const alertClassName = "hover:bg-red-500 text-red-500 hover:text-white";
+
   const OPTIONS = [
     {
       title: "Add Reaction",
@@ -96,46 +100,65 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
           <RightArrow className="h-[10px] w-[10px]" />
         </div>
       ),
+      /**@TODO add reaction functionality */
+      onClick: () => console.log("add reaction functionality"),
     },
     {
       title: "View Reactions",
       icon: <HappyEmojiIcon className={dimensions} />,
+      /**@TODO add reaction functionality */
+      onClick: () => console.log("add reaction functionality"),
     },
     {
       title: "Edit Message",
       ownerAction: true,
       icon: <PencilIcon className={dimensions} />,
+      /**@TOOD look below */
+      onClick: () => console.log("add edit message functionality"),
     },
     {
       title: "Pin Message",
       adminAction: true,
       icon: <Pin className={dimensions} />,
+      /**@TODO add pin functionality */
+      onClick: () => console.log("add pin message functionality"),
     },
     {
       title: "Reply",
       generalAction: true,
       icon: <ReplyIcon className={dimensions} />,
+      /**@OTOD look below */
+      onClick: () => console.log("add reply functionality"),
     },
     {
       title: "Copy Text",
       generalAction: true,
       icon: <CopyTextIcon className={dimensions} />,
+      onClick: () => navigator.clipboard.writeText(thisMessage?.body || ""),
     },
     {
       title: "Mark Unread",
       generalAction: true,
       icon: <SiphonIcon className={dimensions} />,
+      /**@TODO look below */
+      onClick: () => console.log("you need to add read/unread functionality"),
     },
     {
       title: "Copy Message Link",
       generalAction: true,
       icon: <LinkIcon className={dimensions} />,
+      onClick: () =>
+        navigator.clipboard.writeText(
+          `${window.location.href}/${id.toString()}`,
+        ),
     },
     {
       title: "Report Message",
       neitherOwnerNorUserAction: true,
       icon: <FlagIcon className={dimensions} />,
       extraStyles: alertClassName,
+      /**@TODO make reporting functionality */
+      onClick: () => console.log("handle reporting"),
     },
     {
       title: "Delete Message",
@@ -148,6 +171,7 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
       title: "Copy Message ID",
       generalAction: true,
       icon: <IDIcon className={dimensions} />,
+      onClick: () => navigator.clipboard.writeText(id.toString()),
     },
   ];
 
@@ -211,13 +235,9 @@ type Option = {
   onClick?: MouseEventHandler;
 };
 
-const EMOJI = ["😆", "👍", "💯", "☝️"];
-
-const dimensions = "h-[18px] w-[18px]";
-
-const alertClassName = "hover:bg-red-500 text-red-500 hover:text-white";
+export const EMOJI = ["😆", "👍", "💯", "☝️"];
 
 /**
- * @TODO find out why top isn't flush
+O find out why top isn't flush
  * @TODO open emoji menu when hover on emoji option
  * @TODO add separator before last line */
