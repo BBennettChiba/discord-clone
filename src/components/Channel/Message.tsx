@@ -3,9 +3,10 @@ import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { cn } from "@/lib/utils";
 import { MessageHoverToolbar } from "./MessageHoverToolbar";
+import { Reactions } from "./Reactions";
 
 type Props = {
-  msg: NonNullable<CompleteMessage>;
+  msg: CompleteMessage;
   displayAllInfo: boolean;
 };
 
@@ -45,6 +46,7 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
           </div>
         ) : null}
         <div>{msg.body}</div>
+        <Reactions reactions={msg.reactions.map((r) => r.reactionId)} />
       </div>
       <div
         className={cn(

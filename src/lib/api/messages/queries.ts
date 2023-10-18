@@ -1,8 +1,6 @@
 import { and, desc, eq, lte } from "drizzle-orm";
 import { db } from "@/lib/db";
-import {
-  messages,
-} from "@/lib/db/schema/messages";
+import { messages } from "@/lib/db/schema/messages";
 
 type GetMessageByIdInput = {
   input: { id: number };
@@ -40,7 +38,7 @@ export const getMessagesByChannelId = async ({
       eq(messages.channelId, channelId),
       lte(messages.createdAt, cursor),
     ),
-    with: { author: true },
+    with: { author: true, reactions: true },
     orderBy: desc(messages.createdAt),
     limit: LIMIT + 1,
   });
