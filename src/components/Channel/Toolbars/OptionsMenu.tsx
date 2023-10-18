@@ -3,24 +3,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef, type MouseEventHandler } from "react";
-import {
-  CopyTextIcon,
-  FlagIcon,
-  HappyEmojiIcon,
-  IDIcon,
-  LinkIcon,
-  PencilIcon,
-  Pin,
-  ReplyIcon,
-  RightArrow,
-  SiphonIcon,
-  TrashIcon,
-} from "@/components/Icons";
+import { useEffect, useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
 import { trpc } from "@/lib/trpc/client";
-import { cn, paramsSchema } from "@/lib/utils";
+import { paramsSchema } from "@/lib/utils";
 import { type Messages } from "../MessageInput";
+import { Options } from "./Options";
 
 type Props = {
   id: number;
@@ -52,7 +40,7 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
 
   const userIsOwner = thisMessage?.authorId === session.user.id;
 
-  const { mutate } = trpc.messages.deleteMessage.useMutation({
+  const { mutate: deleteMessage } = trpc.messages.deleteMessage.useMutation({
     onSuccess: ({ id: deletedMessageId }) => {
       queryClient.setQueryData<Messages>(KEY, (prev) =>
         prev
@@ -81,110 +69,11 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref, closeMenu]);
-
-  const handleDelete = () => {
-    mutate({ id });
+ const handleDelete = () => {
+    deleteMessage({ id });
     closeMenu();
   };
 
-  const dimensions = "h-[18px] w-[18px]";
-
-  const alertClassName = "hover:bg-red-500 text-red-500 hover:text-white";
-
-  const OPTIONS = [
-    {
-      title: "Add Reaction",
-      generalAction: true,
-      icon: (
-        <div className={dimensions}>
-          <RightArrow className="h-[10px] w-[10px]" />
-        </div>
-      ),
-      /**@TODO add reaction functionality */
-      onClick: () => console.log("add reaction functionality"),
-    },
-    {
-      title: "View Reactions",
-      icon: <HappyEmojiIcon className={dimensions} />,
-      /**@TODO add reaction functionality */
-      onClick: () => console.log("add reaction functionality"),
-    },
-    {
-      title: "Edit Message",
-      ownerAction: true,
-      icon: <PencilIcon className={dimensions} />,
-      /**@TOOD look below */
-      onClick: () => console.log("add edit message functionality"),
-    },
-    {
-      title: "Pin Message",
-      adminAction: true,
-      icon: <Pin className={dimensions} />,
-      /**@TODO add pin functionality */
-      onClick: () => console.log("add pin message functionality"),
-    },
-    {
-      title: "Reply",
-      generalAction: true,
-      icon: <ReplyIcon className={dimensions} />,
-      /**@OTOD look below */
-      onClick: () => console.log("add reply functionality"),
-    },
-    {
-      title: "Copy Text",
-      generalAction: true,
-      icon: <CopyTextIcon className={dimensions} />,
-      onClick: () => navigator.clipboard.writeText(thisMessage?.body || ""),
-    },
-    {
-      title: "Mark Unread",
-      generalAction: true,
-      icon: <SiphonIcon className={dimensions} />,
-      /**@TODO look below */
-      onClick: () => console.log("you need to add read/unread functionality"),
-    },
-    {
-      title: "Copy Message Link",
-      generalAction: true,
-      icon: <LinkIcon className={dimensions} />,
-      onClick: () =>
-        navigator.clipboard.writeText(
-          `${window.location.href}/${id.toString()}`,
-        ),
-    },
-    {
-      title: "Report Message",
-      neitherOwnerNorUserAction: true,
-      icon: <FlagIcon className={dimensions} />,
-      extraStyles: alertClassName,
-      /**@TODO make reporting functionality */
-      onClick: () => console.log("handle reporting"),
-    },
-    {
-      title: "Delete Message",
-      ownerOrAdminAction: true,
-      icon: <TrashIcon className={dimensions} />,
-      extraStyles: alertClassName,
-      onClick: handleDelete,
-    },
-    {
-      title: "Copy Message ID",
-      generalAction: true,
-      icon: <IDIcon className={dimensions} />,
-      onClick: () => navigator.clipboard.writeText(id.toString()),
-    },
-  ];
-
-  const filteredOptions = OPTIONS.filter((option) => {
-    if (option.generalAction) return true;
-    if (option.ownerAction && userIsOwner) return true;
-    if (option.adminAction && USER_IS_ADMIN) return true;
-    if (option.neitherOwnerNorUserAction && !USER_IS_ADMIN && !userIsOwner)
-      return true;
-    if (option.ownerOrAdminAction && (userIsOwner || USER_IS_ADMIN))
-      return true;
-    return false;
-  });
 
   return (
     <div ref={ref} className="w-[204px] bg-black px-2 py-[6px]">
@@ -200,39 +89,15 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
           </div>
         ))}
       </div>
-      <ul>
-        {filteredOptions.map(
-          ({
-            title,
-            icon,
-            extraStyles,
-            onClick = (e) => console.log(e.target),
-          }: Option) => (
-            <li
-              onClick={onClick}
-              key={title}
-              className={cn(
-                "cursor-pointer rounded-sm p-[6px] hover:bg-indigo-500",
-                extraStyles,
-              )}
-            >
-              <div className="flex">
-                <div className="h-5 w-full text-xs leading-5">{title}</div>
-                {icon}
-              </div>
-            </li>
-          ),
-        )}
-      </ul>
+      <Options
+        userIsOwner={userIsOwner}
+        userIsAdmin={USER_IS_ADMIN}
+        handleDelete={handleDelete}
+        id={id}
+        thisMessage={thisMessage}
+      />
     </div>
   );
-};
-
-type Option = {
-  title: string;
-  icon: JSX.Element;
-  extraStyles?: string;
-  onClick?: MouseEventHandler;
 };
 
 export const EMOJI = ["😆", "👍", "💯", "☝️"];
