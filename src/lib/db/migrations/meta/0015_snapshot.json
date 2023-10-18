@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "9a5a89b5-9c50-4d3f-b3da-2006da554da0",
-  "prevId": "b807e418-0d15-49b9-b2d0-46feba4773ac",
+  "id": "ed0bdd66-35e4-4356-a3d8-632ad85b676f",
+  "prevId": "88d18954-b019-4c15-9c22-c65bc4039605",
   "tables": {
     "account": {
       "name": "account",
@@ -502,6 +502,72 @@
           "columns": [
             "reaction_id",
             "message_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "reactions_to_messages_to_users": {
+      "name": "reactions_to_messages_to_users",
+      "schema": "",
+      "columns": {
+        "reaction_to_messages_reaction_id": {
+          "name": "reaction_to_messages_reaction_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reaction_to_messages_message_id": {
+          "name": "reaction_to_messages_message_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reactions_to_messages_to_users_user_id_user_id_fk": {
+          "name": "reactions_to_messages_to_users_user_id_user_id_fk",
+          "tableFrom": "reactions_to_messages_to_users",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reactions_to_messages_to_users_reaction_to_messages_reaction_id_reaction_to_messages_message_id_reactions_to_messages_reaction_id_message_id_fk": {
+          "name": "reactions_to_messages_to_users_reaction_to_messages_reaction_id_reaction_to_messages_message_id_reactions_to_messages_reaction_id_message_id_fk",
+          "tableFrom": "reactions_to_messages_to_users",
+          "tableTo": "reactions_to_messages",
+          "columnsFrom": [
+            "reaction_to_messages_reaction_id",
+            "reaction_to_messages_message_id"
+          ],
+          "columnsTo": [
+            "reaction_id",
+            "message_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "reactions_to_messages_to_users_reaction_to_messages_reaction_id_reaction_to_messages_message_id_user_id": {
+          "name": "reactions_to_messages_to_users_reaction_to_messages_reaction_id_reaction_to_messages_message_id_user_id",
+          "columns": [
+            "reaction_to_messages_reaction_id",
+            "reaction_to_messages_message_id",
+            "user_id"
           ]
         }
       },

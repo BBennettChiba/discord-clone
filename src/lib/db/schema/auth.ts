@@ -8,6 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { invites } from "./invites";
 import { messages } from "./messages";
+import { reactionsToMessagesToUsers } from "./reactionsToMessagesToUsers";
 import { servers } from "./servers";
 import { usersToChannels } from "./usersToChannels";
 import { usersToServers } from "./usersToServers";
@@ -27,6 +28,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   channels: many(usersToChannels),
   ownedServer: one(servers),
   invites: many(invites),
+  reactions: many(reactionsToMessagesToUsers),
 }));
 
 export const accounts = pgTable(

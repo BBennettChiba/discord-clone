@@ -38,7 +38,10 @@ export const getMessagesByChannelId = async ({
       eq(messages.channelId, channelId),
       lte(messages.createdAt, cursor),
     ),
-    with: { author: true, reactions: true },
+    with: {
+      author: true,
+      reactions: { with: { reactor: { with: { reactor: true } } } },
+    },
     orderBy: desc(messages.createdAt),
     limit: LIMIT + 1,
   });

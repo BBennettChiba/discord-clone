@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { integer, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { messages } from "./messages";
 import { reactions } from "./reactions";
+import { reactionsToMessagesToUsers } from "./reactionsToMessagesToUsers";
 
 export const reactionsToMessages = pgTable(
   "reactions_to_messages",
@@ -20,7 +21,7 @@ export const reactionsToMessages = pgTable(
 
 export const reactionsToMessagesRelations = relations(
   reactionsToMessages,
-  ({ one }) => ({
+  ({ one, many }) => ({
     reaction: one(reactions, {
       fields: [reactionsToMessages.reactionId],
       references: [reactions.id],
@@ -29,5 +30,6 @@ export const reactionsToMessagesRelations = relations(
       fields: [reactionsToMessages.messageId],
       references: [messages.id],
     }),
+    reactor: many(reactionsToMessagesToUsers),
   }),
 );

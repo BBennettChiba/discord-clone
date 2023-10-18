@@ -10,9 +10,14 @@ export const Reactions = ({ reactions }: Props) => {
   const mappedReactions = reactions.map(
     (reaction) => emojiData[reaction]?.skins[0]?.native,
   );
-  return mappedReactions.map((r) => (
-    <div key={r} className="text-3xl">
-      {r}
+
+  return (
+    <div className="h-[30px]">
+      {mappedReactions.map((r) => (
+        <div key={r} className="text-3xl">
+          {r}
+        </div>
+      ))}
     </div>
-  ));
+  );
 };
