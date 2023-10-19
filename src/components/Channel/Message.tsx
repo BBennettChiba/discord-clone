@@ -46,7 +46,9 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
           </div>
         ) : null}
         <div>{msg.body}</div>
-        <Reactions reactions={msg.reactions.map((r) => r.reactionId)} />
+        {msg.reactions.length > 0 ? (
+          <Reactions reactions={msg.reactions} />
+        ) : null}
       </div>
       <div
         className={cn(
