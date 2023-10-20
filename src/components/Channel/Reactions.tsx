@@ -16,7 +16,7 @@ export const Reactions = ({ reactions }: Props) => {
           <div className="text-xl">
             {emojiData[r.reactionId]?.skins[0]?.native}
           </div>
-          <div>{r.reactor.length}</div>
+          <div>{r.reactors.length}</div>
         </div>
       ))}
     </div>

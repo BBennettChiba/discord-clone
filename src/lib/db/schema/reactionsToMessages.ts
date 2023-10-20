@@ -30,6 +30,6 @@ export const reactionsToMessagesRelations = relations(
       fields: [reactionsToMessages.messageId],
       references: [messages.id],
     }),
-    reactor: many(reactionsToMessagesToUsers),
+    reactors: many(reactionsToMessagesToUsers),
   }),
 );

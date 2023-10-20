@@ -11,7 +11,10 @@ export const getMessageById = async ({
 }: GetMessageByIdInput) => {
   const message = await db.query.messages.findFirst({
     where: eq(messages.id, id),
-    with: { author: true },
+    with: {
+      author: true,
+      reactions: { with: { reactors: { with: { reactor: true } } } },
+    },
   });
   return message;
 };
@@ -40,7 +43,7 @@ export const getMessagesByChannelId = async ({
     ),
     with: {
       author: true,
-      reactions: { with: { reactor: { with: { reactor: true } } } },
+      reactions: { with: { reactors: { with: { reactor: true } } } },
     },
     orderBy: desc(messages.createdAt),
     limit: LIMIT + 1,
@@ -58,3 +61,5 @@ export const getMessagesByChannelId = async ({
     nextCursor,
   };
 };
+
+/**@TODO adding and deleting messages in dom seems to cause one to disappear */
