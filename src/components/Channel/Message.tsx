@@ -13,7 +13,10 @@ type Props = {
 export const Message = ({ msg, displayAllInfo }: Props) => {
   const { isOpenWhere } = usePickerMenu();
   const today = new Date().getDay();
-  const time = `${msg.createdAt.getHours()}:${msg.createdAt.getMinutes()}`;
+  const time = `${msg.createdAt.getHours()}:${String(
+    msg.createdAt.getMinutes(),
+  ).padStart(2, "0")}`;
+
   return (
     <div className="min-h-12 group relative flex hover:bg-zinc-800 hover:bg-opacity-30">
       {displayAllInfo ? (
