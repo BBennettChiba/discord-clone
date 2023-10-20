@@ -62,21 +62,6 @@ export const ChannelListItem = ({ channel }: Props) => {
 
   const { mutate: toggleSubscriptionMutation } =
     trpc.channels.toggleChannelSubscription.useMutation({
-      onSuccess: (data) => {
-        if (!data) throw new Error(" no data in optimistic update");
-        client.setQueryData<Groups>(queryKey, (old) =>
-          old
-            ? old.map((d) => ({
-                ...d,
-                channels: d.channels.map((c) =>
-                  c.id === data.channelId
-                    ? { ...c, isUserSubscribed: !c.isUserSubscribed }
-                    : c,
-                ),
-              }))
-            : old,
-        );
-      },
       onSettled: () => void client.invalidateQueries(queryKey),
     });
 

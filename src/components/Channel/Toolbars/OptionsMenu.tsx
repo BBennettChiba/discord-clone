@@ -41,20 +41,8 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   const userIsOwner = thisMessage?.authorId === session.user.id;
 
   const { mutate: deleteMessage } = trpc.messages.deleteMessage.useMutation({
-    onSuccess: ({ id: deletedMessageId }) => {
-      queryClient.setQueryData<Messages>(KEY, (prev) =>
-        prev
-          ? {
-              ...prev,
-              pages: prev.pages.map((page) => ({
-                ...page,
-                messages: page.messages.filter(
-                  (m) => m.id !== deletedMessageId,
-                ),
-              })),
-            }
-          : undefined,
-      );
+    onSettled: async () => {
+      await queryClient.invalidateQueries(KEY)
     },
   });
 

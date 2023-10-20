@@ -1,34 +1,18 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { paramsSchema } from "@/lib/utils";
 import { Checkbox } from "../Icons";
+
 type Props = {
   groupId: number;
   checked: boolean;
 };
 
-type Groups = RouterOutputs["groups"]["getGroupsByServerId"];
-
 export const FollowCategoryButton = ({ groupId, checked }: Props) => {
   const { server: serverId } = paramsSchema.parse(useParams());
 
   const callbacks = {
-    onSuccess: (data: { channelId: number; userId: string }[]) => {
-      client.setQueryData<Groups>(queryKey, (old) =>
-        old
-          ? old.map((group) => ({
-              ...group,
-              channels: group.channels.map((c) =>
-                data.map((datum) => datum.channelId).includes(c.id)
-                  ? { ...c, isUserSubscribed: !c.isUserSubscribed }
-                  : c,
-              ),
-            }))
-          : old,
-      );
-    },
     onSettled: () => void client.invalidateQueries(queryKey),
   };
 

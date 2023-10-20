@@ -13,7 +13,9 @@ import { trpc } from "@/lib/trpc/client";
 
 type Props = { channelName: string; channelId: number };
 
-export type Messages = InfiniteData<RouterOutputs["messages"]["getMessagesByChannelId"]>;
+export type Messages = InfiniteData<
+  RouterOutputs["messages"]["getMessagesByChannelId"]
+>;
 
 export const MessageInput = ({ channelName, channelId }: Props) => {
   const queryClient = useQueryClient();
@@ -21,28 +23,8 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
 
   const [body, setBody] = useState("");
   const { mutate } = trpc.messages.createMessage.useMutation({
-    onSuccess: (data) => {
-      if (!data.message) throw new Error("no data in infinte query");
-      setBody("");
-      queryClient.setQueryData<Messages>(
-        [
-          ["messages", "getMessagesByChannelId"],
-          { input: { channelId }, type: "infinite" },
-        ],
-        (prev) =>
-          prev
-            ? {
-                ...prev,
-                pages: prev.pages.map((page, i) => ({
-                  ...page,
-                  messages:
-                    i === 0 ? [data.message!, ...page.messages] : page.messages,
-                })),
-              }
-            : undefined,
-      );
-    },
     onSettled: () => {
+      setBody("");
       void queryClient.invalidateQueries([
         ["messages", "getMessagesByChannelId"],
         { input: { channelId }, type: "infinite" },
