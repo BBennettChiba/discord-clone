@@ -1,9 +1,10 @@
 import { type EmojiMartData } from "@emoji-mart/data";
 import data from "@emoji-mart/data";
-import { useQueryClient } from "@tanstack/react-query";
+import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { cn, paramsSchema } from "@/lib/utils";
 
@@ -11,19 +12,15 @@ type Props = {
   reactions: CompleteMessage["reactions"];
 };
 
+type InfiniteMessages = InfiniteData<
+  RouterOutputs["messages"]["getMessagesByChannelId"]
+>;
+
 export const Reactions = ({ reactions }: Props) => {
   const emojiData = (data as EmojiMartData).emojis;
 
   const { channel: channelId } = paramsSchema.parse(useParams());
   const client = useQueryClient();
-
-  const { mutate: toggleMutate } = trpc.reactions.toggleReaction.useMutation({
-    onSettled: () =>
-      client.invalidateQueries([
-        ["messages", "getMessagesByChannelId"],
-        { input: { channelId }, type: "infinite" },
-      ]),
-  });
 
   const { data: session } = useSession();
 
@@ -31,6 +28,59 @@ export const Reactions = ({ reactions }: Props) => {
     throw new Error("something went wrong no session returned from useSession");
   const userId = session.user.id;
 
+  const KEY = [
+    ["messages", "getMessagesByChannelId"],
+    { input: { channelId }, type: "infinite" },
+  ];
+
+  const { mutate: toggleMutate } = trpc.reactions.toggleReaction.useMutation({
+    onSettled: () => client.invalidateQueries(KEY),
+    onSuccess: (successData) => {
+      client.setQueryData<InfiniteMessages>(KEY, (prev) =>
+        prev
+          ? {
+              ...prev,
+              pages: prev.pages.map((page) => ({
+                ...page,
+                messages: page.messages.map((message) => ({
+                  ...message,
+                  reactions: message.reactions.map((reaction) => ({
+                    ...reaction,
+                    reactors:
+                      successData.action === "deleted"
+                        ? reaction.reactors.filter(
+                            (reactor) =>
+                              reactor.userId === userId &&
+                              reactor.reactionToMessagesReactionId ===
+                                successData.reactionId &&
+                              reactor.reactionToMessagesMessageId ===
+                                successData.messageId,
+                          )
+                        : [
+                            ...reaction.reactors,
+                            {
+                              reactionToMessagesMessageId:
+                                successData.messageId,
+                              reactionToMessagesReactionId:
+                                successData.reactionId,
+                              userId,
+                              reactor: {
+                                email: session.user.email!,
+                                emailVerified: null,
+                                name: session.user.name!,
+                                id: userId,
+                                image: session.user.image!,
+                              },
+                            },
+                          ],
+                  })),
+                })),
+              })),
+            }
+          : prev,
+      );
+    },
+  });
   const handleClick = (input: { reactionId: string; messageId: number }) => {
     toggleMutate(input);
   };

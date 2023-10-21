@@ -46,7 +46,7 @@ export const createReaction = async ({
   if (!reactionToMessagesToUserInsert)
     throw new Error("Could not insert into reactionToMessagesToUser");
 
-  return reactionToMessagesToUserInsert;
+  return { action: "inserted", messageId, reactionId } as const;
 };
 
 export const toggleReaction = async ({
@@ -94,7 +94,7 @@ const deleteReaction = async ({
   messageId: number;
   userId: string;
 }) => {
-  const del = await db
+  await db
     .delete(reactionsToMessagesToUsers)
     .where(
       and(
@@ -102,7 +102,6 @@ const deleteReaction = async ({
         eq(reactionsToMessagesToUsers.reactionToMessagesMessageId, messageId),
         eq(reactionsToMessagesToUsers.userId, userId),
       ),
-    )
-    .returning();
-  return del;
+    );
+  return { action: "deleted", reactionId, messageId } as const;
 };
