@@ -1,20 +1,15 @@
 import { type EmojiMartData } from "@emoji-mart/data";
 import data from "@emoji-mart/data";
-import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
-import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { cn, paramsSchema } from "@/lib/utils";
 
 type Props = {
   reactions: CompleteMessage["reactions"];
 };
-
-type InfiniteMessages = InfiniteData<
-  RouterOutputs["messages"]["getMessagesByChannelId"]
->;
 
 export const Reactions = ({ reactions }: Props) => {
   const emojiData = (data as EmojiMartData).emojis;
@@ -35,58 +30,16 @@ export const Reactions = ({ reactions }: Props) => {
 
   const { mutate: toggleMutate } = trpc.reactions.toggleReaction.useMutation({
     onSettled: () => client.invalidateQueries(KEY),
-    onSuccess: (successData) => {
-      client.setQueryData<InfiniteMessages>(KEY, (prev) =>
-        prev
-          ? {
-              ...prev,
-              pages: prev.pages.map((page) => ({
-                ...page,
-                messages: page.messages.map((message) => ({
-                  ...message,
-                  reactions: message.reactions.map((reaction) => ({
-                    ...reaction,
-                    reactors:
-                      successData.action === "deleted"
-                        ? reaction.reactors.filter(
-                            (reactor) =>
-                              reactor.userId === userId &&
-                              reactor.reactionToMessagesReactionId ===
-                                successData.reactionId &&
-                              reactor.reactionToMessagesMessageId ===
-                                successData.messageId,
-                          )
-                        : [
-                            ...reaction.reactors,
-                            {
-                              reactionToMessagesMessageId:
-                                successData.messageId,
-                              reactionToMessagesReactionId:
-                                successData.reactionId,
-                              userId,
-                              reactor: {
-                                email: session.user.email!,
-                                emailVerified: null,
-                                name: session.user.name!,
-                                id: userId,
-                                image: session.user.image!,
-                              },
-                            },
-                          ],
-                  })),
-                })),
-              })),
-            }
-          : prev,
-      );
-    },
   });
+
+  const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] as const;
+
   const handleClick = (input: { reactionId: string; messageId: number }) => {
     toggleMutate(input);
   };
 
   return (
-    <div className="flex gap-1">
+    <div className="flex h-[30px] gap-1 overflow-hidden">
       {reactions.map((r) => (
         <button
           onClick={() =>
@@ -103,9 +56,73 @@ export const Reactions = ({ reactions }: Props) => {
           )}
         >
           <div className="">{emojiData[r.reactionId]?.skins[0]?.native}</div>
-          <div className="px-1">{r.reactors.length}</div>
+          <div className="relative">
+            <div className="invisible min-w-[14px] px-1" />
+            {digits.map((digit, i) => (
+              <div
+                key={i}
+                style={{
+                  transform: `translateY(${
+                    (i - r.reactors.length + 1) * 100
+                  }%)`,
+                }}
+                className="absolute min-w-[14px] px-1 transition-all"
+              >
+                {digit}
+              </div>
+            ))}
+          </div>
         </button>
       ))}
     </div>
   );
 };
+
+/**
+ type InfiniteMessages = InfiniteData<
+  RouterOutputs["messages"]["getMessagesByChannelId"]
+>;
+
+
+ onSuccess: ({ reactionId, action, messageId }) => {
+      client.setQueryData<InfiniteMessages>(KEY, (prev) =>
+        prev
+          ? {
+              ...prev,
+              pages: prev.pages.map((page) => ({
+                ...page,
+                messages: page.messages.map((message) => ({
+                  ...message,
+                  reactions: message.reactions.map((reaction) => ({
+                    ...reaction,
+                    reactors:
+                      action === "deleted"
+                        ? reaction.reactors.filter(
+                            (reactor) =>
+                              reactor.userId === userId &&
+                              reactor.reactionToMessagesReactionId ===
+                                reactionId &&
+                              reactor.reactionToMessagesMessageId === messageId,
+                          )
+                        : [
+                            ...reaction.reactors,
+                            {
+                              reactionToMessagesMessageId: messageId,
+                              reactionToMessagesReactionId: reactionId,
+                              userId,
+                              reactor: {
+                                email: session.user.email!,
+                                emailVerified: null,
+                                name: session.user.name!,
+                                id: userId,
+                                image: session.user.image!,
+                              },
+                            },
+                          ],
+                  })),
+                })),
+              })),
+            }
+          : prev,
+      );
+    }, */
