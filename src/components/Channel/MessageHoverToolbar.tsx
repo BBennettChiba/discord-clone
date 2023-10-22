@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import { useOptionsMenu } from "@/contexts/OptionsMenuContext";
 import { usePickerMenu } from "@/contexts/PickerMenuContext";
+import { useReply } from "@/contexts/ReplyContext";
 import { DotDotDotIcon, EmojiIcon, ReplyIcon } from "../Icons";
 
 export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
@@ -9,6 +10,7 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
   const reactionsButtonRef = useRef<HTMLDivElement>(null);
   const { openMenu: openPickerMenu } = usePickerMenu();
   const { openMenu: openOptionsMenu } = useOptionsMenu();
+  const { setReplyTarget } = useReply();
 
   const openEmojiPicker = () => {
     if (!reactionsButtonRef.current) throw new Error("No current");
@@ -20,6 +22,10 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
     if (!optionsButtonRef.current) throw new Error("no current");
     const { top, left } = optionsButtonRef.current.getBoundingClientRect();
     openOptionsMenu(messageId, top, left);
+  };
+
+  const handleReply = () => {
+    setReplyTarget(messageId);
   };
 
   return (
@@ -40,7 +46,12 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
           </div>
         </div>
         <div className="p-[6px] hover:bg-white/10">
-          <div aria-label="Reply" role="button" tabIndex={0}>
+          <div
+            aria-label="Reply"
+            role="button"
+            tabIndex={0}
+            onClick={handleReply}
+          >
             <ReplyIcon className="h-5 w-5" />
           </div>
         </div>

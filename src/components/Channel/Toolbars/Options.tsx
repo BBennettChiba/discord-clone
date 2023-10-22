@@ -11,6 +11,7 @@ import {
   SiphonIcon,
   TrashIcon,
 } from "@/components/Icons";
+import { useReply } from "@/contexts/ReplyContext";
 import { type Message } from "@/lib/db/schema/messages";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ export const Options = ({
   id,
   thisMessage,
 }: Props) => {
+  const { setReplyTarget } = useReply();
   const dimensions = "h-[18px] w-[18px]";
 
   const alertClassName = "hover:bg-red-500 text-red-500 hover:text-white";
@@ -69,7 +71,9 @@ export const Options = ({
       generalAction: true,
       icon: <ReplyIcon className={dimensions} />,
       /**@OTOD look below */
-      onClick: () => console.log("add reply functionality"),
+      onClick: () => {
+        setReplyTarget(id);
+      },
     },
     {
       title: "Copy Text",

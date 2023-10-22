@@ -21,11 +21,11 @@ type Props = {
   children: ReactNode;
 };
 
-export const InputHeightProvider= ({ children }: Props) => {
+export const InputHeightContextProvider = ({ children }: Props) => {
   const [inputRows, setInputRows] = useState(1);
 
   return (
-    <context.Provider value={{ inputRows, setInputRows}}>
+    <context.Provider value={{ inputRows, setInputRows }}>
       {children}
     </context.Provider>
   );
