@@ -26,8 +26,6 @@ type Props = {
 export const ReplyContextProvider = ({ children }: Props) => {
   const [replyTarget, setReplyTarget] = useState<ReplyTarget>(null);
 
-  console.log(replyTarget);
-
   return (
     <context.Provider
       value={{  replyTarget, setReplyTarget}}
