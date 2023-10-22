@@ -1,13 +1,15 @@
 import { and, desc, eq, lte } from "drizzle-orm";
-import { db } from "@/lib/db";
 import { messages } from "@/lib/db/schema/messages";
+import { type AuthedContext } from "@/lib/trpc/context";
 
 type GetMessageByIdInput = {
   input: { id: number };
+  ctx: AuthedContext;
 };
 
 export const getMessageById = async ({
   input: { id },
+  ctx: { db },
 }: GetMessageByIdInput) => {
   const message = await db.query.messages.findFirst({
     where: eq(messages.id, id),
@@ -23,11 +25,13 @@ const LIMIT = 10;
 
 type GetMessagesByChannelIdInput = {
   input: { cursor?: Date; channelId: number };
+  ctx: AuthedContext;
 };
 
 export const getMessagesByChannelId = async ({
   input: { channelId },
   input,
+  ctx: { db },
 }: GetMessagesByChannelIdInput) => {
   let cursor = input.cursor;
 

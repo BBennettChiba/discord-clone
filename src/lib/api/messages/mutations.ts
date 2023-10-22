@@ -1,12 +1,10 @@
 import { and, eq } from "drizzle-orm";
-import { type Session } from "next-auth";
-import { getUserAuth } from "@/lib/auth/utils";
-import { db } from "@/lib/db";
 import {
   type NewMessageParams,
   messages,
   type MessageId,
 } from "@/lib/db/schema/messages";
+import { type AuthedContext } from "@/lib/trpc/context";
 import { getMessageById as getMessageById } from "./queries";
 
 type CreateMessageInput = {
@@ -14,14 +12,14 @@ type CreateMessageInput = {
 } & CTX;
 
 type CTX = {
-  ctx: { session: Session };
+  ctx: AuthedContext;
 };
 
 export const createMessage = async ({
   input: msgInput,
+  ctx: { db, session },
+  ctx
 }: CreateMessageInput) => {
-  const { session } = await getUserAuth();
-  if (!session) throw new Error("Session not found in createMessage");
   const newMessage = {
     ...msgInput,
     authorId: session.user.id,
@@ -29,7 +27,7 @@ export const createMessage = async ({
   try {
     const [m] = await db.insert(messages).values(newMessage).returning();
     if (!m) throw new Error("messages not found in createMessage");
-    const message = await getMessageById({ input: { id: m.id } });
+    const message = await getMessageById({ input: { id: m.id }, ctx });
     return { message };
   } catch (err) {
     const errMessage =
@@ -45,7 +43,7 @@ type DeleteMessageInput = {
 
 export const deleteMessage = async ({
   input: { id },
-  ctx: { session },
+  ctx: { session, db },
 }: DeleteMessageInput) => {
   const [d] = await db
     .delete(messages)

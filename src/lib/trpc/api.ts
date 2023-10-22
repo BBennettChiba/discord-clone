@@ -4,6 +4,7 @@ import { experimental_createTRPCNextAppDirServer as createTRPCNextAppDirServer }
 import { cookies } from "next/headers";
 import SuperJSON from "superjson";
 import { getUserAuth } from "../auth/utils";
+import { db } from "../db";
 import { appRouter } from "../server/routers/_app";
 
 /**
@@ -28,6 +29,7 @@ export const serverTrpc = createTRPCNextAppDirServer<typeof appRouter>({
                 cookie: cookies().toString(),
                 "x-trpc-source": "rsc-invoke",
               },
+              db,
             };
           },
         }),

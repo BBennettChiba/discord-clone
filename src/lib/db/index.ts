@@ -8,6 +8,6 @@ const connectionString = env.DATABASE_URL;
 
 export const client = postgres(connectionString);
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(postgres(connectionString), { schema });
 
 /**@TODO try to fix the too many clients error */

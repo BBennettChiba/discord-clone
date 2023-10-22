@@ -1,18 +1,17 @@
 import { and, eq, inArray } from "drizzle-orm";
-import { type Session } from "next-auth";
-import { db } from "@/lib/db";
 import { channels } from "@/lib/db/schema/channels";
 import { groups } from "@/lib/db/schema/groups";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
+import { type AuthedContext } from "@/lib/trpc/context";
 
 type SubscribeInput = {
   input: { id: number };
-  ctx: { session: Session };
+  ctx: AuthedContext;
 };
 
 export const unsubscribeFromGroup = async ({
   input: { id: groupId },
-  ctx: { session },
+  ctx: { session, db },
 }: SubscribeInput) => {
   const channelIds = await db
     .select({
@@ -38,7 +37,7 @@ export const unsubscribeFromGroup = async ({
 
 export const subscribeToGroup = async ({
   input: { id: groupId },
-  ctx: { session },
+  ctx: { session, db },
 }: SubscribeInput) => {
   const channelIds = await db
     .select({

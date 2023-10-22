@@ -1,15 +1,14 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema/auth";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
-import {isNotNull} from '../../utils'
+import { isNotNull } from "../../utils";
 import { protectedProcedure, router } from "../trpc";
 
 export const usersRouter = router({
   getUsersByChannel: protectedProcedure
     .input(z.object({ channelId: z.number() }))
-    .query(async ({ input: { channelId } }) => {
+    .query(async ({ input: { channelId }, ctx: { db } }) => {
       const members = (
         await db
           .select({ user: users })
@@ -22,4 +21,3 @@ export const usersRouter = router({
       return members;
     }),
 });
-

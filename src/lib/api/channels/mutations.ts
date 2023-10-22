@@ -1,16 +1,15 @@
 import { and, eq } from "drizzle-orm";
-import { type Session } from "next-auth";
-import { db } from "@/lib/db";
 import { usersToChannels } from "@/lib/db/schema/usersToChannels";
+import { type AuthedContext } from "@/lib/trpc/context";
 
 type ToggleChannelSubscriptionInput = {
   input: { id: number };
-  ctx: { session: Session };
+  ctx: AuthedContext;
 };
 
 export const toggleChannelSubscription = async ({
   input: { id: channelId },
-  ctx: { session },
+  ctx: { session, db },
 }: ToggleChannelSubscriptionInput) => {
   const userToChannelConnection = await db.query.usersToChannels.findFirst({
     where: and(
@@ -19,11 +18,15 @@ export const toggleChannelSubscription = async ({
     ),
   });
   if (!userToChannelConnection)
-    return subscribeToChannel(channelId, session.user.id);
-  else return unsubscribeToChannel(channelId, session.user.id);
+    return subscribeToChannel(channelId, session.user.id, db);
+  else return unsubscribeToChannel(channelId, session.user.id, db);
 };
 
-const unsubscribeToChannel = async (channelId: number, userId: string) =>
+const unsubscribeToChannel = async (
+  channelId: number,
+  userId: string,
+  db: AuthedContext["db"],
+) =>
   (
     await db
       .delete(usersToChannels)
@@ -36,7 +39,11 @@ const unsubscribeToChannel = async (channelId: number, userId: string) =>
       .returning()
   )[0];
 
-const subscribeToChannel = async (channelId: number, userId: string) =>
+const subscribeToChannel = async (
+  channelId: number,
+  userId: string,
+  db: AuthedContext["db"],
+) =>
   (
     await db.insert(usersToChannels).values({ userId, channelId }).returning()
   )[0];

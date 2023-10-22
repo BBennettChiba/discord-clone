@@ -1,17 +1,16 @@
 import { eq } from "drizzle-orm";
-import { type Session } from "next-auth";
-import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema/auth";
 import { groups } from "@/lib/db/schema/groups";
+import { type AuthedContext } from "@/lib/trpc/context";
 
 type Input = {
   input: { serverId: number };
-  ctx: { session: Session };
+  ctx: AuthedContext;
 };
 
 export const getGroupsByServerId = async ({
   input: { serverId },
-  ctx: { session },
+  ctx: { session, db },
 }: Input) => {
   const gs = await db.query.groups.findMany({
     with: { channels: true },
