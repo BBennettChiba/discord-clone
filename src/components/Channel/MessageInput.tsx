@@ -11,6 +11,7 @@ import { useInputHeight } from "@/contexts/InputHeightContext";
 import { useReply } from "@/contexts/ReplyContext";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
+import { cn } from "@/lib/utils";
 import { AtSymbolIcon, XInCircleIcon } from "../Icons";
 
 type Props = { channelName: string; channelId: number };
@@ -56,7 +57,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
       mutate({
         body,
         channelId,
-        parentId: null,
+        parentId: replyTarget,
       });
     }
   };
@@ -100,7 +101,10 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         value={body}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="align-botttom w-full resize-none appearance-none overflow-hidden rounded-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none"
+        className={cn(
+          "align-botttom w-full resize-none appearance-none overflow-hidden rounded-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none",
+          { "rounded-t-none": !!replyTarget },
+        )}
         placeholder={`Send a message in ${channelName}`}
       />
     </div>
