@@ -80,35 +80,33 @@ const Reply = ({ parentId }: { parentId: number }) => {
   const { channel: channelId } = paramsSchema.parse(useParams());
   if (!channelId) throw new Error("channel cannot be parsed");
 
-  const utils = trpc.useUtils();
-  const parent = utils.messages.getMessagesByChannelId
-    .getInfiniteData({
-      channelId,
-    })
-    ?.pages.map((p) => p.messages)
-    .flat()
-    .find((m) => m.id === parentId);
-
-  if (!parent) throw new Error("there must be a parent");
-  console.log(parent);
+  const { data } = trpc.messages.getMessageById.useQuery({ id: parentId });
+  const parent = data ?? {
+    author: { name: "loading", image: null },
+    body: "loading",
+  };
 
   return (
-    <div className="relative flex items-center overflow-hidden overflow-ellipsis whitespace-nowrap break-words pl-[72px] text-sm text-gray-400">
+    <div className="relative flex items-center overflow-hidden overflow-ellipsis whitespace-nowrap break-words pl-[72px] text-sm text-gray-400 before:absolute before:left-9 before:top-1/2 before:h-2 before:w-8 before:rounded-tl-[4px] before:border-l before:border-t before:border-gray-500">
       <div className="overflow-hidden rounded-full indent-[-624.88rem] ">
-        <Image
-          src={parent.author.image!}
-          width={16}
-          height={16}
-          alt="parent author avatar"
-        />
+        {parent.author.image ? (
+          <Image
+            src={parent.author.image}
+            width={16}
+            height={16}
+            alt="parent author avatar"
+          />
+        ) : (
+          parent.author.name
+        )}
       </div>
 
       <span className="relative pl-1 font-medium text-yellow-400 opacity-[0.64]">
-        @{parent.author.name}
+        @{parent.author.name || ""}
       </span>
       <div className="cursor-pointer text-ellipsis">
         <div className="relative flex items-center pl-3 text-center">
-          <span>{parent.body}</span>
+          <span>{parent.body || ""}</span>
           <span>.</span>{" "}
           {/* <span className="inline-block h-5 text-xs font-medium text-zinc-400">
             <div>
