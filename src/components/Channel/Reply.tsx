@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { useScrollTo } from "@/contexts/ScrollToContext";
 import { trpc } from "@/lib/trpc/client";
 import { paramsSchema } from "@/lib/utils";
 
@@ -14,7 +15,11 @@ export const Reply = ({ parentId }: { parentId: number }) => {
     body: "loading",
   };
 
-  const scrollToParent = () => {};
+  const { scrollTo } = useScrollTo();
+
+  const handleClick = () => {
+    scrollTo(parentId);
+  };
 
   return (
     <div className="relative flex items-center overflow-hidden overflow-ellipsis whitespace-nowrap break-words pl-[72px] text-sm text-gray-400 before:absolute before:left-9 before:top-1/2 before:h-2 before:w-8 before:rounded-tl-[4px] before:border-l before:border-t before:border-gray-500">
@@ -34,16 +39,13 @@ export const Reply = ({ parentId }: { parentId: number }) => {
       <span className="relative pl-1 font-medium text-yellow-400 opacity-[0.64]">
         @{parent.author.name || ""}
       </span>
-      <div className="cursor-pointer text-ellipsis" onClick={scrollToParent}>
-        <div className="relative flex items-center pl-3 text-center">
-          <span>{parent.body || ""}</span>
-          <span>.</span>{" "}
-          {/* <span className="inline-block h-5 text-xs font-medium text-zinc-400">
+      <div className="cursor-pointer flex items-center" onClick={handleClick}>
+        <span className="overflow-hidden whitespace-nowrap text-ellipsis min-h-0 max-w-[60dvw]">{parent.body || ""}</span>
+        {/* <span className="inline-block h-5 text-xs font-medium text-zinc-400">
             <div>
               <span className="text-[0.63rem]">(edited)</span>
             </div>
           </span> */}
-        </div>
       </div>
     </div>
   );

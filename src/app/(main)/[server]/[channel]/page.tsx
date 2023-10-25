@@ -2,6 +2,10 @@
 import { Fragment, useRef } from "react";
 import { Message } from "@/components/Channel/Message";
 import { ScrollContainer } from "@/components/Channel/ScrollContainer";
+import {
+  ScrollToContextProvider,
+  useScrollTo,
+} from "@/contexts/ScrollToContext";
 import { useIntersectionObserver } from "@/hooks";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { trpc } from "@/lib/trpc/client";
@@ -29,6 +33,7 @@ const MONTHS = [
 const Channel = ({ params: { channel } }: Props) => {
   const inner = useRef<HTMLDivElement | null>(null);
   const outer = useRef<HTMLDivElement | null>(null);
+  const { scrollTarget, scrollTargetId } = useScrollTo();
 
   const { isVisible } = useIntersectionObserver(inner, {
     root: outer.current,
@@ -66,37 +71,43 @@ const Channel = ({ params: { channel } }: Props) => {
 
   if (isVisible && hasNextPage) void fetchNextPage();
 
+  const messages = data.pages.flatMap((d) => d.messages);
+
+  // if (!!scrollTarget.current && !messages.find((m) => m.id === scrollTargetId)) {
+  //   void fetchNextPage();
+  // }
+  /**@TODO find out how to scroll targets in */
+
   return (
     <div ref={outer} className="relative flex flex-1">
       <ScrollContainer>
-        {data.pages
-          .flatMap((d) => d.messages)
-          .map((msg, i, arr) => {
-            const newDay =
-              lastDate?.getDay() !== msg.createdAt.getDay() && i !== 0;
-            lastDate = msg.createdAt;
-            const lastMessage = arr[i + 1];
-            let displayAllInfo = true;
-            if (
-              lastMessage &&
-              lastAuthorIsSame(msg, lastMessage) &&
-              tenMinutesHaveNotPassed(msg, lastMessage)
-            ) {
-              displayAllInfo = false;
-            }
-            return (
-              <Fragment key={msg.id}>
-                {newDay ? (
-                  <div className="px-4 pb-2 pt-6">
-                    <div className="relative h-[1px] w-full bg-gray-500">
-                      <div className="absolute left-1/2 -translate-y-1/2 bg-zinc-700 text-xs">
-                        {`${
-                          MONTHS[msg.createdAt.getMonth()]
-                        } ${msg.createdAt.getDate()}, ${msg.createdAt.getFullYear()}`}
-                      </div>
+        {messages.map((msg, i, arr) => {
+          const newDay =
+            lastDate?.getDay() !== msg.createdAt.getDay() && i !== 0;
+          lastDate = msg.createdAt;
+          const lastMessage = arr[i + 1];
+          let displayAllInfo = true;
+          if (
+            lastMessage &&
+            lastAuthorIsSame(msg, lastMessage) &&
+            tenMinutesHaveNotPassed(msg, lastMessage)
+          ) {
+            displayAllInfo = false;
+          }
+          return (
+            <Fragment key={msg.id}>
+              {newDay ? (
+                <div className="px-4 pb-2 pt-6">
+                  <div className="relative h-[1px] w-full bg-gray-500">
+                    <div className="absolute left-1/2 -translate-y-1/2 bg-zinc-700 text-xs">
+                      {`${
+                        MONTHS[msg.createdAt.getMonth()]
+                      } ${msg.createdAt.getDate()}, ${msg.createdAt.getFullYear()}`}
                     </div>
                   </div>
-                ) : null}
+                </div>
+              ) : null}
+              <div ref={msg.id === scrollTargetId ? scrollTarget : null}>
                 <div
                   className={cn("pt-[17px]", { "pt-0": !displayAllInfo })}
                   style={{ zIndex: 999 - i }}
@@ -104,15 +115,21 @@ const Channel = ({ params: { channel } }: Props) => {
                 >
                   <Message msg={msg} displayAllInfo={displayAllInfo} />
                 </div>
-              </Fragment>
-            );
-          })}
+              </div>
+            </Fragment>
+          );
+        })}
       </ScrollContainer>
     </div>
   );
 };
 
-export default Channel;
+const Wrapper = (props: Props) => (
+  <ScrollToContextProvider>
+    <Channel {...props} />
+  </ScrollToContextProvider>
+);
+export default Wrapper;
 
 const tenMinutesHaveNotPassed = (
   message1: NonNullable<CompleteMessage>,
@@ -123,3 +140,7 @@ const lastAuthorIsSame = (
   message1: NonNullable<CompleteMessage>,
   message2: NonNullable<CompleteMessage>,
 ) => message1.authorId === message2.authorId;
+
+/**
+ * @TODO disable timer for replied messages
+ */
