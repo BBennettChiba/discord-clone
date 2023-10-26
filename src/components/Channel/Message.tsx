@@ -32,10 +32,8 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
             />
           </div>
         ) : (
-          <div className="flex items-center">
-            <div className="absolute left-4 hidden text-xs group-hover:block">
-              {time}
-            </div>
+          <div className="absolute left-4 top-1/2 hidden -translate-y-1/2 text-xs group-hover:block">
+            {time}
           </div>
         )}
         <div className="pl-[72px]">
