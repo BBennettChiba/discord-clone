@@ -9,7 +9,7 @@ import {
 } from "react";
 
 type Context = {
-  scrollTarget: MutableRefObject<null | HTMLDivElement>;
+    scrollTargetRef: MutableRefObject<null | HTMLDivElement>;
   scrollTargetId: number | null;
   scrollTo: (id: number) => void;
 };
@@ -25,18 +25,18 @@ type Props = {
 export const ScrollToContextProvider = ({ children }: Props) => {
   const [scrollTargetId, setScrollTargetId] = useState<null | number>(null);
 
-  const scrollTarget = useRef<HTMLDivElement | null>(null);
+  const scrollTargetRef = useRef<HTMLDivElement | null>(null);
 
   const scrollTo = (id: number) => {
     setScrollTargetId(id);
     setTimeout(() => {
-      if (!scrollTarget.current) return;
-      scrollTarget.current.scrollIntoView();
+      if (!scrollTargetRef.current) return;
+      scrollTargetRef.current.scrollIntoView();
     }, 0);
   };
 
   return (
-    <context.Provider value={{ scrollTarget, scrollTo, scrollTargetId }}>
+    <context.Provider value={{ scrollTargetRef, scrollTo, scrollTargetId }}>
       {children}
     </context.Provider>
   );

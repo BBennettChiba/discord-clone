@@ -33,7 +33,7 @@ const MONTHS = [
 const Channel = ({ params: { channel } }: Props) => {
   const inner = useRef<HTMLDivElement | null>(null);
   const outer = useRef<HTMLDivElement | null>(null);
-  const { scrollTarget, scrollTargetId } = useScrollTo();
+  const { scrollTargetRef, scrollTargetId, scrollTo } = useScrollTo();
 
   const { isVisible } = useIntersectionObserver(inner, {
     root: outer.current,
@@ -73,10 +73,19 @@ const Channel = ({ params: { channel } }: Props) => {
 
   const messages = data.pages.flatMap((d) => d.messages);
 
-  // if (!!scrollTarget.current && !messages.find((m) => m.id === scrollTargetId)) {
-  //   void fetchNextPage();
-  // }
-  /**@TODO find out how to scroll targets in */
+  const cantFindMessage = !messages.find((m) => m.id === scrollTargetId);
+
+  if (
+    scrollTargetId &&
+    !scrollTargetRef.current &&
+    cantFindMessage &&
+    hasNextPage
+  ) {
+    void (async () => {
+      await fetchNextPage();
+      scrollTo(scrollTargetId);
+    })();
+  }
 
   return (
     <div ref={outer} className="relative flex flex-1">
@@ -107,7 +116,7 @@ const Channel = ({ params: { channel } }: Props) => {
                   </div>
                 </div>
               ) : null}
-              <div ref={msg.id === scrollTargetId ? scrollTarget : null}>
+              <div ref={msg.id === scrollTargetId ? scrollTargetRef : null}>
                 <div
                   className={cn("pt-[17px]", { "pt-0": !displayAllInfo })}
                   style={{ zIndex: 999 - i }}
