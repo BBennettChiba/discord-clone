@@ -42,6 +42,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
   const { mutate } = trpc.messages.createMessage.useMutation({
     onSettled: () => {
       setBody("");
+      setReplyTarget(null);
       void queryClient.invalidateQueries(KEY);
     },
   });
