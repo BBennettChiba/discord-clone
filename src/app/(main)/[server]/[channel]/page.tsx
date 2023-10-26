@@ -99,7 +99,8 @@ const Channel = ({ params: { channel } }: Props) => {
           if (
             lastMessage &&
             lastAuthorIsSame(msg, lastMessage) &&
-            tenMinutesHaveNotPassed(msg, lastMessage)
+            tenMinutesHaveNotPassed(msg, lastMessage) &&
+            !msg.parentId
           ) {
             displayAllInfo = false;
           }
