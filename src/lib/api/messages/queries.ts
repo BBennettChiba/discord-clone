@@ -21,7 +21,7 @@ export const getMessageById = async ({
   return message;
 };
 
-const LIMIT = 10;
+const LIMIT = 20;
 
 type GetMessagesByChannelIdInput = {
   input: { cursor?: Date; channelId: number };
