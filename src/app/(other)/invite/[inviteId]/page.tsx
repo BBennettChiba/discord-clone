@@ -25,7 +25,7 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-indigo-500">
-      <div className="flex w-[480px] flex-col items-center rounded-md bg-gray-800 p-8">
+      <div className="flex w-[480px] flex-col items-center rounded-md bg-gray-700 p-8">
         <div className="pb-6">
           <Img invite={invite} />
         </div>
@@ -55,7 +55,51 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
               </button>
             </form>
           </div>
-        ) : null}
+        ) : (
+          <div className="mt-2 w-full text-lg text-zinc-400">
+            <h1 className="mb-2 text-xs font-bold uppercase text-gray-400">
+              Display Name
+            </h1>
+            <div className="mb-2">
+              <div className="flex flex-col">
+                <input
+                  className="h-10 w-full cursor-text rounded bg-neutral-800 p-3 text-sm text-zinc-200"
+                  defaultValue=""
+                  placeholder="What should everyone call you?"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className="text-xs text-gray-400">
+              This is how others see you. You can use special characters and
+              emoji.
+            </div>
+            <div className="mt-3">
+              <button className="relative flex h-11 w-full cursor-pointer items-center justify-center rounded bg-indigo-500 px-4 py-1 text-center text-sm font-medium text-white">
+                <div
+                  className="text-ellipsis whitespace-nowrap"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) calc(2px), rgba(0, 0, 0, 0) calc(2px))",
+                  }}
+                >
+                  Continue
+                </div>
+              </button>
+            </div>
+            <button className="relative mt-3 h-auto w-auto cursor-pointer items-center justify-center rounded py-1 text-center text-sm font-medium text-sky-500">
+              <div
+                className="text-ellipsis whitespace-nowrap"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) calc(2px), rgba(0, 0, 0, 0) calc(2px))",
+                }}
+              >
+                Already have an account?
+              </div>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

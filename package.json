@@ -40,7 +40,7 @@
     "emoji-mart": "^5.5.2",
     "eslint": "^8.52.0",
     "eslint-config-next": "13.4.19",
-    "next": "13.5.3",
+    "next": "14.0.0",
     "next-auth": "^4.24.3",
     "postcss": "8.4.29",
     "postgres": "^3.4.1",

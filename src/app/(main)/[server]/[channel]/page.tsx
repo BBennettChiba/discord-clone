@@ -97,10 +97,10 @@ const Channel = ({ params: { channel } }: Props) => {
           const lastMessage = arr[i + 1];
           let displayAllInfo = true;
           if (
+            !msg.parentId &&
             lastMessage &&
             lastAuthorIsSame(msg, lastMessage) &&
-            tenMinutesHaveNotPassed(msg, lastMessage) &&
-            !msg.parentId
+            tenMinutesHaveNotPassed(msg, lastMessage)
           ) {
             displayAllInfo = false;
           }
@@ -150,7 +150,3 @@ const lastAuthorIsSame = (
   message1: NonNullable<CompleteMessage>,
   message2: NonNullable<CompleteMessage>,
 ) => message1.authorId === message2.authorId;
-
-/**
- * @TODO disable timer for replied messages
- */
