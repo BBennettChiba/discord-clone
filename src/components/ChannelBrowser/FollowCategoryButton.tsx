@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
 import { paramsSchema } from "@/lib/utils";
@@ -11,21 +10,17 @@ type Props = {
 
 export const FollowCategoryButton = ({ groupId, checked }: Props) => {
   const { server: serverId } = paramsSchema.parse(useParams());
+  
+  const utils = trpc.useUtils().groups.getGroupsByServerId;
 
   const callbacks = {
-    onSettled: () => void client.invalidateQueries(queryKey),
+    onSettled: () => void utils.invalidate({serverId}),
   };
 
-  const client = useQueryClient();
   const { mutate: unsubscribe } =
     trpc.groups.unsubscribeFromGroup.useMutation(callbacks);
   const { mutate: subscribe } =
     trpc.groups.subscribeToGroup.useMutation(callbacks);
-
-  const queryKey = [
-    ["groups", "getGroupsByServerId"],
-    { input: { serverId }, type: "query" },
-  ];
 
   const handleClick = () => {
     if (checked) return unsubscribe({ id: groupId });

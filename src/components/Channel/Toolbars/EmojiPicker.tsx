@@ -1,7 +1,6 @@
 "use client";
 import data from "@emoji-mart/data";
 import EmojiPicker from "@emoji-mart/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
@@ -20,13 +19,12 @@ type Emoji = {
 
 export const Picker: MenuType = ({ closeMenu, id }) => {
   const { channel: channelId } = paramsSchema.parse(useParams());
-  const queryClient = useQueryClient();
+
+  const utils = trpc.useUtils().messages.getMessagesByChannelId;
+
   const { mutate } = trpc.reactions.createReaction.useMutation({
     onSettled: async (_data) => {
-      await queryClient.invalidateQueries([
-        ["messages", "getMessagesByChannelId"],
-        { input: { channelId }, type: "infinite" },
-      ]);
+      await utils.invalidate({ channelId });
     },
   });
   const emoji = useRef("");

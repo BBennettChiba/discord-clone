@@ -1,6 +1,5 @@
 import { type EmojiMartData } from "@emoji-mart/data";
 import data from "@emoji-mart/data";
-import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
@@ -15,7 +14,8 @@ export const Reactions = ({ reactions }: Props) => {
   const emojiData = (data as EmojiMartData).emojis;
 
   const { channel: channelId } = paramsSchema.parse(useParams());
-  const client = useQueryClient();
+
+  const utils = trpc.useUtils().messages.getMessagesByChannelId;
 
   const { data: session } = useSession();
 
@@ -23,13 +23,8 @@ export const Reactions = ({ reactions }: Props) => {
     throw new Error("something went wrong no session returned from useSession");
   const userId = session.user.id;
 
-  const KEY = [
-    ["messages", "getMessagesByChannelId"],
-    { input: { channelId }, type: "infinite" },
-  ];
-
   const { mutate: toggleMutate } = trpc.reactions.toggleReaction.useMutation({
-    onSettled: () => client.invalidateQueries(KEY),
+    onSettled: () => void utils.invalidate({ channelId }),
   });
 
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] as const;

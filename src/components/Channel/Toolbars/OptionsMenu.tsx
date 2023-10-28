@@ -1,13 +1,11 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
 import { trpc } from "@/lib/trpc/client";
 import { paramsSchema } from "@/lib/utils";
-import { type Messages } from "../MessageInput";
 import { Options } from "./Options";
 
 type Props = {
@@ -19,18 +17,13 @@ const USER_IS_ADMIN = (() => Math.random() < 0.5)();
 
 export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const queryClient = useQueryClient();
+  const utils = trpc.useUtils().messages.getMessagesByChannelId;
   const { channel: channelId } = paramsSchema.parse(useParams());
   if (!channelId) throw new Error("Invalid channelID in Options Menu");
   const { data: session } = useSession();
   if (!session) throw new Error("Invalid session in Options Menu");
 
-  const KEY = [
-    ["messages", "getMessagesByChannelId"],
-    { input: { channelId }, type: "infinite" },
-  ];
-
-  const messages = queryClient.getQueryData<Messages>(KEY);
+  const messages = utils.getInfiniteData({ channelId });
   if (!messages) throw new Error("No messages in getQueryData");
 
   const thisMessage = messages.pages
@@ -42,7 +35,7 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
 
   const { mutate: deleteMessage } = trpc.messages.deleteMessage.useMutation({
     onSettled: async () => {
-      await queryClient.invalidateQueries(KEY)
+      await utils.invalidate({ channelId });
     },
   });
 
@@ -57,11 +50,10 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref, closeMenu]);
- const handleDelete = () => {
+  const handleDelete = () => {
     deleteMessage({ id });
     closeMenu();
   };
-
 
   return (
     <div ref={ref} className="w-[204px] bg-black px-2 py-[6px]">

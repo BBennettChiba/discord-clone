@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
@@ -53,16 +52,11 @@ const getRelativeTime = (timestamp: Date | undefined) => {
 export const ChannelListItem = ({ channel }: Props) => {
   const { server: serverId } = paramsSchema.parse(useParams());
 
-  const client = useQueryClient();
-
-  const queryKey = [
-    ["groups", "getGroupsByServerId"],
-    { input: { serverId }, type: "query" },
-  ];
+  const utils = trpc.useUtils().groups.getGroupsByServerId;
 
   const { mutate: toggleSubscriptionMutation } =
     trpc.channels.toggleChannelSubscription.useMutation({
-      onSettled: () => void client.invalidateQueries(queryKey),
+      onSettled: () => void utils.invalidate({ serverId }),
     });
 
   const { data } = trpc.messages.getMessagesByChannelId.useInfiniteQuery({
