@@ -1,5 +1,5 @@
 "use client";
-import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { type InfiniteData } from "@tanstack/react-query";
 
 import {
   useState,
@@ -22,17 +22,14 @@ export type Messages = InfiniteData<
 
 export const MessageInput = ({ channelName, channelId }: Props) => {
   const { replyTarget, setReplyTarget } = useReply();
-  const queryClient = useQueryClient();
+  const utils = trpc.useUtils().messages.getMessagesByChannelId;
   const { inputRows, setInputRows } = useInputHeight();
 
-  const KEY = [
-    ["messages", "getMessagesByChannelId"],
-    { input: { channelId }, type: "infinite" },
-  ];
+  const input = { channelId };
 
   const replyAuthor = replyTarget
-    ? queryClient
-        .getQueryData<Messages>(KEY)
+    ? utils
+        .getInfiniteData(input)
         ?.pages.map((p) => p.messages)
         .flat()
         .find((m) => m.id === replyTarget)?.author
@@ -43,7 +40,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
     onSettled: () => {
       setBody("");
       setReplyTarget(null);
-      void queryClient.invalidateQueries(KEY);
+      void utils.invalidate(input);
     },
   });
 

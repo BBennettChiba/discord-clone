@@ -50,14 +50,14 @@ export const getMessagesByChannelId = async ({
       reactions: { with: { reactors: { with: { reactor: true } } } },
     },
     orderBy: desc(messages.createdAt),
-    limit: LIMIT + 1,
+    limit: LIMIT,
   });
 
   let nextCursor: typeof cursor | undefined = undefined;
 
-  if (m.length > LIMIT) {
-    const nextItem = m.pop();
-    nextCursor = nextItem?.createdAt;
+  if (m.length >= LIMIT) {
+    const lastItem = m[m.length - 1];
+    nextCursor = lastItem?.createdAt;
   }
 
   return {

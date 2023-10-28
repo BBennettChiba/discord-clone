@@ -34,5 +34,3 @@ export const getServerById = async ({
   });
   return server;
 };
-
-/**@TODO something, I forgot */

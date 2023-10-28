@@ -48,7 +48,7 @@ const InvitePage = async ({ params: { inviteId } }: Props) => {
         </div>
         {session?.user ? (
           <div className="w-full pt-10">
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises*/}
+            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
             <form action={joinServer}>
               <button className="h-11 w-full rounded-sm bg-indigo-500">
                 Accept Invite
