@@ -20,7 +20,7 @@ type ContextT = {
 
 type MenuArgs = {
   closeMenu: () => void;
-  id: number
+  id: number;
 };
 
 export type MenuType = ({ closeMenu, id }: MenuArgs) => JSX.Element | null;
@@ -47,20 +47,20 @@ export const createMenuContextProvider = (
     return (
       <context.Provider value={{ isOpenWhere, openMenu, closeMenu }}>
         {children}
-        <div
-          ref={ref}
-          className="absolute z-[999] -translate-x-full"
-          style={{ top: `${position.top}px`, left: `${position.left}px` }}
-        >
-          {isOpenWhere ? <Menu closeMenu={closeMenu} id={isOpenWhere} /> : null}
-        </div>
+        {isOpenWhere ? (
+          <div
+            ref={ref}
+            className="absolute z-[999] -translate-x-full"
+            style={{ top: `${position.top}px`, left: `${position.left}px` }}
+          >
+            <Menu closeMenu={closeMenu} id={isOpenWhere} />
+          </div>
+        ) : null}
       </context.Provider>
     );
   };
   return Provider;
 };
-
-/**@TODO make the emoji menu and options menu generic */
 
 export const CreateMenu = (Menu: MenuType) => {
   const context = createContext({} as ContextT);
