@@ -1,9 +1,8 @@
 import { env } from "./src/env";
 import type { Config } from "drizzle-kit";
 import "dotenv/config";
-// import { env } from "@/env";
 
-// eslint-disable 
+// eslint-disable
 export default {
   schema: "./src/lib/db/schema",
   out: "./src/lib/db/migrations",

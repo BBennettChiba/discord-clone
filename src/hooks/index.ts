@@ -53,5 +53,3 @@ export const usePreventOverlapping = () => {
 
   return { ref };
 };
-
-/**@TODO when it prevents a menu from overlapping that position is saved. need to fix that. */

@@ -2,6 +2,7 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { Hash, X } from "@/components/Icons";
 import { type ToChannel, useInvite } from "@/contexts/InviteContext";
+import { env } from "@/env";
 import { trpc } from "@/lib/trpc/client";
 import { paramsSchema } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ export const InviteModal = ({ toChannel }: { toChannel: ToChannel }) => {
   );
 
   const { server: serverId } = paramsSchema.parse(useParams());
+  if (!serverId) throw new Error("no serverId in params");
 
   useEffect(() => {
     createInvite({ serverId, toChannelId: toChannel?.id ?? null });
@@ -29,7 +31,7 @@ export const InviteModal = ({ toChannel }: { toChannel: ToChannel }) => {
 
   if (!invite || !channel) return null;
 
-  const link = `http://localhost:3000/invite/${invite.id}`;
+  const link = `${env.NEXT_PUBLIC_URL}/invite/${invite.id}`;
 
   return (
     <div className="absolute h-screen w-screen bg-black bg-opacity-60">

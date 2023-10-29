@@ -65,5 +65,3 @@ export const getMessagesByChannelId = async ({
     nextCursor,
   };
 };
-
-/**@TODO adding and deleting messages in dom seems to cause one to disappear */
