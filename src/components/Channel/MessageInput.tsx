@@ -7,6 +7,7 @@ import {
   type KeyboardEventHandler,
   useEffect,
 } from "react";
+import Tenor from 'react-tenor'
 import { useInputHeight } from "@/contexts/InputHeightContext";
 import { useReply } from "@/contexts/ReplyContext";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
@@ -105,6 +106,12 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         )}
         placeholder={`Send a message in ${channelName}`}
       />
+      <div className="absolute">
+        <Tenor
+          token="your-token-here"
+          onSelect={(result) => console.log(result)}
+        />
+      </div>
     </div>
   );
 };

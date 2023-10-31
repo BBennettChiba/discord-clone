@@ -19,6 +19,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_URL: z.string().min(1),
+    NEXT_PUBLIC_TENOR_TOKEN: z.string().min(1),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -32,5 +33,6 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+    NEXT_PUBLIC_TENOR_TOKEN: process.env.NEXT_PUBLIC_TENOR_TOKEN,
   },
 });
