@@ -53,3 +53,23 @@ export const usePreventOverlapping = () => {
 
   return { ref };
 };
+
+export const useClickAway = <T extends HTMLElement>(
+  callback: (...args: unknown[]) => unknown,
+) => {
+  const ref = useRef<T | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: globalThis.MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        callback();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref, callback]);
+
+  return ref;
+};

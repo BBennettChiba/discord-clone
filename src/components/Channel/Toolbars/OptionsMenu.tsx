@@ -2,8 +2,8 @@
 
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef } from "react";
 import { type MenuType } from "@/contexts/MenuContext";
+import { useClickAway } from "@/hooks";
 import { trpc } from "@/lib/trpc/client";
 import { paramsSchema } from "@/lib/utils";
 import { Options } from "./Options";
@@ -16,7 +16,7 @@ type Props = {
 const USER_IS_ADMIN = (() => Math.random() < 0.5)();
 
 export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useClickAway<HTMLDivElement>(closeMenu);
   const utils = trpc.useUtils().messages.getMessagesByChannelId;
   const { channel: channelId } = paramsSchema.parse(useParams());
   if (!channelId) throw new Error("Invalid channelID in Options Menu");
@@ -39,17 +39,6 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
     },
   });
 
-  useEffect(() => {
-    const handleClickOutside = (event: globalThis.MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        closeMenu();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref, closeMenu]);
   const handleDelete = () => {
     deleteMessage({ id });
     closeMenu();
