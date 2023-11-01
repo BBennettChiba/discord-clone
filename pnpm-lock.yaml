@@ -74,6 +74,9 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.19
     version: 13.4.19(eslint@8.52.0)(typescript@5.2.2)
+  gif-picker-react:
+    specifier: ^1.3.2
+    version: 1.3.2(react-dom@18.2.0)(react@18.2.0)
   next:
     specifier: 14.0.0
     version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -92,9 +95,6 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
-  react-tenor:
-    specifier: ^2.2.0
-    version: 2.2.0(react-dom@18.2.0)(react@18.2.0)
   superjson:
     specifier: ^1.13.3
     version: 1.13.3
@@ -2460,6 +2460,17 @@ packages:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
+  /gif-picker-react@1.3.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-Ve3x43nyTkfakPG3Yd2cW7faw0bsCooVLImNIvhFnJoImmsuZ/mlFoXdpb07fh+IrCQ2pTYam691YKlqJgBeIw==}
+    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -3824,16 +3835,6 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
-    dev: false
-
-  /react-tenor@2.2.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-hs0KomduflTLU05fvKAtrf9f/aAj3wN2kPF2cl5cAOFPkhuaVJuWLNxRSAQN1m+aKHinujEQZ1fXp+gL1KgYhg==}
-    peerDependencies:
-      react: ^16
-      react-dom: ^16
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react@18.2.0:

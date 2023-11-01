@@ -1,19 +1,20 @@
 "use client";
 import { type InfiniteData } from "@tanstack/react-query";
 
+import GifPicker from "gif-picker-react";
 import {
   useState,
   type ChangeEventHandler,
   type KeyboardEventHandler,
   useEffect,
 } from "react";
-import Tenor from 'react-tenor'
 import { useInputHeight } from "@/contexts/InputHeightContext";
 import { useReply } from "@/contexts/ReplyContext";
+import { env } from "@/env";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
-import { AtSymbolIcon, XInCircleIcon } from "../Icons";
+import { AtSymbolIcon, GifIcon, XInCircleIcon } from "../Icons";
 
 type Props = { channelName: string; channelId: number };
 
@@ -25,6 +26,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
   const { replyTarget, setReplyTarget } = useReply();
   const utils = trpc.useUtils().messages.getMessagesByChannelId;
   const { inputRows, setInputRows } = useInputHeight();
+  const [isGifMenuOpen, setIsGifMenuOpen] = useState(false);
 
   const input = { channelId };
 
@@ -67,7 +69,7 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
   }, [body, setInputRows]);
 
   return (
-    <div className="flex flex-shrink-0 flex-col justify-self-end px-4 pb-6 align-bottom">
+    <div className="relative flex flex-shrink-0 justify-self-end px-4 pb-6 align-bottom">
       {replyTarget ? (
         <div className="flex cursor-pointer select-none items-center justify-between rounded-tl-lg rounded-tr-lg bg-zinc-800">
           <div>
@@ -101,17 +103,57 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         className={cn(
-          "align-botttom w-full resize-none appearance-none overflow-hidden rounded-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none",
+          "align-botttom w-full resize-none appearance-none overflow-hidden rounded-l-lg bg-neutral-800 bg-opacity-40 p-4 text-gray-300 placeholder:text-gray-500 focus:outline-none",
           { "rounded-t-none": !!replyTarget },
         )}
         placeholder={`Send a message in ${channelName}`}
       />
-      <div className="absolute">
-        <Tenor
-          token="your-token-here"
-          onSelect={(result) => console.log(result)}
-        />
-      </div>
+      <Buttons />
+      {isGifMenuOpen ? (
+        <div className="absolute right-0 -translate-y-full">
+          <GifPicker
+            tenorApiKey={env.NEXT_PUBLIC_TENOR_TOKEN}
+            onGifClick={(result) => console.log(result)}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
+
+const Buttons = () => (
+  <div className="flex rounded-r-lg bg-neutral-800 bg-opacity-40 pr-2">
+    <div className="flex items-center">
+      <button className="relative flex h-8 w-auto cursor-pointer items-center justify-center rounded text-center text-sm font-medium">
+        <div
+          className="m-1 flex items-center justify-center p-1 text-gray-400"
+          style={{
+            backgroundImage:
+              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) calc(2px), rgba(0, 0, 0, 0) calc(2px))",
+          }}
+        >
+          <div>
+            <GifIcon />
+          </div>
+        </div>
+      </button>
+    </div>
+    <div className="flex items-center">
+      <button
+        className="relative flex h-7 w-auto cursor-pointer items-center justify-center rounded p-1 text-center text-xl font-medium"
+        style={{
+          maxHeight: "3.13rem",
+        }}
+      >
+        <div
+          style={{
+            backgroundImage:
+              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) calc(2px), rgba(0, 0, 0, 0) calc(2px))",
+          }}
+        >
+          😊
+        </div>
+      </button>
+    </div>
+  </div>
+);
