@@ -18,6 +18,11 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
     msg.createdAt.getMinutes(),
   ).padStart(2, "0")}`;
 
+  const urlCheck =
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+
+  const imgSrc = msg.body.match(urlCheck);
+
   return (
     <>
       {msg.parentId ? <Reply parentId={msg.parentId} /> : null}
@@ -65,6 +70,7 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
           <MessageHoverToolbar messageId={msg.id} />
         </div>
       </div>
+      {imgSrc && imgSrc.length > 0 ? <img src={imgSrc[0]} /> : null}
     </>
   );
 };

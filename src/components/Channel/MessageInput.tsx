@@ -151,7 +151,9 @@ export const MessageInput = ({ channelName, channelId }: Props) => {
           <div className="absolute right-0 -translate-y-full" ref={ref}>
             <GifPicker
               tenorApiKey={env.NEXT_PUBLIC_TENOR_TOKEN}
-              onGifClick={(result) => console.log(result)}
+              onGifClick={(result) =>
+                mutate({ body: result.url, channelId, parentId: replyTarget })
+              }
             />
           </div>
         ) : null}
