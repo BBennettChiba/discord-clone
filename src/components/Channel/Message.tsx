@@ -18,10 +18,9 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
     msg.createdAt.getMinutes(),
   ).padStart(2, "0")}`;
 
-  const urlCheck =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+  const imgCheck = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
 
-  const imgSrc = msg.body.match(urlCheck);
+  const imgSrc = msg.body.match(imgCheck);
 
   return (
     <>
@@ -54,7 +53,12 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
               </div>
             </div>
           ) : null}
-          <div>{msg.body}</div>
+
+          {imgSrc && imgSrc.length > 0 ? (
+            <img src={imgSrc[0]} className="max-h-[350px]" alt="reaction gif" />
+          ) : (
+            <div>{msg.body}</div>
+          )}
           {msg.reactions.length > 0 ? (
             <Reactions reactions={msg.reactions} />
           ) : null}
@@ -70,7 +74,6 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
           <MessageHoverToolbar messageId={msg.id} />
         </div>
       </div>
-      {imgSrc && imgSrc.length > 0 ? <img src={imgSrc[0]} /> : null}
     </>
   );
 };
