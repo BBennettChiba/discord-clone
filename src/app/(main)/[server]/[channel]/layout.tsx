@@ -42,5 +42,5 @@ const Layout = async ({ children, params: { channel } }: Props) => {
 export default Layout;
 
 /**
- * @TODO add tenor support
+ * @TODO look into intial data for queryclient. I can fetch serverdata, pass it to a client component and use that for initial data in the trpc/tanstack client.
  */

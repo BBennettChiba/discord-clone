@@ -3,9 +3,11 @@ import { useRef } from "react";
 import { useOptionsMenu } from "@/contexts/OptionsMenuContext";
 import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { useReply } from "@/contexts/ReplyContext";
-import { DotDotDotIcon, EmojiIcon, ReplyIcon } from "../Icons";
+import { DotDotDotIcon, EmojiIcon, PencilIcon, ReplyIcon } from "../Icons";
 
-export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
+type Props = { messageId: number; userIsOwner: boolean };
+
+export const MessageHoverToolbar = ({ messageId, userIsOwner }: Props) => {
   const optionsButtonRef = useRef<HTMLDivElement | null>(null);
   const reactionsButtonRef = useRef<HTMLDivElement>(null);
   const { openMenu: openPickerMenu } = usePickerMenu();
@@ -52,7 +54,11 @@ export const MessageHoverToolbar = ({ messageId }: { messageId: number }) => {
             tabIndex={0}
             onClick={handleReply}
           >
-            <ReplyIcon className="h-5 w-5" />
+            {userIsOwner ? (
+              <PencilIcon className="h-5 w-5" />
+            ) : (
+              <ReplyIcon className="h-5 w-5" />
+            )}
           </div>
         </div>
         <div

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { cn } from "@/lib/utils";
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export const Message = ({ msg, displayAllInfo }: Props) => {
+  const { data: session } = useSession();
   const { isOpenWhere } = usePickerMenu();
   const today = new Date().getDay();
   const time = `${msg.createdAt.getHours()}:${String(
@@ -21,6 +23,10 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
   const imgCheck = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
 
   const imgSrc = msg.body.match(imgCheck);
+
+  if (!session) throw new Error("no session in message component");
+
+  const userIsOwner = msg.author.id === session.user.id;
 
   return (
     <>
@@ -71,7 +77,7 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
             },
           )}
         >
-          <MessageHoverToolbar messageId={msg.id} />
+          <MessageHoverToolbar messageId={msg.id} userIsOwner={userIsOwner} />
         </div>
       </div>
     </>
