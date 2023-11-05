@@ -61,7 +61,14 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
           ) : null}
 
           {imgSrc && imgSrc.length > 0 ? (
-            <img src={imgSrc[0]} className="max-h-[350px]" alt="reaction gif" />
+            <>
+              <img
+                src={imgSrc[0]}
+                className="max-h-[350px]"
+                alt="reaction gif"
+              />
+              {msg.body.replace(imgSrc[0], "")}
+            </>
           ) : (
             <div>{msg.body}</div>
           )}
