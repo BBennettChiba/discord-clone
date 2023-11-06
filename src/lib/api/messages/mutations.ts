@@ -18,7 +18,7 @@ type CTX = {
 export const createMessage = async ({
   input: msgInput,
   ctx: { db, session },
-  ctx
+  ctx,
 }: CreateMessageInput) => {
   const newMessage = {
     ...msgInput,
@@ -51,4 +51,20 @@ export const deleteMessage = async ({
     .returning();
   if (!d) throw new Error("Error deleting messages");
   return d;
+};
+
+type EditMessageInput = {
+  input: { body: string; id: number };
+} & CTX;
+
+export const editMessage = async ({
+  input: { body, id },
+  ctx: { session, db },
+}: EditMessageInput) => {
+  const [msg] = await db
+    .update(messages)
+    .set({ body })
+    .where(and(eq(messages.id, id), eq(messages.authorId, session.user.id)))
+    .returning();
+  return msg;
 };
