@@ -1,4 +1,8 @@
-import { createMessage, deleteMessage } from "@/lib/api/messages/mutations";
+import {
+  createMessage,
+  deleteMessage,
+  editMessage,
+} from "@/lib/api/messages/mutations";
 import {
   getMessageById,
   getMessagesByChannelId,
@@ -7,6 +11,7 @@ import {
   MessageByChannelIdSchema,
   insertMessageParams,
   messageIdSchema,
+  updateMessageSchema,
 } from "@/lib/db/schema/messages";
 import { protectedProcedure, router } from "../trpc";
 
@@ -23,4 +28,7 @@ export const messagesRouter = router({
   deleteMessage: protectedProcedure
     .input(messageIdSchema)
     .mutation(deleteMessage),
+  editMessage: protectedProcedure
+    .input(updateMessageSchema)
+    .mutation(editMessage),
 });

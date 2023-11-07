@@ -64,7 +64,13 @@ export const insertMessageParams = createSelectSchema(messages, {
   updatedAt: true,
 });
 
-export const updateMessageSchema = createSelectSchema(messages);
+export const updateMessageSchema = createSelectSchema(messages).omit({
+  authorId: true,
+  createdAt: true,
+  channelId: true,
+  updatedAt: true,
+  parentId: true,
+});
 
 export const updateMessageParams = createSelectSchema(messages, {
   channelId: z.coerce.number(),
@@ -78,7 +84,7 @@ export const messageIdSchema = updateMessageSchema.pick({
   id: true,
 });
 
-export const MessageByChannelIdSchema = updateMessageSchema
+export const MessageByChannelIdSchema = createSelectSchema(messages)
   .pick({
     channelId: true,
   })
@@ -94,4 +100,4 @@ export type MessageByChannelId = z.infer<typeof MessageByChannelIdSchema>;
 
 // this type infers the return from getMessages() - meaning it will include any joins
 export type CompleteMessage =
-  RouterOutputs["messages"]["getMessagesByChannelId"]['messages'][number];
+  RouterOutputs["messages"]["getMessagesByChannelId"]["messages"][number];
