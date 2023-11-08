@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { MembersList } from "@/components/Channel/MembersList";
 import { MessageInput } from "@/components/Channel/MessageInput";
 import { TopBar } from "@/components/Channel/TopBar/TopBar";
+import { EditMessageContextProvider } from "@/contexts/EditMessageContext";
 import { InputHeightContextProvider } from "@/contexts/InputHeightContext";
 import { OptionsMenuContextProvider } from "@/contexts/OptionsMenuContext";
 import { PickerMenuContextProvider } from "@/contexts/PickerMenuContext";
@@ -21,16 +22,18 @@ const Layout = async ({ children, params: { channel } }: Props) => {
         <InputHeightContextProvider>
           <PickerMenuContextProvider>
             <OptionsMenuContextProvider>
-              <TopBar channel={channelData} />
-              <div className="flex min-h-0 flex-1 overflow-hidden">
-                {children}
-                <div className="h-full w-1" />
-                <MembersList channelId={+channel} />
-              </div>
-              <MessageInput
-                channelName={channelData.name}
-                channelId={+channel}
-              />
+              <EditMessageContextProvider>
+                <TopBar channel={channelData} />
+                <div className="flex min-h-0 flex-1 overflow-hidden">
+                  {children}
+                  <div className="h-full w-1" />
+                  <MembersList channelId={+channel} />
+                </div>
+                <MessageInput
+                  channelName={channelData.name}
+                  channelId={+channel}
+                />
+              </EditMessageContextProvider>
             </OptionsMenuContextProvider>
           </PickerMenuContextProvider>
         </InputHeightContextProvider>

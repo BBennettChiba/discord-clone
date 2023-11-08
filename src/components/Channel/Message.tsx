@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import { useEditMessage } from "@/contexts/EditMessageContext";
 import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { type CompleteMessage } from "@/lib/db/schema/messages";
 import { cn } from "@/lib/utils";
+import { EditMessage } from "./EditMessage";
 import { MessageHoverToolbar } from "./MessageHoverToolbar";
 import { Reactions } from "./Reactions";
 import { Reply } from "./Reply";
@@ -15,6 +17,7 @@ type Props = {
 export const Message = ({ msg, displayAllInfo }: Props) => {
   const { data: session } = useSession();
   const { isOpenWhere } = usePickerMenu();
+  const { editId } = useEditMessage();
   const today = new Date().getDay();
   const time = `${msg.createdAt.getHours()}:${String(
     msg.createdAt.getMinutes(),
@@ -70,7 +73,13 @@ export const Message = ({ msg, displayAllInfo }: Props) => {
               {msg.body.replace(imgSrc[0], "")}
             </>
           ) : (
-            <div>{msg.body}</div>
+            <>
+              {editId === msg.id ? (
+                <EditMessage body={msg.body} />
+              ) : (
+                <div>{msg.body}</div>
+              )}
+            </>
           )}
           {msg.reactions.length > 0 ? (
             <Reactions reactions={msg.reactions} />

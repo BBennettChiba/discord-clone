@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import { useEditMessage } from "@/contexts/EditMessageContext";
 import { useOptionsMenu } from "@/contexts/OptionsMenuContext";
 import { usePickerMenu } from "@/contexts/PickerMenuContext";
 import { useReply } from "@/contexts/ReplyContext";
@@ -13,6 +14,7 @@ export const MessageHoverToolbar = ({ messageId, userIsOwner }: Props) => {
   const { openMenu: openPickerMenu } = usePickerMenu();
   const { openMenu: openOptionsMenu } = useOptionsMenu();
   const { setReplyTarget } = useReply();
+  const { setEditId } = useEditMessage();
 
   const openEmojiPicker = () => {
     if (!reactionsButtonRef.current) throw new Error("No current");
@@ -26,8 +28,9 @@ export const MessageHoverToolbar = ({ messageId, userIsOwner }: Props) => {
     openOptionsMenu(messageId, top, left);
   };
 
-  const handleReply = () => {
-    setReplyTarget(messageId);
+  const handleClick = () => {
+    if (userIsOwner) return setEditId(messageId);
+    else setReplyTarget(messageId);
   };
 
   return (
@@ -52,7 +55,7 @@ export const MessageHoverToolbar = ({ messageId, userIsOwner }: Props) => {
             aria-label="Reply"
             role="button"
             tabIndex={0}
-            onClick={handleReply}
+            onClick={handleClick}
           >
             {userIsOwner ? (
               <PencilIcon className="h-5 w-5" />

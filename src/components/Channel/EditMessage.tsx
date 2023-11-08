@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {
+  body: string;
+};
 
-export const EditMessage = (props: Props) => {
-  return (
-    <div>EditMessage</div>
-  )
-}
+export const EditMessage = ({ body }: Props) => {
+  console.log(body);
+  return <div>{body} edit</div>;
+};
