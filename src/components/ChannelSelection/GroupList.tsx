@@ -1,20 +1,31 @@
 "use client";
+import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
 import { Group } from "./Group";
 
-export const GroupList = ({ serverId }: { serverId: number }) => {
-  const { data: groups, isError } = trpc.groups.getGroupsByServerId.useQuery({
-    serverId,
-  });
+type Props = {
+  serverId: number;
+  groups: RouterOutputs["servers"]["getServerById"]["groups"];
+};
+
+export const GroupList = ({ serverId, groups }: Props) => {
+  const { data, isError } = trpc.groups.getGroupsByServerId.useQuery(
+    {
+      serverId,
+    },
+    { initialData: groups },
+  );
 
   if (isError) return "error";
 
   return (
     <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-900">
       <ul>
-        {groups
-          ?.filter((g) => !g.channels.every((c) => !c.isUserSubscribed))
-          .map((group) => <Group key={group.id} group={group} />)}
+        {data
+          .filter((g) => !g.channels.every((c) => !c.isUserSubscribed))
+          .map((group) => (
+            <Group key={group.id} group={group} />
+          ))}
       </ul>
     </div>
   );

@@ -14,7 +14,7 @@ import {
   PeoplePlusIcon,
 } from "../../Icons";
 
-import  InvitePeopleWrapper  from "./InvitePeopleWrapper";
+import InvitePeopleWrapper from "./InvitePeopleWrapper";
 
 const ICON_SIZE = "h[18px] w-[18px]";
 

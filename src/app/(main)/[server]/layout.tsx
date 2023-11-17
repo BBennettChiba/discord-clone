@@ -17,7 +17,6 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
     id: +serverId,
   });
 
-  if (!server) throw new Error("no Server in main/server/layout");
 
   return (
     <InviteContextProvider>
@@ -27,7 +26,7 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
             <DropdownMenu />
           </MenuOpener>
           <ChannelBrowserButton defaultChannel={server.defaultChannel} />
-          <GroupList serverId={+serverId} />
+          <GroupList serverId={+serverId} groups={server.groups} />
           <UserStatus />
         </div>
         {children}

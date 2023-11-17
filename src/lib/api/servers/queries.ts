@@ -17,7 +17,6 @@ export const getServers = async ({ ctx: { session, db } }: GetServersInput) => {
     .where(eq(users.id, session.user.id));
 
   return s.map((ser) => ser.servers);
-
 };
 
 type GetServerByIdInput = {
@@ -27,10 +26,24 @@ type GetServerByIdInput = {
 
 export const getServerById = async ({
   input: { id: serverId },
-  ctx: { db },
+  ctx: { db, session },
 }: GetServerByIdInput) => {
-  const server = db.query.servers.findFirst({
+  const server = await db.query.servers.findFirst({
     where: eq(servers.id, serverId),
+    with: { groups: { with: { channels: true } } },
   });
-  return server;
+
+  if (!server) throw new Error("could not find server");
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+    with: { channels: true },
+  });
+  return {
+    ...server,
+    groups: server.groups.map((g) => ({
+      ...g,
+      channels: g.channels.map((c) => ({ ...c, isUserSubscribed: !!user?.channels.find(chan => chan.channelId === c.id)})),
+    })),
+  };
 };
