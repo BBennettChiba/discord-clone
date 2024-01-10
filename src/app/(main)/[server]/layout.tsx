@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { z } from "zod";
 import { ChannelBrowserButton } from "@/components/ChannelSelection/ChannelBrowser";
 import { GroupList } from "@/components/ChannelSelection/GroupList";
 import { DropdownMenu } from "@/components/ChannelSelection/Menu/DropdownMenu";
@@ -9,14 +10,16 @@ import { serverTrpc } from "@/lib/trpc/api";
 
 type Props = {
   children: ReactNode;
-  params: { server: string };
+  params: unknown;
 };
 
-const Server = async ({ children, params: { server: serverId } }: Props) => {
+const Server = async ({ children, params }: Props) => {
+  const { server: serverId } = z
+    .object({ server: z.coerce.number() })
+    .parse(params);
   const server = await serverTrpc.servers.getServerById.query({
-    id: +serverId,
+    id: serverId,
   });
-
 
   return (
     <InviteContextProvider>
@@ -26,7 +29,7 @@ const Server = async ({ children, params: { server: serverId } }: Props) => {
             <DropdownMenu />
           </MenuOpener>
           <ChannelBrowserButton defaultChannel={server.defaultChannel} />
-          <GroupList serverId={+serverId} groups={server.groups} />
+          <GroupList serverId={serverId} groups={server.groups} />
           <UserStatus />
         </div>
         {children}
