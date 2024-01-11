@@ -1,5 +1,6 @@
 "use client";
 import { Fragment, useRef } from "react";
+import { z } from "zod";
 import { Message } from "@/components/Channel/Message";
 import { ScrollContainer } from "@/components/Channel/ScrollContainer";
 import {
@@ -12,7 +13,7 @@ import { trpc } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
 type Props = {
-  params: { channel: string };
+  params: unknown;
 };
 
 const MONTHS = [
@@ -30,7 +31,8 @@ const MONTHS = [
   "December",
 ] as const;
 
-const Channel = ({ params: { channel } }: Props) => {
+const Channel = ({ params }: Props) => {
+  const { channel } = z.object({ channel: z.coerce.number() }).parse(params);
   const inner = useRef<HTMLDivElement | null>(null);
   const outer = useRef<HTMLDivElement | null>(null);
   const { scrollTargetRef, scrollTargetId, scrollTo } = useScrollTo();
@@ -44,7 +46,7 @@ const Channel = ({ params: { channel } }: Props) => {
   const { data, isLoading, fetchNextPage, hasNextPage } =
     trpc.messages.getMessagesByChannelId.useInfiniteQuery(
       {
-        channelId: +channel,
+        channelId: channel,
       },
       {
         getNextPageParam: ({ nextCursor }) => nextCursor,
