@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { z } from "zod";
 import { MembersList } from "@/components/Channel/MembersList";
 import { MessageInput } from "@/components/Channel/MessageInput";
 import { TopBar } from "@/components/Channel/TopBar/TopBar";
@@ -9,11 +10,13 @@ import { PickerMenuContextProvider } from "@/contexts/PickerMenuContext";
 import { ReplyContextProvider } from "@/contexts/ReplyContext";
 import { serverTrpc } from "@/lib/trpc/api";
 
-type Props = { children: ReactNode; params: { channel: string } };
+type Props = { children: ReactNode; params: unknown };
 
-const Layout = async ({ children, params: { channel } }: Props) => {
+const Layout = async ({ children, params }: Props) => {
+  const { channel } = z.object({ channel: z.coerce.number() }).parse(params);
+
   const channelData = await serverTrpc.channels.getChannelById.query({
-    id: +channel,
+    id: channel,
   });
 
   return (
