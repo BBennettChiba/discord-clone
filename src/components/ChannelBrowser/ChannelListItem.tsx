@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
@@ -50,6 +50,7 @@ const getRelativeTime = (timestamp: Date | undefined) => {
 };
 
 export const ChannelListItem = ({ channel }: Props) => {
+  const router = useRouter();
   const { server: serverId } = paramsSchema.parse(useParams());
 
   const utils = trpc.useUtils().groups.getGroupsByServerId;
@@ -70,6 +71,11 @@ export const ChannelListItem = ({ channel }: Props) => {
   const dateOfNewestMessage = getRelativeTime(
     data?.pages[0]?.messages[0]?.createdAt,
   );
+
+  const goToChannel: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    router.push(`${channel.id}`);
+  };
 
   return (
     <div
@@ -95,7 +101,10 @@ export const ChannelListItem = ({ channel }: Props) => {
         </div>
         <div className="flex">
           <div className="pr-8">
-            <button className="invisible rounded-sm border border-gray-500 px-4 py-1 text-sm group-hover:visible hover:bg-gray-500">
+            <button
+              onClick={goToChannel}
+              className="invisible rounded-sm border border-gray-500 px-4 py-1 text-sm group-hover:visible hover:bg-gray-500"
+            >
               View
             </button>
           </div>

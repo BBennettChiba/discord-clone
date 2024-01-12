@@ -7,16 +7,19 @@ import { ChannelSearchBar } from "./ChannelSearchBar";
 import { Group } from "./Group";
 
 export const Browser = () => {
-  const { server: serverId } = paramsSchema.parse( useParams());
+  const { server: serverId } = paramsSchema.parse(useParams());
+  
+  if (!serverId) throw new Error("no serverId in Browser component");
 
   const {
     data: groups,
     isLoading,
     isError,
-  } = trpc.groups.getGroupsByServerId.useQuery({ serverId});
+  } = trpc.groups.getGroupsByServerId.useQuery({ serverId });
   const [search, setSearch] = useState("");
   if (isLoading) return "loading";
   if (isError) return "error";
+
   const searchResults = groups
     .map((g) => ({
       ...g,
