@@ -1,30 +1,29 @@
+import { z } from "zod";
 import { BackButton } from "@/components/ChannelBrowser/BackButton";
 import { Browser } from "@/components/ChannelBrowser/Browser";
 import { HashWithLookingGlass } from "@/components/Icons";
 import { serverTrpc } from "@/lib/trpc/api";
 import { throwError } from "@/lib/utils";
 
-type Props = {
-  params: {
-    server: `${number}`;
-  };
-  searchParams: {
-    last: `${number}`;
-  };
-};
+const ChannelBrowser = async (props: unknown) => {
+  const {
+    searchParams: { last },
+    params: { server },
+  } = z
+    .object({
+      searchParams: z.object({ last: z.coerce.number() }),
+      params: z.object({ server: z.coerce.number() }),
+    })
+    .parse(props);
 
-const ChannelBrowser = async ({
-  params: { server },
-  searchParams: { last },
-}: Props) => {
   const groups = await serverTrpc.groups.getGroupsByServerId.query({
-    serverId: +server,
+    serverId: server,
   });
 
   let lastChannel = groups
     .map((g) => g.channels)
     .flat()
-    .find((c) => c.id === +last);
+    .find((c) => c.id === last);
   if (!lastChannel)
     lastChannel =
       groups[0]?.channels[0] || throwError("no last channel found ");
