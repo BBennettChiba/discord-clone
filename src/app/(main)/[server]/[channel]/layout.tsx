@@ -34,7 +34,7 @@ const Layout = async ({ children, params }: Props) => {
                 </div>
                 <MessageInput
                   channelName={channelData.name}
-                  channelId={+channel}
+                  channelId={channel}
                 />
               </EditMessageContextProvider>
             </OptionsMenuContextProvider>

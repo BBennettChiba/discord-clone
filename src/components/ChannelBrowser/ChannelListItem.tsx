@@ -2,7 +2,7 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { type RouterOutputs } from "@/lib/server/routers/_app";
 import { trpc } from "@/lib/trpc/client";
-import { paramsSchema } from "@/lib/utils";
+import { getRelativeTime, paramsSchema } from "@/lib/utils";
 import { Checkbox, Hash } from "../Icons";
 
 type Groups = RouterOutputs["groups"]["getGroupsByServerId"];
@@ -11,42 +11,6 @@ type Channel = Groups[number]["channels"][number];
 
 type Props = {
   channel: Channel;
-};
-
-const MINUTE_IN_MILLISECONDS = 1000 * 60;
-
-const getRelativeTime = (timestamp: Date | undefined) => {
-  if (!timestamp) return "";
-  const rtf = new Intl.RelativeTimeFormat();
-
-  const differenceInMilliseconds = timestamp.getTime() - new Date().getTime();
-
-  const round = (num: number) => Math.round(num);
-
-  let difference =
-    differenceInMilliseconds / MINUTE_IN_MILLISECONDS +
-    new Date().getTimezoneOffset();
-
-  if (difference > -5) return "Just now";
-
-  if (difference > -60) {
-    return rtf.format(round(difference), "minutes");
-  }
-  difference /= 60;
-  if (difference > -24) {
-    return rtf.format(round(difference), "hours");
-  }
-  difference /= 24;
-  if (difference > -28) {
-    return rtf.format(round(difference), "days");
-  }
-  difference /= 28;
-  if (difference > -12) {
-    return rtf.format(round(difference), "months");
-  }
-  difference /= 12;
-
-  return rtf.format(round(difference), "years");
 };
 
 export const ChannelListItem = ({ channel }: Props) => {

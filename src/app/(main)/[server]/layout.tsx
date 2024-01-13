@@ -17,6 +17,7 @@ const Server = async ({ children, params }: Props) => {
   const { server: serverId } = z
     .object({ server: z.coerce.number() })
     .parse(params);
+
   const server = await serverTrpc.servers.getServerById.query({
     id: serverId,
   });
