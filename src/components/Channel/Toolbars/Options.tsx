@@ -21,6 +21,7 @@ type Props = {
   handleDelete: () => void;
   id: number;
   thisMessage?: Message;
+  closeMenu: () => void;
 };
 
 export const Options = ({
@@ -29,6 +30,7 @@ export const Options = ({
   handleDelete,
   id,
   thisMessage,
+  closeMenu,
 }: Props) => {
   const { setReplyTarget } = useReply();
   const dimensions = "h-[18px] w-[18px]";
@@ -73,6 +75,7 @@ export const Options = ({
       /**@OTOD look below */
       onClick: () => {
         setReplyTarget(id);
+        closeMenu();
       },
     },
     {

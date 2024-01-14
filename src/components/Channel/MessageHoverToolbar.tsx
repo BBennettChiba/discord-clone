@@ -82,4 +82,3 @@ export const MessageHoverToolbar = ({ messageId, userIsOwner }: Props) => {
     </div>
   );
 };
-/**@TODO when comment is your own the option to reply is one to edit */

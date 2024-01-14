@@ -59,6 +59,7 @@ export const OptionsMenu: MenuType = ({ closeMenu, id }: Props) => {
         ))}
       </div>
       <Options
+      closeMenu={closeMenu}
         userIsOwner={userIsOwner}
         userIsAdmin={USER_IS_ADMIN}
         handleDelete={handleDelete}
