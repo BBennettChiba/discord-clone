@@ -25,7 +25,7 @@ const Server = async ({ children, params }: Props) => {
   return (
     <InviteContextProvider>
       <div className="flex flex-1">
-        <div className="relative flex h-screen w-60 flex-col bg-zinc-800">
+        <div className="relative flex h-screen w-60 flex-col bg-zinc-800 bg-opacity-80">
           <MenuOpener name={server.name}>
             <DropdownMenu />
           </MenuOpener>

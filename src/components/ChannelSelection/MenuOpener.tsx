@@ -33,7 +33,7 @@ export const MenuOpener = ({ name, children }: Props) => {
             <div className="absolute h-4 w-[1px] origin-center rotate-45 bg-white transition-all" />
             <div
               className={cn(
-                "absolute bottom-0 h-1/2 w-full bg-zinc-800 transition-all duration-300",
+                "absolute bottom-0 h-1/2 w-ful bg-[#1F1F21] transition-all duration-300",
                 {
                   "h-0": isMenuOpen,
                 },
