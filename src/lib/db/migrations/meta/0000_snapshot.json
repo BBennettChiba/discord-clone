@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "ed0bdd66-35e4-4356-a3d8-632ad85b676f",
-  "prevId": "88d18954-b019-4c15-9c22-c65bc4039605",
+  "id": "af729ea4-bed1-42a4-9fd8-38e54dcde13b",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
       "name": "account",
@@ -751,6 +751,63 @@
           "columns": [
             "user_id",
             "server_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "users_to_users": {
+      "name": "users_to_users",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "friend_id": {
+          "name": "friend_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_to_users_user_id_user_id_fk": {
+          "name": "users_to_users_user_id_user_id_fk",
+          "tableFrom": "users_to_users",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "users_to_users_friend_id_user_id_fk": {
+          "name": "users_to_users_friend_id_user_id_fk",
+          "tableFrom": "users_to_users",
+          "tableTo": "user",
+          "columnsFrom": [
+            "friend_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "users_to_users_user_id_friend_id": {
+          "name": "users_to_users_user_id_friend_id",
+          "columns": [
+            "user_id",
+            "friend_id"
           ]
         }
       },

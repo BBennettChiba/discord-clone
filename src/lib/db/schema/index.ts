@@ -9,6 +9,7 @@ import * as reactionsToUsersSchema from "./reactionsToMessagesToUsers";
 import * as serversSchema from "./servers";
 import * as usersToChannelsSchema from "./usersToChannels";
 import * as usersToServerSchema from "./usersToServers";
+import * as usersToUsersSchema from "./usersToUsers";
 
 export const schema = {
   ...authSchema,
@@ -21,5 +22,6 @@ export const schema = {
   ...invitesSchema,
   ...reactionsSchema,
   ...reactionsToMessagesSchema,
+  ...usersToUsersSchema,
   ...reactionsToUsersSchema,
 };

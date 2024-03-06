@@ -1,1 +1,0 @@
-ALTER TABLE "reactions_to_messages_to_users" ALTER COLUMN "reaction_to_messages_message_id" TYPE integer USING ("reaction_to_messages_message_id"::integer);

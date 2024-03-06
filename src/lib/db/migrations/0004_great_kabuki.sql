@@ -1,1 +1,0 @@
-ALTER TABLE "channels" ADD COLUMN "description" varchar(256) NOT NULL;
